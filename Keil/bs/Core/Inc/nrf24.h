@@ -5,19 +5,13 @@
 #include <stdint.h>
 #include "stm32f1xx_ll_gpio.h"
 //------------------------------------------------
-#define CS_GPIO_PORT GPIOA
-#define CS_PIN LL_GPIO_PIN_5
-#define CS_ON LL_GPIO_ResetOutputPin(CS_GPIO_PORT, CS_PIN)
-#define CS_OFF LL_GPIO_SetOutputPin(CS_GPIO_PORT, CS_PIN)
-#define CE_GPIO_PORT GPIOA
-#define CE_PIN GPIO_PIN_3
-#define CE_RESET LL_GPIO_ResetOutputPin(CE_GPIO_PORT, CE_PIN)
-#define CE_SET LL_GPIO_SetOutputPin(CE_GPIO_PORT, CE_PIN)
-#define LED_GPIO_PORT GPIOC
-#define LED_PIN GPIO_PIN_13
-#define LED_ON LL_GPIO_ResetOutputPin(LED_GPIO_PORT, LED_PIN)
-#define LED_OFF LL_GPIO_SetOutputPin(LED_GPIO_PORT, LED_PIN)
-#define LED_TGL LL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN)
+#define CS_ON LL_GPIO_ResetOutputPin(GPIOA, CSN_Pin)
+#define CS_OFF LL_GPIO_SetOutputPin(GPIOA, CSN_Pin)
+#define CE_RESET LL_GPIO_ResetOutputPin(GPIOA, CE_Pin)
+#define CE_SET LL_GPIO_SetOutputPin(GPIOA, CE_Pin)
+#define LED_ON LL_GPIO_ResetOutputPin(LED_GPIO_Port, LED_Pin)
+#define LED_OFF LL_GPIO_SetOutputPin(LED_GPIO_Port, LED_Pin)
+#define LED_TGL LL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD 0x61 // Define RX payload register address
@@ -51,7 +45,7 @@
 //------------------------------------------------
 #define W_REGISTER 	0x20 //запись в регистр
 //------------------------------------------------
-void NRF24_ini(void);
+void NRF24_init(void);
 uint8_t NRF24_ReadReg(uint8_t addr);
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
 uint8_t NRF24L01_Send(uint8_t *pBuf);

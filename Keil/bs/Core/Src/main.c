@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "nrf24.h"
+#include "usbd_cdc_if.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,6 +44,9 @@
 
 /* USER CODE BEGIN PV */
 
+char str1[5] = {0};
+uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x05};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -57,6 +61,13 @@ static void MX_SPI1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+ void DelayMicro2(uint32_t micros)
+{
+  micros *= (SystemCoreClock / 1000000) / 9;
+  /* Wait till done */
+  while (micros--) ;
+}
 
 /* USER CODE END 0 */
 
@@ -93,13 +104,27 @@ int main(void)
   MX_IWDG_Init();
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-
+  LL_SPI_Enable(SPI1);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		DelayMicro2(1000);
+		LED_ON;
+		DelayMicro2(1000);
+		LED_OFF;		
+		//
+		//IRQ_Callback();
+		//NRF24L01_Send(data);
+
+		//if (str1[0] == '!')
+		//{
+		//	CDC_Transmit_FS((uint8_t*)str1, strlen(str1));		
+		//	
+		//}
+		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -320,20 +345,20 @@ static void MX_GPIO_Init(void)
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_13);
+  LL_GPIO_SetOutputPin(LED_GPIO_Port, LED_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_3|LL_GPIO_PIN_4);
+  LL_GPIO_ResetOutputPin(GPIOA, CE_Pin|CSN_Pin);
 
   /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_13;
+  GPIO_InitStruct.Pin = LED_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
-  LL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  LL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = LL_GPIO_PIN_3|LL_GPIO_PIN_4;
+  GPIO_InitStruct.Pin = CE_Pin|CSN_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
@@ -350,7 +375,7 @@ static void MX_GPIO_Init(void)
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
-  LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_2, LL_GPIO_MODE_FLOATING);
+  LL_GPIO_SetPinMode(IRQ_GPIO_Port, IRQ_Pin, LL_GPIO_MODE_FLOATING);
 
   /* EXTI interrupt init*/
   NVIC_SetPriority(EXTI2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));

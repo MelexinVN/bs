@@ -47,3 +47,9 @@ bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdio.h
 bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdlib.h
 bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h
 bs\main.o: ../Core/Inc/nrf24.h
+bs\main.o: ../USB_DEVICE/App/usbd_cdc_if.h
+bs\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h
+bs\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+bs\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h
+bs\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h
+bs\main.o: ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h

@@ -11,6 +11,7 @@ volatile uint8_t rx_flag = 0, tx_flag = 0;
 uint32_t TIM1_Count=0;
 uint16_t cnt1=0;
 extern uint8_t buf1[20];
+extern char str1[];
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
 {
@@ -196,7 +197,7 @@ void NRF24L01_Receive(void)
   }
 }
 //------------------------------------------------
-void NRF24_ini(void)
+void NRF24_init(void)
 {
 	CE_RESET;
   DelayMicro(5000);
@@ -232,6 +233,9 @@ void IRQ_Callback(void)
     pipe = (status>>1)&0x07;
     NRF24_Read_Buf(RD_RX_PLOAD,RX_BUF,TX_PLOAD_WIDTH);
     *(RX_BUF+5) = pipe;
+		
+		if (RX_BUF[0] == 0x01) str1[0] = '!';
+			
     NRF24_WriteReg(STATUS, 0x40);
     rx_flag = 1;
   }

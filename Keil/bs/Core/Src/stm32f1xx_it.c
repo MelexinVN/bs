@@ -46,7 +46,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
-
+void IRQ_Callback(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/

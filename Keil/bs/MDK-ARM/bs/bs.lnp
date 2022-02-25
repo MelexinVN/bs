@@ -1,9 +1,9 @@
 --cpu Cortex-M3
 "bs\startup_stm32f103xb.o"
+"bs\nrf24.o"
 "bs\main.o"
 "bs\stm32f1xx_it.o"
 "bs\stm32f1xx_hal_msp.o"
-"bs\nrf24.o"
 "bs\usb_device.o"
 "bs\usbd_desc.o"
 "bs\usbd_cdc_if.o"
