@@ -1,7 +1,7 @@
 bs\nrf24.o: ..\Core\Src\nrf24.c
 bs\nrf24.o: ../Core/Inc/nrf24.h
-bs\nrf24.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h
-bs\nrf24.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+bs\nrf24.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+bs\nrf24.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
 bs\nrf24.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 bs\nrf24.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
@@ -16,7 +16,7 @@ bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 bs\nrf24.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy/stm32_hal_legacy.h
-bs\nrf24.o: D:\Keil\ARM\ARMCC\Bin\..\include\stddef.h
+bs\nrf24.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stddef.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc_ex.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_gpio_ex.h
@@ -42,3 +42,4 @@ bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rtc.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_spi.h
+bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h

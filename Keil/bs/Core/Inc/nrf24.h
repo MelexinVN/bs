@@ -48,9 +48,9 @@
 void NRF24_init(void);
 uint8_t NRF24_ReadReg(uint8_t addr);
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
-uint8_t NRF24L01_Send(uint8_t *pBuf);
-void NRF24L01_Receive(void);
-void IRQ_Callback(void);
-void TIM1_Callback(void);
+//uint8_t NRF24L01_Send(uint8_t *pBuf);
+//void NRF24L01_Receive(void);
+//void IRQ_Callback(void);
+//void TIM1_Callback(void);
 //------------------------------------------------
 #endif /* NRF24_H_ */

@@ -40,11 +40,12 @@ extern "C" {
 #include "stm32f1xx_ll_dma.h"
 #include "stm32f1xx_ll_rtc.h"
 #include "stm32f1xx_ll_spi.h"
+#include "stm32f1xx_ll_usart.h"
 #include "stm32f1xx_ll_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "nrf24.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

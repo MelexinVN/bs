@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include "nrf24.h"
 #include "usbd_cdc_if.h"
+#include <string.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +46,8 @@
 /* USER CODE BEGIN PV */
 
 char str1[5] = {0};
+char str2[5] = "12345";
+uint8_t buf1[20]={0};
 uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x05};
 
 /* USER CODE END PV */
@@ -55,6 +58,7 @@ static void MX_GPIO_Init(void);
 static void MX_RTC_Init(void);
 static void MX_IWDG_Init(void);
 static void MX_SPI1_Init(void);
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -62,11 +66,15 @@ static void MX_SPI1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
- void DelayMicro2(uint32_t micros)
+void USART_TX (uint8_t* dt, uint16_t sz)
 {
-  micros *= (SystemCoreClock / 1000000) / 9;
-  /* Wait till done */
-  while (micros--) ;
+  uint16_t ind = 0;
+  while (ind<sz)
+  {
+    while (!LL_USART_IsActiveFlag_TXE(USART1)) {}
+    LL_USART_TransmitData8(USART1,*(uint8_t*)(dt+ind));
+    ind++;
+  }
 }
 
 /* USER CODE END 0 */
@@ -78,7 +86,7 @@ static void MX_SPI1_Init(void);
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
+	uint8_t dt_reg=0;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -103,18 +111,47 @@ int main(void)
   MX_USB_DEVICE_Init();
   MX_IWDG_Init();
   MX_SPI1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   LL_SPI_Enable(SPI1);
+	LL_USART_Enable(USART1);
+	NRF24_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		DelayMicro2(1000);
-		LED_ON;
-		DelayMicro2(1000);
-		LED_OFF;		
+
+		LL_mDelay(1000);
+		dt_reg = NRF24_ReadReg(CONFIG);
+		sprintf(str1,"CONFIG: 0x%02X\r\n",dt_reg);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		dt_reg = NRF24_ReadReg(EN_AA);
+		sprintf(str1,"EN_AA: 0x%02X\r\n",dt_reg);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		dt_reg = NRF24_ReadReg(EN_RXADDR);
+		sprintf(str1,"EN_RXADDR: 0x%02X\r\n",dt_reg);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		dt_reg = NRF24_ReadReg(STATUS);
+		sprintf(str1,"STATUS: 0x%02X\r\n",dt_reg);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		dt_reg = NRF24_ReadReg(RF_SETUP);
+		sprintf(str1,"RF_SETUP: 0x%02X\r\n",dt_reg);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		NRF24_Read_Buf(TX_ADDR,buf1,3);
+		sprintf(str1,"TX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		NRF24_Read_Buf(RX_ADDR_P1,buf1,3);
+		sprintf(str1,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
+		USART_TX((uint8_t*)str1,strlen(str1));
+		
+		//DelayMicro(1000000);
+		//LL_mDelay(1000);
+		//LED_ON;
+		//DelayMicro(1000000);
+		//LL_mDelay(1000);
+		//LED_OFF;		
 		//
 		//IRQ_Callback();
 		//NRF24L01_Send(data);
@@ -330,6 +367,59 @@ static void MX_SPI1_Init(void)
 }
 
 /**
+  * @brief USART1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART1_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART1_Init 0 */
+
+  /* USER CODE END USART1_Init 0 */
+
+  LL_USART_InitTypeDef USART_InitStruct = {0};
+
+  LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* Peripheral clock enable */
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_USART1);
+
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
+  /**USART1 GPIO Configuration
+  PA9   ------> USART1_TX
+  PA10   ------> USART1_RX
+  */
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_9;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  GPIO_InitStruct.Pin = LL_GPIO_PIN_10;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING;
+  LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* USER CODE BEGIN USART1_Init 1 */
+
+  /* USER CODE END USART1_Init 1 */
+  USART_InitStruct.BaudRate = 115200;
+  USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
+  USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
+  USART_InitStruct.Parity = LL_USART_PARITY_NONE;
+  USART_InitStruct.TransferDirection = LL_USART_DIRECTION_TX_RX;
+  USART_InitStruct.HardwareFlowControl = LL_USART_HWCONTROL_NONE;
+  USART_InitStruct.OverSampling = LL_USART_OVERSAMPLING_16;
+  LL_USART_Init(USART1, &USART_InitStruct);
+  LL_USART_ConfigAsyncMode(USART1);
+  LL_USART_Enable(USART1);
+  /* USER CODE BEGIN USART1_Init 2 */
+
+  /* USER CODE END USART1_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -345,7 +435,7 @@ static void MX_GPIO_Init(void)
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_GPIOA);
 
   /**/
-  LL_GPIO_SetOutputPin(LED_GPIO_Port, LED_Pin);
+  LL_GPIO_ResetOutputPin(LED_GPIO_Port, LED_Pin);
 
   /**/
   LL_GPIO_ResetOutputPin(GPIOA, CE_Pin|CSN_Pin);
