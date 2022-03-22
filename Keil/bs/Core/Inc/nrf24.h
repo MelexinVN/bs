@@ -1,9 +1,7 @@
 #ifndef NRF24_H_
 #define NRF24_H_
 //------------------------------------------------
-#include <string.h>
-#include <stdint.h>
-#include "stm32f1xx_ll_gpio.h"
+#include "main.h"
 //------------------------------------------------
 #define CS_ON LL_GPIO_ResetOutputPin(GPIOA, CSN_Pin)
 #define CS_OFF LL_GPIO_SetOutputPin(GPIOA, CSN_Pin)
@@ -12,6 +10,7 @@
 #define LED_ON LL_GPIO_ResetOutputPin(LED_GPIO_Port, LED_Pin)
 #define LED_OFF LL_GPIO_SetOutputPin(LED_GPIO_Port, LED_Pin)
 #define LED_TGL LL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin)
+#define IRQ LL_GPIO_IsInputPinSet(IRQ_GPIO_Port, IRQ_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD 0x61 // Define RX payload register address
@@ -48,8 +47,8 @@
 void NRF24_init(void);
 uint8_t NRF24_ReadReg(uint8_t addr);
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
-//uint8_t NRF24L01_Send(uint8_t *pBuf);
-//void NRF24L01_Receive(void);
+uint8_t NRF24L01_Send(uint8_t *pBuf);
+void NRF24L01_Receive(void);
 //void IRQ_Callback(void);
 //void TIM1_Callback(void);
 //------------------------------------------------

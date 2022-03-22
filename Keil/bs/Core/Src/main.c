@@ -18,13 +18,10 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "nrf24.h"
-#include "usbd_cdc_if.h"
-#include <string.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,7 +42,7 @@
 
 /* USER CODE BEGIN PV */
 
-char str1[5] = {0};
+char str1[150] = {0};
 char str2[5] = "12345";
 uint8_t buf1[20]={0};
 uint8_t data[] = {0x01, 0x02, 0x03, 0x04, 0x05};
@@ -86,13 +83,27 @@ void USART_TX (uint8_t* dt, uint16_t sz)
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	uint8_t dt_reg=0;
+	//uint8_t dt_reg=0;
+	uint8_t retr_cnt, dt;
+	uint16_t i=1,retr_cnt_full;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_AFIO);
+  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+
+  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+
+  /* System interrupt init*/
+  /* SysTick_IRQn interrupt configuration */
+  NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),15, 0));
+
+  /** NOJTAG: JTAG-DP Disabled and SW-DP Enabled
+  */
+  LL_GPIO_AF_Remap_SWJ_NOJTAG();
 
   /* USER CODE BEGIN Init */
 
@@ -108,7 +119,6 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_RTC_Init();
-  MX_USB_DEVICE_Init();
   MX_IWDG_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
@@ -116,6 +126,10 @@ int main(void)
   LL_SPI_Enable(SPI1);
 	LL_USART_Enable(USART1);
 	NRF24_init();
+	
+	sprintf(str1,"STATUS ");
+	USART_TX((uint8_t*)str1,strlen(str1));
+		
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,48 +137,25 @@ int main(void)
   while (1)
   {
 
-		LL_mDelay(1000);
-		dt_reg = NRF24_ReadReg(CONFIG);
-		sprintf(str1,"CONFIG: 0x%02X\r\n",dt_reg);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		dt_reg = NRF24_ReadReg(EN_AA);
-		sprintf(str1,"EN_AA: 0x%02X\r\n",dt_reg);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		dt_reg = NRF24_ReadReg(EN_RXADDR);
-		sprintf(str1,"EN_RXADDR: 0x%02X\r\n",dt_reg);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		dt_reg = NRF24_ReadReg(STATUS);
-		sprintf(str1,"STATUS: 0x%02X\r\n",dt_reg);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		dt_reg = NRF24_ReadReg(RF_SETUP);
-		sprintf(str1,"RF_SETUP: 0x%02X\r\n",dt_reg);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		NRF24_Read_Buf(TX_ADDR,buf1,3);
-		sprintf(str1,"TX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
-		USART_TX((uint8_t*)str1,strlen(str1));
-		NRF24_Read_Buf(RX_ADDR_P1,buf1,3);
-		sprintf(str1,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
-		USART_TX((uint8_t*)str1,strlen(str1));
+		LL_mDelay(100);
 		
-		//DelayMicro(1000000);
-		//LL_mDelay(1000);
-		//LED_ON;
-		//DelayMicro(1000000);
-		//LL_mDelay(1000);
-		//LED_OFF;		
-		//
-		//IRQ_Callback();
-		//NRF24L01_Send(data);
+		
+		memcpy(buf1,(uint8_t*)&i,2);
+		memcpy(buf1+2,(uint8_t*)&retr_cnt_full,2);
+		dt = NRF24L01_Send(buf1);
+		retr_cnt = dt & 0xF;
+		i++;
+		retr_cnt_full += retr_cnt;
+		
 
-		//if (str1[0] == '!')
-		//{
-		//	CDC_Transmit_FS((uint8_t*)str1, strlen(str1));		
-		//	
-		//}
+		
+		
+		//NRF24L01_Receive();
 		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		LL_IWDG_ReloadCounter(IWDG);
   }
   /* USER CODE END 3 */
 }
@@ -229,14 +220,8 @@ void SystemClock_Config(void)
   {
 
   }
+  LL_Init1msTick(48000000);
   LL_SetSystemCoreClock(48000000);
-
-   /* Update the time base */
-  if (HAL_InitTick (TICK_INT_PRIORITY) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  LL_RCC_SetUSBClockSource(LL_RCC_USB_CLKSOURCE_PLL);
 }
 
 /**
@@ -426,7 +411,6 @@ static void MX_USART1_UART_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
-  LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
   LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
@@ -448,28 +432,16 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(LED_GPIO_Port, &GPIO_InitStruct);
 
   /**/
+  GPIO_InitStruct.Pin = IRQ_Pin;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING;
+  LL_GPIO_Init(IRQ_GPIO_Port, &GPIO_InitStruct);
+
+  /**/
   GPIO_InitStruct.Pin = CE_Pin|CSN_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /**/
-  LL_GPIO_AF_SetEXTISource(LL_GPIO_AF_EXTI_PORTA, LL_GPIO_AF_EXTI_LINE2);
-
-  /**/
-  EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_2;
-  EXTI_InitStruct.LineCommand = ENABLE;
-  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-  EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
-  LL_EXTI_Init(&EXTI_InitStruct);
-
-  /**/
-  LL_GPIO_SetPinMode(IRQ_GPIO_Port, IRQ_Pin, LL_GPIO_MODE_FLOATING);
-
-  /* EXTI interrupt init*/
-  NVIC_SetPriority(EXTI2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-  NVIC_EnableIRQ(EXTI2_IRQn);
 
 }
 
