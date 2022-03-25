@@ -2,66 +2,74 @@
 #include "main.h"
 //------------------------------------------------
 
-#define TX_ADR_WIDTH 3
-#define TX_PLOAD_WIDTH 5
-uint8_t TX_ADDRESS[TX_ADR_WIDTH] = {0xb3,0xb4,0x01};
-uint8_t RX_BUF[TX_PLOAD_WIDTH] = {0};
-//uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};
-//uint8_t RX_BUF[TX_PLOAD_WIDTH+1] = {0};
-//volatile uint8_t rx_flag = 0, tx_flag = 0;
-//uint32_t TIM1_Count=0;
-//uint16_t cnt1=0;
-//extern uint8_t buf1[20];
-//extern char str1[];
-extern char str1[150];
-uint8_t ErrCnt_Fl = 0;
+#define OO//OO/OI									//выбор устройства
 
+#define TX_ADR_WIDTH 3						//размер адреса передачи
+#define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
+
+#ifdef OO
+uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
+uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 1
+#endif
+
+#ifdef OI
+uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
+uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
+#endif
+
+uint8_t rx_buf[TX_PLOAD_WIDTH+1] = {0};			//приемный буфер
+volatile uint8_t rx_flag = 0, tx_flag = 0;	//флаги приема и передачи
+uint16_t cnt1=0;														//счетчик
+extern uint8_t f_send;											//флаг отправки
+extern uint8_t buf1[20];										//буфер
+extern char str1[20];												//строка для вывода данных
+//самодельная функция микросекундной задержки
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
 {
-  micros *= (SystemCoreClock / 1000000) / 9;
+  micros *= (SystemCoreClock / 1000000) / 9;	//делитель (9) получен экспериментально
   /* Wait till done */
   while (micros--) ;
 }
-
+//функция чтения регистра модуля
 uint8_t NRF24_ReadReg(uint8_t addr)
 {
-  uint8_t dt=0, cmd;
-  CS_ON;
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-  LL_SPI_TransmitData8 (SPI1, addr);
-	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-	dt = LL_SPI_ReceiveData8(SPI1);
-		
-  if (addr!=STATUS)//если адрес равен адрес регистра статус то и возварщаем его состояние
+  uint8_t dt=0, cmd;												//переменные данных и команды
+  CS_ON;																		//ногу cs к земле
+	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	//ждем пока не поднимется флаг txe (готовность к передаче)
+  LL_SPI_TransmitData8 (SPI1, addr);				//передаем байт адреса по spi
+	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {} //ждем пока не поднимется флаг rxne (есть данные на прием)
+	dt = LL_SPI_ReceiveData8(SPI1);						//принимаем данные по spi
+	//если адрес равен адрес регистра статус то и возварщаем его состояние	
+  if (addr!=STATUS)//а если не равен
   {
-    cmd=0xFF;
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-		LL_SPI_TransmitData8 (SPI1, cmd);
-		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-		dt = LL_SPI_ReceiveData8(SPI1);
+    cmd=0xFF;				//команда NOP для получения данных
+		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	
+		LL_SPI_TransmitData8 (SPI1, cmd);					//пишем пустую команду
+		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}	
+		dt = LL_SPI_ReceiveData8(SPI1);						//получаем данные, 1 байт
   }
-  CS_OFF;
-  return dt;
+  CS_OFF;																			//поднимаем ногу CS
+  return dt;	//возвращаемое значение
 }
 //------------------------------------------------
-void NRF24_WriteReg(uint8_t addr, uint8_t dt)
+void NRF24_WriteReg(uint8_t addr, uint8_t dt)		//запись регистра
 {
-  addr |= W_REGISTER;//включим бит записи в адрес
+  addr |= W_REGISTER;//включим бит записи в адрес	
   CS_ON;
   while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
+	LL_SPI_TransmitData8 (SPI1, addr);				//записываем адрес с командой записи
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-	(void) SPI1->DR;
+	(void) SPI1->DR;													//читаем регистр DR, имитация приема, который обязательно происходит одновременно с записью
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt);
+	LL_SPI_TransmitData8 (SPI1, dt);					//запись данных
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
-	(void) SPI1->DR;
+	(void) SPI1->DR;													//имитация чтения
   CS_OFF;
 }
 //------------------------------------------------
-void NRF24_ToggleFeatures(void)
-{
+void NRF24_ToggleFeatures(void)							//активация команд R_RX_PL_WID, W_ACK_PAYLOAD и W_TX_PAYLOAD_NOACK
+{	//есть в даташите "без плюса"
   uint8_t dt[1] = {ACTIVATE};
   CS_ON;
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
@@ -78,35 +86,35 @@ void NRF24_ToggleFeatures(void)
 }
 //-----------------------------------------------
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
+{//чтение буфера (несколько байт)
   CS_ON;
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
+	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	
+	LL_SPI_TransmitData8 (SPI1, addr);				//сначала пишем адрес
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
-	(void) SPI1->DR;
-	for (uint8_t i = 0 ; i < bytes ; i++) 
-	{
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-		LL_SPI_TransmitData8 (SPI1, addr);
+	(void) SPI1->DR;													//имитируем прием
+	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
+	{																					//
+		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}//
+		LL_SPI_TransmitData8 (SPI1, addr);			//записываем каждый раз адрес
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}	
-		pBuf[i] = LL_SPI_ReceiveData8(SPI1);	
+		pBuf[i] = LL_SPI_ReceiveData8(SPI1);		//читаем очередной байт
 	}
   CS_OFF;
 }
 //------------------------------------------------
-void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
+void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)	
+{//запись буфера
   addr |= W_REGISTER;//включим бит записи в адрес
   CS_ON;
   while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8(SPI1, addr);
+	LL_SPI_TransmitData8(SPI1, addr);					//записываем адрес регистра, откуда будем читать
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
   DelayMicro(1);
-  for (uint8_t i = 0 ; i < bytes ; i++) 
+  for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
 	{
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	
-		LL_SPI_TransmitData8(SPI1, pBuf[i]);
+		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	//
+		LL_SPI_TransmitData8(SPI1, pBuf[i]);			//отправляем очередной байт
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 		(void) SPI1->DR;	
 	}
@@ -114,36 +122,40 @@ void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 }
 //------------------------------------------------
 void NRF24_FlushRX(void)
-{
+{//очистка буфера приема
   uint8_t dt[1] = {FLUSH_RX};
   CS_ON;
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
-  DelayMicro(1);
+  DelayMicro(1);//пауза в микросекунду для завершения процесса
   CS_OFF;
 }
 //------------------------------------------------
 void NRF24_FlushTX(void)
-{
+{//очистка буфера передачи
   uint8_t dt[1] = {FLUSH_TX};
   CS_ON;
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
-  DelayMicro(1);
+  DelayMicro(1);//пауза в микросекунду для завершения процесса
   CS_OFF;
 }
 //------------------------------------------------
 void NRF24L01_RX_Mode(void)
-{
+{//режим приемника
   uint8_t regval=0x00;
-  regval = NRF24_ReadReg(CONFIG);
+  regval = NRF24_ReadReg(CONFIG);	//сохраняем значение регистра конфигурации
   //разбудим модуль и переведём его в режим приёмника, включив биты PWR_UP и PRIM_RX
   regval |= (1<<PWR_UP)|(1<<PRIM_RX);
-  NRF24_WriteReg(CONFIG,regval);
+  NRF24_WriteReg(CONFIG,regval);	//возвращаем значение регистра статуса
+	
+	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS1, TX_ADR_WIDTH);		//записываем  адрес передатчика
+	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS1, TX_ADR_WIDTH);	//записываем адрес приемника
+	
   CE_SET;
   DelayMicro(150); //Задержка минимум 130 мкс
   // Flush buffers
@@ -152,9 +164,9 @@ void NRF24L01_RX_Mode(void)
 }
 //------------------------------------------------
 void NRF24L01_TX_Mode(uint8_t *pBuf)
-{
-  NRF24_Write_Buf(TX_ADDR, TX_ADDRESS, TX_ADR_WIDTH);
-	//NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS, TX_ADR_WIDTH);
+{//режим передатчика
+  NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);		//записываем адрес передатчика
+	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);	//записываем адрес приемника
   CE_RESET;
   // Flush buffers
   NRF24_FlushRX();
@@ -162,11 +174,11 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 }
 
 void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
+{//передача данных
   CE_RESET;
   CS_ON;
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
+	LL_SPI_TransmitData8 (SPI1, addr);				//отправляем адрес
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
   DelayMicro(1);
@@ -183,7 +195,7 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
 {
-  uint8_t status=0x00, regval=0x00;
+  uint8_t regval=0x00;
 	NRF24L01_TX_Mode(pBuf);
 	regval = NRF24_ReadReg(CONFIG);
 	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
@@ -196,256 +208,20 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	CE_SET;
 	DelayMicro(15); //minimum 10us high pulse (Page 21)
 	CE_RESET;
-	while(IRQ) {}
-	status = NRF24_ReadReg(STATUS);
-	if(status&TX_DS) //tx_ds == 0x20
-	{
-    LED_TGL;
-		NRF24_WriteReg(STATUS, 0x20);
-	}
-	else if(status&MAX_RT)
-	{
-		NRF24_WriteReg(STATUS, 0x10);
-		NRF24_FlushTX();
-	}
-	regval = NRF24_ReadReg(OBSERVE_TX);
-	//Уходим в режим приёмника
-  NRF24L01_RX_Mode();
-  return regval;
+	return 0;
 }
 //------------------------------------------------
 void NRF24L01_Receive(void)
 {
-  uint8_t status=0x01;
-  uint16_t dt=0;
-	while(IRQ) {}
-	status = NRF24_ReadReg(STATUS);
-	sprintf(str1,"STATUS: 0x%02X\r\n",status);
-	USART_TX((uint8_t*)str1,strlen(str1));
-	LED_TGL;
-	DelayMicro(10);
-  status = NRF24_ReadReg(STATUS);
-  if(status & 0x40)
-  {
-    NRF24_Read_Buf(RD_RX_PLOAD,RX_BUF,TX_PLOAD_WIDTH);
-    dt = *(int16_t*)RX_BUF;
-    sprintf(str1,"dt: %d\r\n",dt);
+	if(rx_flag==1)
+	{
+		sprintf(str1,"received: %d\r\n",rx_buf[0]);
 		USART_TX((uint8_t*)str1,strlen(str1));
-    dt = *(int16_t*)(RX_BUF+2);
-    dt = *(int16_t*)RX_BUF;
-    sprintf(str1,"dt: %d\r\n",dt);
-    NRF24_WriteReg(STATUS, 0x40);
-  }
+		if (rx_buf[0] == 0x02)	f_send = 1;
+		rx_flag = 0;
+	}
 }
 
-//------------------------------------------------
-void NRF24_init(void)
-{
-	CE_RESET;
-  DelayMicro(5000);
-	NRF24_WriteReg(CONFIG, 0x0a); // Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
-  DelayMicro(5000);
-	//NRF24_WriteReg(EN_AA, 0x02); // Enable Pipe1
-	//NRF24_WriteReg(EN_RXADDR, 0x02); // Enable Pipe1
-	NRF24_WriteReg(EN_AA, 0x01); // Enable Pipe0
-	NRF24_WriteReg(EN_RXADDR, 0x01); // Enable Pipe0
-	NRF24_WriteReg(SETUP_AW, 0x01); // Setup address width=3 bytes
-	NRF24_WriteReg(SETUP_RETR, 0x5F); // // 1500us, 15 retrans
-	NRF24_ToggleFeatures();
-	NRF24_WriteReg(FEATURE, 0);
-	NRF24_WriteReg(DYNPD, 0);
-	NRF24_WriteReg(STATUS, 0x70); //Reset flags for IRQ
-	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
-	NRF24_WriteReg(RF_SETUP, 0x06); //TX_PWR:0dBm, Datarate:1Mbps
-	//NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS, TX_ADR_WIDTH);
-	//NRF24_WriteReg(RX_PW_P1, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
-	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS, TX_ADR_WIDTH);
-	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS, TX_ADR_WIDTH);
-	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
- //пока уходим в режим приёмника
-  NRF24L01_RX_Mode();
-  LED_OFF;
-}
-//--------------------------------------------------
-
-/*
-//--------------------------------------------------
-uint8_t NRF24_ReadReg(uint8_t addr)
-{
-  uint8_t dt=0, cmd;
-  CS_ON;
-  //HAL_SPI_TransmitReceive(&hspi1,&addr,&dt,1,1000);
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-  LL_SPI_TransmitData8 (SPI1, addr);
-	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-	dt = LL_SPI_ReceiveData8(SPI1);
-	
-  if (addr!=STATUS)//если адрес равен адрес регистра статус то и возварщаем его состояние
-  {
-    cmd=0xFF;
-    //HAL_SPI_TransmitReceive(&hspi1,&cmd,&dt,1,1000);
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-		LL_SPI_TransmitData8 (SPI1, cmd);
-		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-		dt = LL_SPI_ReceiveData8(SPI1);
-  }
-  CS_OFF;
-  return dt;
-}
-//------------------------------------------------
-void NRF24_WriteReg(uint8_t addr, uint8_t dt)
-{
-  addr |= W_REGISTER;//включим бит записи в адрес
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,&addr,1,1000);//отправим адрес в шину
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
-  //HAL_SPI_Transmit(&hspi1,&dt,1,1000);//отправим данные в шину
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt);
-  CS_OFF;
-}
-//------------------------------------------------
-void NRF24_ToggleFeatures(void)
-{
-  uint8_t dt[1] = {ACTIVATE};
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,dt,1,1000);
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt[0]);
-  DelayMicro(1);
-  dt[0] = 0x73;
-  //HAL_SPI_Transmit(&hspi1,dt,1,1000);
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt[0]);
-  CS_OFF;
-}
-//-----------------------------------------------
-void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,&addr,1,1000);//отправим адрес в шину
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
-  //HAL_SPI_Receive(&hspi1,pBuf,bytes,1000);//отправим данные в буфер
-	for (uint8_t i = 0 ; i < bytes ; i++) 
-	{
-		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
-		pBuf[i] = LL_SPI_ReceiveData8(SPI1);	
-	}
-	
-  CS_OFF;
-}
-//------------------------------------------------
-void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
-  addr |= W_REGISTER;//включим бит записи в адрес
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,&addr,1,1000);//отправим адрес в шину
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
-  DelayMicro(1);
-  //HAL_SPI_Transmit(&hspi1,pBuf,bytes,1000);//отправим данные в буфер
-	for (uint8_t i = 0 ; i < bytes ; i++) 
-	{
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-		LL_SPI_TransmitData8 (SPI1, pBuf[i]);
-	}
-  CS_OFF;
-}
-//------------------------------------------------
-void NRF24_FlushRX(void)
-{
-  uint8_t dt[1] = {FLUSH_RX};
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,dt,1,1000);
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt[0]);
-  DelayMicro(1);
-  CS_OFF;
-}
-//------------------------------------------------
-void NRF24_FlushTX(void)
-{
-  uint8_t dt[1] = {FLUSH_TX};
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,dt,1,1000);
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, dt[0]);
-  DelayMicro(1);
-  CS_OFF;
-}
-//------------------------------------------------
-void NRF24L01_RX_Mode(void)
-{
-  uint8_t regval=0x00;
-  regval = NRF24_ReadReg(CONFIG);
-  //разбудим модуль и переведём его в режим приёмника, включив биты PWR_UP и PRIM_RX
-  regval |= (1<<PWR_UP)|(1<<PRIM_RX);
-  NRF24_WriteReg(CONFIG,regval);
-	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS1, TX_ADR_WIDTH);
-	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS1, TX_ADR_WIDTH);
-  CE_SET;
-  DelayMicro(150); //Задержка минимум 130 мкс
-  // Flush buffers
-  NRF24_FlushRX();
-  NRF24_FlushTX();
-}
-//------------------------------------------------
-void NRF24L01_TX_Mode(uint8_t *pBuf)
-{
-  NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);
-	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);
-  CE_RESET;
-  // Flush buffers
-  NRF24_FlushRX();
-  NRF24_FlushTX();
-}
-//------------------------------------------------
-void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{
-  CE_RESET;
-  CS_ON;
-  //HAL_SPI_Transmit(&hspi1,&addr,1,1000);//отправим адрес в шину
-	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);
-  DelayMicro(1);
-  //HAL_SPI_Transmit(&hspi1,pBuf,bytes,1000);//отправим данные в буфер
-	for (uint8_t i = 0 ; i < bytes ; i++) 
-	{
-		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-		LL_SPI_TransmitData8 (SPI1, pBuf[i]);
-	}
-  CS_OFF;
-  CE_SET;
-}
-//------------------------------------------------
-uint8_t NRF24L01_Send(uint8_t *pBuf)
-{
-  uint8_t regval=0x00;
-  NRF24L01_TX_Mode(pBuf);
-  regval = NRF24_ReadReg(CONFIG);
-  //если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
-  regval |= (1<<PWR_UP);
-  regval &= ~(1<<PRIM_RX);
-  NRF24_WriteReg(CONFIG,regval);
-  DelayMicro(150); //Задержка минимум 130 мкс
-  //Отправим данные в воздух
-  NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);
-  CE_SET;
-  DelayMicro(15); //minimum 10us high pulse (Page 21)
-  CE_RESET;
-  return 0;
-}
-//------------------------------------------------
-void NRF24L01_Receive(void)
-{
-  if(rx_flag==1)
-  {
-    //NumberL_7219(*(int16_t*)RX_BUF);
-    rx_flag = 0;
-  }
-}
 //------------------------------------------------
 void NRF24_init(void)
 {
@@ -464,8 +240,8 @@ void NRF24_init(void)
 	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
 	NRF24_WriteReg(RF_SETUP, 0x06); //TX_PWR:0dBm, Datarate:1Mbps
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);
-	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);
-	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 0
+	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);
+	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
  //пока уходим в режим приёмника
   NRF24L01_RX_Mode();
   LED_OFF;
@@ -473,7 +249,8 @@ void NRF24_init(void)
 //--------------------------------------------------
 void IRQ_Callback(void)
 {
-  uint8_t status=0x01;
+	LED_TGL;
+	uint8_t status=0x01;
   uint8_t pipe;
   DelayMicro(10);
   status = NRF24_ReadReg(STATUS);
@@ -481,11 +258,8 @@ void IRQ_Callback(void)
   {
     LED_TGL;
     pipe = (status>>1)&0x07;
-    NRF24_Read_Buf(RD_RX_PLOAD,RX_BUF,TX_PLOAD_WIDTH);
-    *(RX_BUF+5) = pipe;
-		
-		if (RX_BUF[0] == 0x01) str1[0] = '!';
-			
+    NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);
+    *(rx_buf+5) = pipe;
     NRF24_WriteReg(STATUS, 0x40);
     rx_flag = 1;
   }
@@ -505,18 +279,8 @@ void IRQ_Callback(void)
   }
 }
 //--------------------------------------------------
-void TIM1_Callback(void)
+void TIM2_Callback(void)
 {
-  if(TIM1_Count%20==0)
-  {
-    cnt1++;
-    memcpy(buf1,(uint8_t*)&cnt1,2);
-    NRF24L01_Send(buf1);
-    Number_7219(*(uint16_t*)buf1);
-    if(cnt1>=9999) cnt1=0;
-    HAL_Delay(1);
-  }
-  TIM1_Count++;
-  if(TIM1_Count>3000000) TIM1_Count=0;
-}*/
+
+}
 //--------------------------------------------------

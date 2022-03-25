@@ -2,7 +2,7 @@ bs\system_stm32f1xx.o: ../Core/Src/system_stm32f1xx.c
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Include/core_cm3.h
-bs\system_stm32f1xx.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+bs\system_stm32f1xx.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Include/cmsis_version.h
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 bs\system_stm32f1xx.o: ../Drivers/CMSIS/Include/cmsis_armcc.h

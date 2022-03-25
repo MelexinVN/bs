@@ -38,6 +38,7 @@ extern "C" {
 #include "stm32f1xx_ll_dma.h"
 #include "stm32f1xx_ll_rtc.h"
 #include "stm32f1xx_ll_spi.h"
+#include "stm32f1xx_ll_tim.h"
 #include "stm32f1xx_ll_usart.h"
 #include "stm32f1xx_ll_gpio.h"
 
@@ -80,6 +81,7 @@ void USART_TX (uint8_t* dt, uint16_t sz);
 #define LED_GPIO_Port GPIOC
 #define IRQ_Pin LL_GPIO_PIN_2
 #define IRQ_GPIO_Port GPIOA
+#define IRQ_EXTI_IRQn EXTI2_IRQn
 #define CE_Pin LL_GPIO_PIN_3
 #define CE_GPIO_Port GPIOA
 #define CSN_Pin LL_GPIO_PIN_4

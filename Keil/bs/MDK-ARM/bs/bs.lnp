@@ -11,6 +11,7 @@
 "bs\stm32f1xx_ll_spi.o"
 "bs\stm32f1xx_ll_dma.o"
 "bs\stm32f1xx_ll_pwr.o"
+"bs\stm32f1xx_ll_tim.o"
 "bs\stm32f1xx_ll_usart.o"
 "bs\system_stm32f1xx.o"
 --strict --scatter "bs\bs.sct"

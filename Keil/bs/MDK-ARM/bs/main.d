@@ -4,7 +4,7 @@ bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_iwdg.h
 bs\main.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 bs\main.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 bs\main.o: ../Drivers/CMSIS/Include/core_cm3.h
-bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+bs\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 bs\main.o: ../Drivers/CMSIS/Include/cmsis_version.h
 bs\main.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 bs\main.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
@@ -19,9 +19,10 @@ bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rtc.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_spi.h
+bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
 bs\main.o: ../Core/Inc/nrf24.h
 bs\main.o: ../Core/Inc/main.h
-bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h
-bs\main.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+bs\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+bs\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
