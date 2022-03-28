@@ -174,18 +174,18 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 }
 
 void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
-{//передача данных
+{//передача данных в модуль
   CE_RESET;
   CS_ON;
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
-	LL_SPI_TransmitData8 (SPI1, addr);				//отправляем адрес
+	LL_SPI_TransmitData8 (SPI1, addr);				//отправляем адрес регистра
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
   DelayMicro(1);
   for (uint8_t i = 0 ; i < bytes ; i++) 
 	{
 		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	
-		LL_SPI_TransmitData8(SPI1, pBuf[i]);
+		LL_SPI_TransmitData8(SPI1, pBuf[i]);		//отправляем данные
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 		(void) SPI1->DR;	
 	}
@@ -194,17 +194,17 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 }
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
-{
-  uint8_t regval=0x00;
+{//отправка данных в эфир
+  uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
 	NRF24L01_TX_Mode(pBuf);
-	regval = NRF24_ReadReg(CONFIG);
+	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
 	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
 	regval |= (1<<PWR_UP);
 	regval &= ~(1<<PRIM_RX);
-	NRF24_WriteReg(CONFIG,regval);
+	NRF24_WriteReg(CONFIG,regval);//записываем новое значение конфигурационного регистра
 	DelayMicro(150); //Задержка минимум 130 мкс
 	//Отправим данные в воздух
-	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);
+	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);//отправка данных
 	CE_SET;
 	DelayMicro(15); //minimum 10us high pulse (Page 21)
 	CE_RESET;
@@ -213,67 +213,68 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 //------------------------------------------------
 void NRF24L01_Receive(void)
 {
-	if(rx_flag==1)
+	if(rx_flag==1)				//если флаг приема поднят
 	{
-		sprintf(str1,"received: %d\r\n",rx_buf[0]);
+		sprintf(str1,"received: %d\r\n",rx_buf[0]);//передаем принятое в порт
 		USART_TX((uint8_t*)str1,strlen(str1));
-		if (rx_buf[0] == 0x02)	f_send = 1;
-		rx_flag = 0;
+		if (rx_buf[0] == 0x02)	f_send = 1;	//поднимаем флаг о том, что нужно отправить ответ
+		rx_flag = 0;				//опускаем флаг приема
 	}
 }
 
 //------------------------------------------------
 void NRF24_init(void)
-{
-	CE_RESET;
-  DelayMicro(5000);
+{//инициализация
+	CE_RESET;						//опускаем к земле вывод ce
+  DelayMicro(5000);		//задержка 5 мс
+	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a); // Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
   DelayMicro(5000);
 	NRF24_WriteReg(EN_AA, 0x01); // Enable Pipe0
 	NRF24_WriteReg(EN_RXADDR, 0x01); // Enable Pipe0
 	NRF24_WriteReg(SETUP_AW, 0x01); // Setup address width=3 bytes
 	NRF24_WriteReg(SETUP_RETR, 0x5F); // // 1500us, 15 retrans
-	NRF24_ToggleFeatures();
-	NRF24_WriteReg(FEATURE, 0);
-	NRF24_WriteReg(DYNPD, 0);
+	NRF24_ToggleFeatures();//активация команд
+	NRF24_WriteReg(FEATURE, 0);//установка стандартных значений регистра FEATURE 
+	NRF24_WriteReg(DYNPD, 0);//отключение динамического размера полезной нагрузки
 	NRF24_WriteReg(STATUS, 0x70); //Reset flags for IRQ
 	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
 	NRF24_WriteReg(RF_SETUP, 0x06); //TX_PWR:0dBm, Datarate:1Mbps
-	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);
-	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);
+	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
+	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
  //пока уходим в режим приёмника
-  NRF24L01_RX_Mode();
+  NRF24L01_RX_Mode();	//режим приема
   LED_OFF;
 }
 //--------------------------------------------------
 void IRQ_Callback(void)
 {
-	LED_TGL;
-	uint8_t status=0x01;
-  uint8_t pipe;
+	LED_TGL;							//меняем состояние светодиода
+	uint8_t status=0x01;	//переменная статус
+  uint8_t pipe;					//переменная номера трубы
   DelayMicro(10);
-  status = NRF24_ReadReg(STATUS);
-  if(status & 0x40)
+  status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
+  if(status & RX_DR)							//если есть данные на прием
   {
-    LED_TGL;
-    pipe = (status>>1)&0x07;
-    NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);
-    *(rx_buf+5) = pipe;
-    NRF24_WriteReg(STATUS, 0x40);
-    rx_flag = 1;
+    LED_TGL;											//дергаем светодиод
+    pipe = (status>>1)&0x07;			//чтение номера трубы, в которой есть данные на прием
+    NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
+    *(rx_buf+5) = pipe;						//запись номера трубы в последний байт буфера
+    NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
+    rx_flag = 1;									//поднимаем флаг приема
   }
-  if(status&TX_DS) //tx_ds == 0x20
+  if(status & TX_DS) //данные успешно отправлены
   {
-    LED_TGL;
-    NRF24_WriteReg(STATUS, 0x20);
-    NRF24L01_RX_Mode();
-    tx_flag = 1;
+    LED_TGL;											//дергаем светодиод
+    NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
+    NRF24L01_RX_Mode();						//переход в режим приема
+    tx_flag = 1;									//поднимаем флаг передачи
   }
-  else if(status&MAX_RT)
+  else if(status & MAX_RT)//превышение количества попыток отправки
   {
-    NRF24_WriteReg(STATUS, 0x10);
-    NRF24_FlushTX();
+    NRF24_WriteReg(STATUS, 0x10);//однуление всех остальных битов, кроме 4го
+    NRF24_FlushTX();			//очистка буфера отправки
     //Уходим в режим приёмника
     NRF24L01_RX_Mode();
   }
