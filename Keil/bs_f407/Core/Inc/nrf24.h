@@ -3,10 +3,10 @@
 //------------------------------------------------
 #include "main.h"
 //------------------------------------------------
-#define CS_ON LL_GPIO_ResetOutputPin(GPIOA, CS_Pin)
-#define CS_OFF LL_GPIO_SetOutputPin(GPIOA, CS_Pin)
-#define CE_RESET LL_GPIO_ResetOutputPin(GPIOA, CE_Pin)
-#define CE_SET LL_GPIO_SetOutputPin(GPIOA, CE_Pin)
+#define CS_ON LL_GPIO_ResetOutputPin(CSN_GPIO_Port, CSN_Pin)
+#define CS_OFF LL_GPIO_SetOutputPin(CSN_GPIO_Port, CSN_Pin)
+#define CE_RESET LL_GPIO_ResetOutputPin(CE_GPIO_Port, CE_Pin)
+#define CE_SET LL_GPIO_SetOutputPin(CE_GPIO_Port, CE_Pin)
 #define LED_ON LL_GPIO_ResetOutputPin(D2_GPIO_Port, D2_Pin)
 #define LED_OFF LL_GPIO_SetOutputPin(D2_GPIO_Port, D2_Pin)
 #define LED_TGL LL_GPIO_TogglePin(D2_GPIO_Port, D2_Pin)

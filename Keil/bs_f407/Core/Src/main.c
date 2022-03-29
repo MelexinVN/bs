@@ -143,7 +143,7 @@ int main(void)
   sprintf(str1,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
 	USART_TX((uint8_t*)str1,strlen(str1));
 
-	  /* USER CODE END 2 */
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
@@ -158,8 +158,9 @@ int main(void)
 			NRF24L01_Send(buf);
 			f_send = 0;
 		}
+
+
 /*
-		LL_mDelay(100);
 		sprintf(str1,"start\r\n");//передаем принятое в порт
 		USART_TX((uint8_t*)str1,strlen(str1));
 */
@@ -233,8 +234,7 @@ static void MX_IWDG_Init(void)
   /* USER CODE BEGIN IWDG_Init 1 */
 
   /* USER CODE END IWDG_Init 1 */
-  
-	LL_IWDG_Enable(IWDG);
+  LL_IWDG_Enable(IWDG);
   LL_IWDG_EnableWriteAccess(IWDG);
   LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
   LL_IWDG_SetReloadCounter(IWDG, 4095);
@@ -243,7 +243,6 @@ static void MX_IWDG_Init(void)
   }
 
   LL_IWDG_ReloadCounter(IWDG);
-	
   /* USER CODE BEGIN IWDG_Init 2 */
 
   /* USER CODE END IWDG_Init 2 */
@@ -277,7 +276,7 @@ static void MX_SPI1_Init(void)
   */
   GPIO_InitStruct.Pin = LL_GPIO_PIN_3|LL_GPIO_PIN_4|LL_GPIO_PIN_5;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_ALTERNATE;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_VERY_HIGH;
+  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
   GPIO_InitStruct.Alternate = LL_GPIO_AF_5;
@@ -376,7 +375,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(GPIOA, D2_Pin|D3_Pin);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOB, CE_Pin|CS_Pin);
+  LL_GPIO_ResetOutputPin(GPIOB, CE_Pin|CSN_Pin);
 
   /**/
   GPIO_InitStruct.Pin = KEY1_Pin|KEY0_Pin;
@@ -393,7 +392,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /**/
-  GPIO_InitStruct.Pin = CE_Pin|CS_Pin;
+  GPIO_InitStruct.Pin = CE_Pin|CSN_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
   GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;

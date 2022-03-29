@@ -85,8 +85,8 @@ void USART_TX (uint8_t* dt, uint16_t sz);
 #define D3_GPIO_Port GPIOA
 #define CE_Pin LL_GPIO_PIN_6
 #define CE_GPIO_Port GPIOB
-#define CS_Pin LL_GPIO_PIN_7
-#define CS_GPIO_Port GPIOB
+#define CSN_Pin LL_GPIO_PIN_7
+#define CSN_GPIO_Port GPIOB
 #define IRQ_Pin LL_GPIO_PIN_8
 #define IRQ_GPIO_Port GPIOB
 #define IRQ_EXTI_IRQn EXTI9_5_IRQn

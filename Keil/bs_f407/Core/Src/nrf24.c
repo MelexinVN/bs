@@ -2,17 +2,17 @@
 #include "main.h"
 //------------------------------------------------
 
-#define OO//OO/OI									//выбор устройства
+#define BAZ												//выбор устройства: BAZ - база, BUT - кнопка
 
 #define TX_ADR_WIDTH 3						//размер адреса передачи
 #define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
 
-#ifdef OO
+#ifdef BAZ
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 1
 #endif
 
-#ifdef OI
+#ifdef BUT
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
 #endif
@@ -49,7 +49,7 @@ uint8_t NRF24_ReadReg(uint8_t addr)
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}	
 		dt = LL_SPI_ReceiveData8(SPI1);						//получаем данные, 1 байт
   }
-  CS_OFF;																			//поднимаем ногу CS
+	CS_OFF;																			//поднимаем ногу CS
   return dt;	//возвращаемое значение
 }
 //------------------------------------------------
@@ -65,7 +65,7 @@ void NRF24_WriteReg(uint8_t addr, uint8_t dt)		//запись регистра
 	LL_SPI_TransmitData8 (SPI1, dt);					//запись данных
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;													//имитация чтения
-  CS_OFF;
+	CS_OFF;
 }
 //------------------------------------------------
 void NRF24_ToggleFeatures(void)							//активация команд R_RX_PL_WID, W_ACK_PAYLOAD и W_TX_PAYLOAD_NOACK
@@ -92,7 +92,8 @@ void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 	LL_SPI_TransmitData8 (SPI1, addr);				//сначала пишем адрес
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;													//имитируем прием
-	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
+  DelayMicro(1);	
+		for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
 	{																					//
 		while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}//
 		LL_SPI_TransmitData8 (SPI1, addr);			//записываем каждый раз адрес
@@ -227,7 +228,6 @@ void NRF24_init(void)
 {//инициализация
 	CE_RESET;						//опускаем к земле вывод ce
   DelayMicro(5000);		//задержка 5 мс
-	//CE_SET;
 	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a); // Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
   DelayMicro(5000);
