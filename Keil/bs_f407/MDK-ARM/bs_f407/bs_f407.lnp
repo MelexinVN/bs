@@ -1,6 +1,7 @@
 --cpu=Cortex-M4.fp.sp
 "bs_f407\startup_stm32f407xx.o"
 "bs_f407\nrf24.o"
+"bs_f407\usart_ring.o"
 "bs_f407\main.o"
 "bs_f407\stm32f4xx_it.o"
 "bs_f407\system_stm32f4xx.o"

@@ -7,12 +7,10 @@
 "bs\stm32f1xx_ll_rcc.o"
 "bs\stm32f1xx_ll_utils.o"
 "bs\stm32f1xx_ll_exti.o"
-"bs\stm32f1xx_ll_rtc.o"
 "bs\stm32f1xx_ll_spi.o"
 "bs\stm32f1xx_ll_dma.o"
 "bs\stm32f1xx_ll_pwr.o"
 "bs\stm32f1xx_ll_tim.o"
-"bs\stm32f1xx_ll_usart.o"
 "bs\system_stm32f1xx.o"
 --strict --scatter "bs\bs.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols

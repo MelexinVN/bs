@@ -41,12 +41,15 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-
+extern volatile uint16_t rx_buffer_head;						//указатель заголовка буфера
+extern volatile uint16_t rx_buffer_tail;						//указатель конца буфера
+extern unsigned char rx_buffer[UART_RX_BUFFER_SIZE];//приемный буфер
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 void IRQ_Callback(void);
+void RST_PUSH_Callback(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -199,6 +202,26 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+  * @brief This function handles EXTI line4 interrupt.
+  */
+void EXTI4_IRQHandler(void)
+{
+  /* USER CODE BEGIN EXTI4_IRQn 0 */
+
+  /* USER CODE END EXTI4_IRQn 0 */
+  if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_4) != RESET)
+  {
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_4);
+    /* USER CODE BEGIN LL_EXTI_LINE_4 */
+		RST_PUSH_Callback();
+    /* USER CODE END LL_EXTI_LINE_4 */
+  }
+  /* USER CODE BEGIN EXTI4_IRQn 1 */
+
+  /* USER CODE END EXTI4_IRQn 1 */
+}
+
+/**
   * @brief This function handles EXTI line[9:5] interrupts.
   */
 void EXTI9_5_IRQHandler(void)
@@ -216,6 +239,48 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
 
   /* USER CODE END EXTI9_5_IRQn 1 */
+}
+
+/**
+  * @brief This function handles USART1 global interrupt.
+  */
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+	//Если поднят флаг приема и разрешены прерывания по приему 
+	if(LL_USART_IsActiveFlag_RXNE(USART1) && LL_USART_IsEnabledIT_RXNE(USART1))
+	  {
+			//Читаем байт из регистра
+			uint8_t rbyte =  LL_USART_ReceiveData8(USART1);	
+			//Переменной i присваиваем следующее за указателем заголовка значение
+			uint16_t i = (uint16_t)(rx_buffer_head + 1) % UART_RX_BUFFER_SIZE;
+			if(i != rx_buffer_tail)								//если заголовок не совпадает с концом
+			{
+				rx_buffer[rx_buffer_head] = rbyte;	//заносим файл в буфер
+				rx_buffer_head = i;									//устанавливаем новое значение заголовка
+			}
+	  }
+	else //сбрасываем посторонние флаги
+	  {
+	    if(LL_USART_IsActiveFlag_ORE(USART1))
+	    {
+	      LL_USART_ClearFlag_ORE(USART1);
+	    }
+	    else if(LL_USART_IsActiveFlag_FE(USART1))
+	    {
+	      LL_USART_ClearFlag_FE(USART1);
+	    }
+	    else if(LL_USART_IsActiveFlag_NE(USART1))
+	    {
+	      LL_USART_ClearFlag_NE(USART1);
+	    }
+	  }
+		
+		return;
+  /* USER CODE END USART1_IRQn 0 */
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
 }
 
 /* USER CODE BEGIN 1 */

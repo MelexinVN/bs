@@ -47,9 +47,11 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "nrf24.h"
+#include "usart_ring.h"
 #include <string.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "stdlib.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -77,8 +79,9 @@ void USART_TX (uint8_t* dt, uint16_t sz);
 /* Private defines -----------------------------------------------------------*/
 #define KEY1_Pin LL_GPIO_PIN_3
 #define KEY1_GPIO_Port GPIOE
-#define KEY0_Pin LL_GPIO_PIN_4
-#define KEY0_GPIO_Port GPIOE
+#define RST_BUT_Pin LL_GPIO_PIN_4
+#define RST_BUT_GPIO_Port GPIOE
+#define RST_BUT_EXTI_IRQn EXTI4_IRQn
 #define D2_Pin LL_GPIO_PIN_6
 #define D2_GPIO_Port GPIOA
 #define D3_Pin LL_GPIO_PIN_7
@@ -103,7 +106,8 @@ void USART_TX (uint8_t* dt, uint16_t sz);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-
+#define NUM_OF_BUTS 2
+#define UART_RX_BUFFER_SIZE   8					//размер приемного буфера
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

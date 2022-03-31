@@ -23,6 +23,8 @@ bs_f407\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usart.h
 bs_f407\stm32f4xx_it.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h
 bs_f407\stm32f4xx_it.o: ../Core/Inc/nrf24.h
 bs_f407\stm32f4xx_it.o: ../Core/Inc/main.h
+bs_f407\stm32f4xx_it.o: ../Core/Inc/usart_ring.h
 bs_f407\stm32f4xx_it.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h
 bs_f407\stm32f4xx_it.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+bs_f407\stm32f4xx_it.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdlib.h
 bs_f407\stm32f4xx_it.o: ../Core/Inc/stm32f4xx_it.h

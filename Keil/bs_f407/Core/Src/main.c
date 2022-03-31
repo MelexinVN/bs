@@ -41,11 +41,25 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char str1[20] = {0};
-uint8_t buf1[20]={0};
+char str[20] = {0};
+char rx_str[UART_RX_BUFFER_SIZE] = {0};
+uint8_t tx_buf[3]={0};
+extern uint8_t rx_buf[];
 uint8_t buf[5]={0};
-uint8_t f_send = 0;
+uint8_t rx_counter = 0;
+uint8_t byte_counter = 0;
 uint8_t dt_reg = 0;
+uint8_t led_stat[NUM_OF_BUTS] = {0};
+uint8_t led_st = 0;
+uint8_t command = 0;
+uint8_t rec_cmnd = 0;
+uint8_t but_cmnds[NUM_OF_BUTS] = {0};
+uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0};
+uint8_t but_times[NUM_OF_BUTS] = {0};
+uint8_t but_addrs[] = {0x01, 0x02};
+uint8_t but_counter = 0;
+uint8_t push_rst = 0;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,6 +85,37 @@ void USART_TX (uint8_t* dt, uint16_t sz)
     ind++;
   }
 }
+
+//---Получение данных из буфера-------------------------------------------------
+void usart_receive()
+{
+	if(uart_available()) // есть ли что-то в приёмном буфере, тогда читаем
+	{
+		while(uart_available())							//пока есть данные в буфере
+		{
+			char in_char = uart_read(); 					// читаем байт
+			if (in_char == '#') 
+			{
+				byte_counter = 0;
+				rx_counter = 0;
+			}
+			else if (('0' <= in_char) && (in_char <= '9'))
+			{
+				rx_str[rx_counter] = in_char;
+				rx_counter++;
+			}
+			else if (in_char == ',')
+			{
+				if (byte_counter == 0) rec_cmnd = *(uint8_t*)(atol(rx_str));
+				else if (byte_counter == 1) command = *(uint8_t*)(atol(rx_str));
+				else if (byte_counter == 2) led_st = *(uint8_t*)(atol(rx_str));
+				byte_counter++;		
+				rx_str[0] = 0x00;				
+			}
+		}
+	}	
+}
+
 
 /* USER CODE END 0 */
 
@@ -115,33 +160,40 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   LL_SPI_Enable(SPI1);
+	LL_USART_EnableIT_RXNE(USART1);									//Разрешаем прерывания USART
 	LL_USART_Enable(USART1);
 	NRF24_init();
 	
-	sprintf(str1,"\r\nSTART\r\n\r\n");
-	USART_TX((uint8_t*)str1,strlen(str1));
+	sprintf(str,"\r\nSTART\r\n\r\n");
+	USART_TX((uint8_t*)str,strlen(str));
 
 	dt_reg = NRF24_ReadReg(CONFIG);
-  sprintf(str1,"CONFIG: 0x%02X\r\n",dt_reg);
-	USART_TX((uint8_t*)str1,strlen(str1));
+  sprintf(str,"CONFIG: 0x%02X\r\n",dt_reg);
+	USART_TX((uint8_t*)str,strlen(str));
   dt_reg = NRF24_ReadReg(EN_AA);
-  sprintf(str1,"EN_AA: 0x%02X\r\n",dt_reg);
-	USART_TX((uint8_t*)str1,strlen(str1));
+  sprintf(str,"EN_AA: 0x%02X\r\n",dt_reg);
+	USART_TX((uint8_t*)str,strlen(str));
   dt_reg = NRF24_ReadReg(EN_RXADDR);
-  sprintf(str1,"EN_RXADDR: 0x%02X\r\n",dt_reg);
-	USART_TX((uint8_t*)str1,strlen(str1));
+  sprintf(str,"EN_RXADDR: 0x%02X\r\n",dt_reg);
+	USART_TX((uint8_t*)str,strlen(str));
   dt_reg = NRF24_ReadReg(STATUS);
-  sprintf(str1,"STATUS: 0x%02X\r\n",dt_reg);
-	USART_TX((uint8_t*)str1,strlen(str1));
+  sprintf(str,"STATUS: 0x%02X\r\n",dt_reg);
+	USART_TX((uint8_t*)str,strlen(str));
   dt_reg = NRF24_ReadReg(RF_SETUP);
-  sprintf(str1,"RF_SETUP: 0x%02X\r\n",dt_reg);
-	USART_TX((uint8_t*)str1,strlen(str1));
-  NRF24_Read_Buf(TX_ADDR,buf1,3);
-  sprintf(str1,"TX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
-	USART_TX((uint8_t*)str1,strlen(str1));
-  NRF24_Read_Buf(RX_ADDR_P1,buf1,3);
-  sprintf(str1,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf1[0],buf1[1],buf1[2]);
-	USART_TX((uint8_t*)str1,strlen(str1));
+  sprintf(str,"RF_SETUP: 0x%02X\r\n",dt_reg);
+	USART_TX((uint8_t*)str,strlen(str));
+  NRF24_Read_Buf(TX_ADDR,buf,3);
+  sprintf(str,"TX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf[0],buf[1],buf[2]);
+	USART_TX((uint8_t*)str,strlen(str));
+  NRF24_Read_Buf(RX_ADDR_P1,buf,3);
+  sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf[0],buf[1],buf[2]);
+	USART_TX((uint8_t*)str,strlen(str));
+
+	LL_mDelay(100);
+	tx_buf[0] = 0xFF;
+	tx_buf[1] = 0x01;
+	tx_buf[2] = 0x00;
+	NRF24L01_Send(tx_buf);
 
   /* USER CODE END 2 */
 
@@ -149,21 +201,39 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
+		
 		NRF24L01_Receive();
 
-		if (f_send) 
+		if ((0 < rec_cmnd) && (rec_cmnd < NUM_OF_BUTS))
 		{
-			buf[0] = 0x03;
-			NRF24L01_Send(buf);
-			f_send = 0;
+			but_cmnds_temp[rec_cmnd - 1] = command;
+			led_stat[rec_cmnd - 1] = led_st;
+		}
+		
+		if ((push_rst) || (rec_cmnd == 0xFF))
+		{
+			tx_buf[0] = 0xFF;
+			NRF24L01_Send(tx_buf);
+			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
+			{
+				but_cmnds_temp[i] = but_cmnds[i];
+			}
+			rec_cmnd = 0;
+			push_rst = 0;
+		}
+		else
+		{
+			tx_buf[0] = but_addrs[but_counter];
+			tx_buf[1] = 0x01; //but_cmnds_temp[but_counter];
+			tx_buf[2] = led_stat[but_counter];
+			NRF24L01_Send(tx_buf);
+
+			//but_cmnds_temp[but_counter] = 0;			
+			but_counter++;
+			if (but_counter == NUM_OF_BUTS) but_counter = 0;
 		}
 
-
-/*
-		sprintf(str1,"start\r\n");//передаем принятое в порт
-		USART_TX((uint8_t*)str1,strlen(str1));
-*/
+		LL_mDelay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -336,6 +406,10 @@ static void MX_USART1_UART_Init(void)
   GPIO_InitStruct.Alternate = LL_GPIO_AF_7;
   LL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
+  /* USART1 interrupt Init */
+  NVIC_SetPriority(USART1_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
+  NVIC_EnableIRQ(USART1_IRQn);
+
   /* USER CODE BEGIN USART1_Init 1 */
 
   /* USER CODE END USART1_Init 1 */
@@ -378,10 +452,10 @@ static void MX_GPIO_Init(void)
   LL_GPIO_ResetOutputPin(GPIOB, CE_Pin|CSN_Pin);
 
   /**/
-  GPIO_InitStruct.Pin = KEY1_Pin|KEY0_Pin;
+  GPIO_InitStruct.Pin = KEY1_Pin;
   GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_NO;
-  LL_GPIO_Init(GPIOE, &GPIO_InitStruct);
+  LL_GPIO_Init(KEY1_GPIO_Port, &GPIO_InitStruct);
 
   /**/
   GPIO_InitStruct.Pin = D2_Pin|D3_Pin;
@@ -400,7 +474,17 @@ static void MX_GPIO_Init(void)
   LL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /**/
+  LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTE, LL_SYSCFG_EXTI_LINE4);
+
+  /**/
   LL_SYSCFG_SetEXTISource(LL_SYSCFG_EXTI_PORTB, LL_SYSCFG_EXTI_LINE8);
+
+  /**/
+  EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_4;
+  EXTI_InitStruct.LineCommand = ENABLE;
+  EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
+  EXTI_InitStruct.Trigger = LL_EXTI_TRIGGER_FALLING;
+  LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
   EXTI_InitStruct.Line_0_31 = LL_EXTI_LINE_8;
@@ -410,19 +494,33 @@ static void MX_GPIO_Init(void)
   LL_EXTI_Init(&EXTI_InitStruct);
 
   /**/
+  LL_GPIO_SetPinPull(RST_BUT_GPIO_Port, RST_BUT_Pin, LL_GPIO_PULL_UP);
+
+  /**/
   LL_GPIO_SetPinPull(IRQ_GPIO_Port, IRQ_Pin, LL_GPIO_PULL_NO);
+
+  /**/
+  LL_GPIO_SetPinMode(RST_BUT_GPIO_Port, RST_BUT_Pin, LL_GPIO_MODE_INPUT);
 
   /**/
   LL_GPIO_SetPinMode(IRQ_GPIO_Port, IRQ_Pin, LL_GPIO_MODE_INPUT);
 
   /* EXTI interrupt init*/
+  NVIC_SetPriority(EXTI4_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
+  NVIC_EnableIRQ(EXTI4_IRQn);
   NVIC_SetPriority(EXTI9_5_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 
 /* USER CODE BEGIN 4 */
-
+void RST_PUSH_Callback(void)
+{
+	if (!LL_GPIO_IsInputPinSet(RST_BUT_GPIO_Port, RST_BUT_Pin))	
+	{
+		push_rst = 1;
+	}
+}
 /* USER CODE END 4 */
 
 /**

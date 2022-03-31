@@ -7,7 +7,7 @@
 #define TX_ADR_WIDTH 3						//размер адреса передачи
 #define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
 
-#ifdef BAZ
+#ifdef BAS
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 1
 #endif
@@ -17,10 +17,13 @@ uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
 #endif
 
-uint8_t rx_buf[TX_PLOAD_WIDTH+1] = {0};			//приемный буфер
+uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};			//приемный буфер
+uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};			
 volatile uint8_t rx_flag = 0, tx_flag = 0;	//флаги приема и передачи
-uint16_t cnt1=0;														//счетчик
+extern uint8_t pushed;											//
 extern uint8_t f_send;											//флаг отправки
+extern uint32_t time_ms;
+extern uint32_t milisec;
 extern uint8_t buf1[20];										//буфер
 extern char str1[20];												//строка дл€ вывода данных
 //самодельна€ функци€ микросекундной задержки
@@ -215,11 +218,36 @@ void NRF24L01_Receive(void)
 {
 	if(rx_flag==1)				//если флаг приема подн€т
 	{
-		sprintf(str1,"received: %d\r\n",rx_buf[0]);//передаем прин€тое в порт
-		USART_TX((uint8_t*)str1,strlen(str1));
-		//if (rx_buf[0] == 0x02)	
-		f_send = 1;	//поднимаем флаг о том, что нужно отправить ответ
-		rx_flag = 0;				//опускаем флаг приема
+		rx_flag = 0;				//опускаем флаг приема		
+		if (rx_buf[0] == 0xFF)
+		{
+			pushed = 0;
+			time_ms = 0;
+			milisec = 0;
+			LED_OFF;
+		}
+		if (rx_buf[0] == BUT_ADDR)
+		{
+			if (pushed)
+			{
+				tx_buf[0] = BUT_ADDR;
+				(*(unsigned long*)&tx_buf[1]) = time_ms;
+				DelayMicro(99);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				NRF24L01_Send(tx_buf);				
+			}
+			else
+			{
+				tx_buf[0] = BUT_ADDR;
+				(*(unsigned long*)&tx_buf[1]) = 0xFFFFFFFF;
+				DelayMicro(99);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				NRF24L01_Send(tx_buf);
+			}
+			if (rx_buf[1] == 0x01)
+			{
+				if(rx_buf[2] == 0x01) LED_ON;
+				if(rx_buf[2] == 0x00) LED_OFF;
+			}
+		}
 	}
 }
 
@@ -251,23 +279,17 @@ void NRF24_init(void)
 //--------------------------------------------------
 void IRQ_Callback(void)
 {
-	LED_TGL;							//мен€ем состо€ние светодиода
 	uint8_t status=0x01;	//переменна€ статус
-  uint8_t pipe;					//переменна€ номера трубы
   DelayMicro(10);
   status = NRF24_ReadReg(STATUS);	//чтение значени€ регистра статуса
   if(status & RX_DR)							//если есть данные на прием
   {
-    LED_TGL;											//дергаем светодиод
-    pipe = (status>>1)&0x07;			//чтение номера трубы, в которой есть данные на прием
     NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
-    *(rx_buf+5) = pipe;						//запись номера трубы в последний байт буфера
     NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
     rx_flag = 1;									//поднимаем флаг приема
   }
   if(status & TX_DS) //данные успешно отправлены
   {
-    LED_TGL;											//дергаем светодиод
     NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме п€того
     NRF24L01_RX_Mode();						//переход в режим приема
     tx_flag = 1;									//поднимаем флаг передачи
@@ -280,9 +302,3 @@ void IRQ_Callback(void)
     NRF24L01_RX_Mode();
   }
 }
-//--------------------------------------------------
-void TIM2_Callback(void)
-{
-
-}
-//--------------------------------------------------

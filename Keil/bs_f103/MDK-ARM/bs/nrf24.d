@@ -18,10 +18,8 @@ bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h
-bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rtc.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_spi.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h
-bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h
 bs\nrf24.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
 bs\nrf24.o: ../Core/Inc/nrf24.h
 bs\nrf24.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h

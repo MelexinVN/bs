@@ -3,6 +3,9 @@
 //------------------------------------------------
 #include "main.h"
 //------------------------------------------------
+
+
+
 #define CS_ON LL_GPIO_ResetOutputPin(CSN_GPIO_Port, CSN_Pin)
 #define CS_OFF LL_GPIO_SetOutputPin(CSN_GPIO_Port, CSN_Pin)
 #define CE_RESET LL_GPIO_ResetOutputPin(CE_GPIO_Port, CE_Pin)

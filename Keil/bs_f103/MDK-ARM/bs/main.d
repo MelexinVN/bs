@@ -17,10 +17,8 @@ bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h
-bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rtc.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_spi.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h
-bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h
 bs\main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
 bs\main.o: ../Core/Inc/nrf24.h
 bs\main.o: ../Core/Inc/main.h
