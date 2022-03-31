@@ -41,24 +41,24 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char str[20] = {0};
-char rx_str[UART_RX_BUFFER_SIZE] = {0};
+char str[32] = {0};
 uint8_t tx_buf[3]={0};
 extern uint8_t rx_buf[];
+extern char rx_str[UART_RX_BUFFER_SIZE];
 uint8_t buf[5]={0};
-uint8_t rx_counter = 0;
-uint8_t byte_counter = 0;
 uint8_t dt_reg = 0;
 uint8_t led_stat[NUM_OF_BUTS] = {0};
 uint8_t led_st = 0;
 uint8_t command = 0;
 uint8_t rec_cmnd = 0;
+uint8_t but_addr = 0;
 uint8_t but_cmnds[NUM_OF_BUTS] = {0};
 uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0};
 uint8_t but_times[NUM_OF_BUTS] = {0};
 uint8_t but_addrs[] = {0x01, 0x02};
 uint8_t but_counter = 0;
 uint8_t push_rst = 0;
+uint8_t f_uart_rec = 0;
 
 /* USER CODE END PV */
 
@@ -89,31 +89,12 @@ void USART_TX (uint8_t* dt, uint16_t sz)
 //---Получение данных из буфера-------------------------------------------------
 void usart_receive()
 {
-	if(uart_available()) // есть ли что-то в приёмном буфере, тогда читаем
+	if (f_uart_rec)
 	{
-		while(uart_available())							//пока есть данные в буфере
-		{
-			char in_char = uart_read(); 					// читаем байт
-			if (in_char == '#') 
-			{
-				byte_counter = 0;
-				rx_counter = 0;
-			}
-			else if (('0' <= in_char) && (in_char <= '9'))
-			{
-				rx_str[rx_counter] = in_char;
-				rx_counter++;
-			}
-			else if (in_char == ',')
-			{
-				if (byte_counter == 0) rec_cmnd = *(uint8_t*)(atol(rx_str));
-				else if (byte_counter == 1) command = *(uint8_t*)(atol(rx_str));
-				else if (byte_counter == 2) led_st = *(uint8_t*)(atol(rx_str));
-				byte_counter++;		
-				rx_str[0] = 0x00;				
-			}
-		}
-	}	
+		sprintf(str,"num but: %d\r\ncommand: %d\r\nled st: %d\r\n", rec_cmnd, command, led_st);
+		USART_TX((uint8_t*)str,strlen(str));
+		f_uart_rec = 0;
+	}
 }
 
 
@@ -201,8 +182,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		
-		NRF24L01_Receive();
+		nrf24l01_receive();
+		usart_receive();
 
 		if ((0 < rec_cmnd) && (rec_cmnd < NUM_OF_BUTS))
 		{
@@ -233,7 +214,7 @@ int main(void)
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;
 		}
 
-		LL_mDelay(100);
+		//LL_mDelay(1);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -307,7 +288,7 @@ static void MX_IWDG_Init(void)
   LL_IWDG_Enable(IWDG);
   LL_IWDG_EnableWriteAccess(IWDG);
   LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
-  LL_IWDG_SetReloadCounter(IWDG, 4095);
+  LL_IWDG_SetReloadCounter(IWDG, 256);
   while (LL_IWDG_IsReady(IWDG) != 1)
   {
   }

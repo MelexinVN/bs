@@ -399,11 +399,6 @@
               <FilePath>..\Core\Src\nrf24.c</FilePath>
             </File>
             <File>
-              <FileName>usart_ring.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\Core\Src\usart_ring.c</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Core/Src/main.c</FilePath>

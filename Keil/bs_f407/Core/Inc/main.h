@@ -107,7 +107,7 @@ void USART_TX (uint8_t* dt, uint16_t sz);
 #endif
 /* USER CODE BEGIN Private defines */
 #define NUM_OF_BUTS 2
-#define UART_RX_BUFFER_SIZE   8					//размер приемного буфера
+#define UART_RX_BUFFER_SIZE   256					//размер приемного буфера
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

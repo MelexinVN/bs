@@ -13,7 +13,7 @@ volatile uint16_t rx_buffer_tail = 0;								//указатель конца б�
 unsigned char rx_buffer[UART_RX_BUFFER_SIZE] = {0,};//приемный буфер
 
 //---Очистка буфера-------------------------------------------------------------
-void clear_uart_buff()															
+void clear_uart_buff(void)															
 {
   LL_USART_DisableIT_RXNE(USART1);								//Запрещаем прерывания USART
 	rx_buffer_head = 0;																//обнуляем заголовок

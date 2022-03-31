@@ -211,7 +211,7 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 }
 //------------------------------------------------
 
-void NRF24L01_Receive(void)
+void nrf24l01_receive(void)
 {
 	if(rx_flag == 1)				//если флаг приема поднят
 	{

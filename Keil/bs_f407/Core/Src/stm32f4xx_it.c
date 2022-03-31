@@ -41,9 +41,16 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
-extern volatile uint16_t rx_buffer_head;						//указатель заголовка буфера
-extern volatile uint16_t rx_buffer_tail;						//указатель конца буфера
-extern unsigned char rx_buffer[UART_RX_BUFFER_SIZE];//приемный буфер
+//extern volatile uint16_t rx_buffer_head;						//указатель заголовка буфера
+//extern volatile uint16_t rx_buffer_tail;						//указатель конца буфера
+//extern unsigned char rx_buffer[UART_RX_BUFFER_SIZE];//приемный буфер
+uint8_t rx_counter = 0;
+uint8_t byte_counter = 0;
+char rx_str[UART_RX_BUFFER_SIZE] = {0};
+extern uint8_t f_uart_rec;
+extern uint8_t command;
+extern uint8_t led_st;
+extern uint8_t rec_cmnd;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -250,15 +257,37 @@ void USART1_IRQHandler(void)
 	//Если поднят флаг приема и разрешены прерывания по приему 
 	if(LL_USART_IsActiveFlag_RXNE(USART1) && LL_USART_IsEnabledIT_RXNE(USART1))
 	  {
-			//Читаем байт из регистра
-			uint8_t rbyte =  LL_USART_ReceiveData8(USART1);	
-			//Переменной i присваиваем следующее за указателем заголовка значение
-			uint16_t i = (uint16_t)(rx_buffer_head + 1) % UART_RX_BUFFER_SIZE;
-			if(i != rx_buffer_tail)								//если заголовок не совпадает с концом
+			LL_USART_DisableIT_RXNE(USART1);
+			if (!f_uart_rec)
 			{
-				rx_buffer[rx_buffer_head] = rbyte;	//заносим файл в буфер
-				rx_buffer_head = i;									//устанавливаем новое значение заголовка
+				char in_char =  LL_USART_ReceiveData8(USART1);	
+				if (in_char == '*') 									//если начало посылки
+				{
+					byte_counter = 0;										//обнуляем счетчик байтов
+					rx_counter = 0;											//обнуляем счетчик цифр
+				}
+				if (('0' <= in_char) && (in_char <= '9'))//если пришла цифра
+				{
+					rx_str[rx_counter] = in_char;								//записываем цифру
+					rx_counter++;																//считам принятое число
+				}
+				if (in_char == ',')							//если пришел разделитель чисел или конец посылки
+				{																			
+					if (byte_counter == 0) rec_cmnd = (uint8_t)(atol(rx_str));	//если пришло первое число, записываем адрес 
+					if (byte_counter == 1) command = (uint8_t)(atol(rx_str));	//если пришло второе число
+					if (byte_counter == 2) 
+					{
+						led_st = (uint8_t)(atol(rx_str));	//если пришло третье число
+						byte_counter = 0;
+						f_uart_rec = 1;
+					}
+					byte_counter++;							//считаем этот байт
+					rx_counter = 0;							//обнуляем счетчик  чисел
+					//rx_str[0] = 0x00;						//обнуляем строку
+					//rx_str[1] = 0x00;
+				}
 			}
+			LL_USART_EnableIT_RXNE(USART1);
 	  }
 	else //сбрасываем посторонние флаги
 	  {
