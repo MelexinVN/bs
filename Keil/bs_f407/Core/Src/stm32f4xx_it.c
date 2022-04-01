@@ -44,19 +44,21 @@
 //extern volatile uint16_t rx_buffer_head;						//указатель заголовка буфера
 //extern volatile uint16_t rx_buffer_tail;						//указатель конца буфера
 //extern unsigned char rx_buffer[UART_RX_BUFFER_SIZE];//приемный буфер
-uint8_t rx_counter = 0;
-uint8_t byte_counter = 0;
+volatile uint8_t rx_counter = 0;
+volatile uint8_t byte_counter = 0;
+//extern char str[32];
 char rx_str[UART_RX_BUFFER_SIZE] = {0};
-extern uint8_t f_uart_rec;
-extern uint8_t command;
-extern uint8_t led_st;
-extern uint8_t rec_cmnd;
+volatile uint8_t f_uart_rec = 0;
+volatile int command = 0;
+volatile int led_st = 0;
+volatile int rec_cmnd = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 void IRQ_Callback(void);
 void RST_PUSH_Callback(void);
+extern void USART_TX (uint8_t* dt, uint16_t sz);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -258,34 +260,50 @@ void USART1_IRQHandler(void)
 	if(LL_USART_IsActiveFlag_RXNE(USART1) && LL_USART_IsEnabledIT_RXNE(USART1))
 	  {
 			LL_USART_DisableIT_RXNE(USART1);
-			if (!f_uart_rec)
-			{
-				char in_char =  LL_USART_ReceiveData8(USART1);	
-				if (in_char == '*') 									//если начало посылки
+			//if (!f_uart_rec)
+			//{
+				char in_char = LL_USART_ReceiveData8(USART1);	
+				if (in_char == '#') 									//если начало посылки
 				{
 					byte_counter = 0;										//обнуляем счетчик байтов
 					rx_counter = 0;											//обнуляем счетчик цифр
 				}
-				if (('0' <= in_char) && (in_char <= '9'))//если пришла цифра
+				else if (('0' <= in_char) && (in_char <= '9'))//если пришла цифра
 				{
 					rx_str[rx_counter] = in_char;								//записываем цифру
 					rx_counter++;																//считам принятое число
 				}
-				if (in_char == ',')							//если пришел разделитель чисел или конец посылки
+				else if (in_char == ',')							//если пришел разделитель чисел или конец посылки
 				{																			
-					if (byte_counter == 0) rec_cmnd = (uint8_t)(atol(rx_str));	//если пришло первое число, записываем адрес 
-					if (byte_counter == 1) command = (uint8_t)(atol(rx_str));	//если пришло второе число
-					if (byte_counter == 2) 
+					if (byte_counter == 0) 
 					{
-						led_st = (uint8_t)(atol(rx_str));	//если пришло третье число
-						byte_counter = 0;
+						rec_cmnd = atol(rx_str);	//если пришло первое число, записываем адрес 
+						//sprintf(str,"rec_cmnd = %d\r\n", rec_cmnd);
+						//USART_TX((uint8_t*)str,strlen(str));
+					}
+					else if (byte_counter == 1) 
+					{
+						command = atol(rx_str);	//если пришло второе число
+						//sprintf(str,"command = %d\r\n", command);
+						//USART_TX((uint8_t*)str,strlen(str));
+						//byte_counter++;							//считаем этот байт		
+						//rx_counter = 0;							//обнуляем счетчик  чисел					
+					}
+					else if (byte_counter == 2) 
+					{
+						led_st = atol(rx_str);	//если пришло третье число
+						//sprintf(str,"led_st= %d\r\n", led_st);
+						//USART_TX((uint8_t*)str,strlen(str));
+						//byte_counter = 0;
+						//rx_counter = 0;							//обнуляем счетчик  чисел				
 						f_uart_rec = 1;
 					}
-					byte_counter++;							//считаем этот байт
-					rx_counter = 0;							//обнуляем счетчик  чисел
-					//rx_str[0] = 0x00;						//обнуляем строку
-					//rx_str[1] = 0x00;
-				}
+					byte_counter++;							//считаем этот байт		
+					rx_counter = 0;							//обнуляем счетчик  чисел		
+					rx_str[0] = 0x00;
+					rx_str[1] = 0x00;
+					rx_str[2] = 0x00;		
+				//}
 			}
 			LL_USART_EnableIT_RXNE(USART1);
 	  }

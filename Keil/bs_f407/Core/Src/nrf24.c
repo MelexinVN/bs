@@ -223,13 +223,11 @@ void nrf24l01_receive(void)
 			unsigned long time = *(unsigned long*)&rx_buf[1];
 			sprintf(str,"%lu\r\n",time);//передаем принятое в порт
 			USART_TX((uint8_t*)str,strlen(str));
-			led_stat[rx_buf[0] - 1] = 0x01;
 		}
 		else
 		{
 			sprintf(str,"%X\t np\r\n",rx_buf[0]);
 			USART_TX((uint8_t*)str,strlen(str));
-			led_stat[rx_buf[0] - 1] = 0x00;
 		}
 		rx_flag = 0;
 	}

@@ -41,16 +41,16 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char str[32] = {0};
+char str[64] = {0};
 uint8_t tx_buf[3]={0};
 extern uint8_t rx_buf[];
-extern char rx_str[UART_RX_BUFFER_SIZE];
+extern volatile char rx_str[UART_RX_BUFFER_SIZE];
 uint8_t buf[5]={0};
 uint8_t dt_reg = 0;
 uint8_t led_stat[NUM_OF_BUTS] = {0};
-uint8_t led_st = 0;
-uint8_t command = 0;
-uint8_t rec_cmnd = 0;
+extern volatile int led_st;
+extern volatile int command;
+extern volatile int rec_cmnd;
 uint8_t but_addr = 0;
 uint8_t but_cmnds[NUM_OF_BUTS] = {0};
 uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0};
@@ -58,7 +58,7 @@ uint8_t but_times[NUM_OF_BUTS] = {0};
 uint8_t but_addrs[] = {0x01, 0x02};
 uint8_t but_counter = 0;
 uint8_t push_rst = 0;
-uint8_t f_uart_rec = 0;
+extern volatile uint8_t f_uart_rec;
 
 /* USER CODE END PV */
 
@@ -85,18 +85,6 @@ void USART_TX (uint8_t* dt, uint16_t sz)
     ind++;
   }
 }
-
-//---Получение данных из буфера-------------------------------------------------
-void usart_receive()
-{
-	if (f_uart_rec)
-	{
-		sprintf(str,"num but: %d\r\ncommand: %d\r\nled st: %d\r\n", rec_cmnd, command, led_st);
-		USART_TX((uint8_t*)str,strlen(str));
-		f_uart_rec = 0;
-	}
-}
-
 
 /* USER CODE END 0 */
 
@@ -183,15 +171,23 @@ int main(void)
   while (1)
   {
 		nrf24l01_receive();
-		usart_receive();
-
-		if ((0 < rec_cmnd) && (rec_cmnd < NUM_OF_BUTS))
-		{
-			but_cmnds_temp[rec_cmnd - 1] = command;
-			led_stat[rec_cmnd - 1] = led_st;
-		}
 		
-		if ((push_rst) || (rec_cmnd == 0xFF))
+		if (f_uart_rec)
+		{
+			if ((0 < rec_cmnd) && (rec_cmnd <= NUM_OF_BUTS))
+			{
+				but_cmnds_temp[rec_cmnd - 1] = (uint8_t)command;
+				led_stat[rec_cmnd - 1] = (uint8_t)led_st;
+				//sprintf(str,"num but: %d\r\ncommand: %d\r\nled st: %d\r\n", rec_cmnd, but_cmnds_temp[rec_cmnd - 1], led_stat[rec_cmnd - 1]);
+				//USART_TX((uint8_t*)str,strlen(str));
+				//rec_cmnd = 0;
+				//command = 0;
+				//led_st = 0;
+				f_uart_rec = 0;
+			}
+		}
+
+		if ((push_rst) || (rec_cmnd == 255))
 		{
 			tx_buf[0] = 0xFF;
 			NRF24L01_Send(tx_buf);
@@ -205,16 +201,14 @@ int main(void)
 		else
 		{
 			tx_buf[0] = but_addrs[but_counter];
-			tx_buf[1] = 0x01; //but_cmnds_temp[but_counter];
+			tx_buf[1] = but_cmnds_temp[but_counter];
 			tx_buf[2] = led_stat[but_counter];
 			NRF24L01_Send(tx_buf);
-
-			//but_cmnds_temp[but_counter] = 0;			
 			but_counter++;
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;
 		}
 
-		//LL_mDelay(1);
+		LL_mDelay(100);//подбирается эксперементально исходя из загрузки МК
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -288,7 +282,7 @@ static void MX_IWDG_Init(void)
   LL_IWDG_Enable(IWDG);
   LL_IWDG_EnableWriteAccess(IWDG);
   LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
-  LL_IWDG_SetReloadCounter(IWDG, 256);
+  LL_IWDG_SetReloadCounter(IWDG, 4095);
   while (LL_IWDG_IsReady(IWDG) != 1)
   {
   }
@@ -394,7 +388,7 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 1 */
 
   /* USER CODE END USART1_Init 1 */
-  USART_InitStruct.BaudRate = 115200;
+  USART_InitStruct.BaudRate = 9600;
   USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
   USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   USART_InitStruct.Parity = LL_USART_PARITY_NONE;
