@@ -100,7 +100,7 @@ void Error_Handler(void);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-#define BUT_ADDR 0x01
+#define BUT_ADDR 0x02
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

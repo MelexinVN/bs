@@ -47,18 +47,19 @@ extern uint8_t rx_buf[];
 extern volatile char rx_str[UART_RX_BUFFER_SIZE];
 uint8_t buf[5]={0};
 uint8_t dt_reg = 0;
-uint8_t led_stat[NUM_OF_BUTS] = {0};
+uint8_t led_stat[NUM_OF_BUTS] = {0x00};
 extern volatile int led_st;
 extern volatile int command;
 extern volatile int rec_cmnd;
-uint8_t but_addr = 0;
-uint8_t but_cmnds[NUM_OF_BUTS] = {0};
-uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0};
-uint8_t but_times[NUM_OF_BUTS] = {0};
-uint8_t but_addrs[] = {0x01, 0x02};
+uint8_t but_cmnds[NUM_OF_BUTS] = {0x01};
+uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0x01};
+uint32_t but_times[NUM_OF_BUTS] = {4294967295, 4294967295, 4294967295, 4294967295};
+uint8_t but_addrs[] = {0x01, 0x02, 0x03, 0x04};
 uint8_t but_counter = 0;
 uint8_t push_rst = 0;
+uint32_t min_time = 4294967295;
 extern volatile uint8_t f_uart_rec;
+uint8_t first_push = 0;
 
 /* USER CODE END PV */
 
@@ -170,19 +171,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		nrf24l01_receive();
+		uint8_t j_min = 0;
 		
+		nrf24l01_receive();
+
 		if (f_uart_rec)
 		{
 			if ((0 < rec_cmnd) && (rec_cmnd <= NUM_OF_BUTS))
 			{
 				but_cmnds_temp[rec_cmnd - 1] = (uint8_t)command;
 				led_stat[rec_cmnd - 1] = (uint8_t)led_st;
-				//sprintf(str,"num but: %d\r\ncommand: %d\r\nled st: %d\r\n", rec_cmnd, but_cmnds_temp[rec_cmnd - 1], led_stat[rec_cmnd - 1]);
-				//USART_TX((uint8_t*)str,strlen(str));
-				//rec_cmnd = 0;
-				//command = 0;
-				//led_st = 0;
 				f_uart_rec = 0;
 			}
 		}
@@ -190,13 +188,20 @@ int main(void)
 		if ((push_rst) || (rec_cmnd == 255))
 		{
 			tx_buf[0] = 0xFF;
+			tx_buf[1] = 0x01;
+			tx_buf[2] = 0x00;
 			NRF24L01_Send(tx_buf);
 			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 			{
-				but_cmnds_temp[i] = but_cmnds[i];
+				but_cmnds_temp[i] = 0x01;
+				led_stat[i] = 0x00;
+				but_times[i] = 4294967295;
 			}
+			min_time = 4294967295;
 			rec_cmnd = 0;
 			push_rst = 0;
+			first_push = 0;
+			LED_TGL;	
 		}
 		else
 		{
@@ -208,7 +213,28 @@ int main(void)
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;
 		}
 
-		LL_mDelay(100);//подбирается эксперементально исходя из загрузки МК
+		for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
+		{
+			if (but_times[i] < 4294967295)
+			{
+				if (but_times[i] < min_time)
+				{
+					min_time = but_times[i];
+					j_min = i;
+					first_push = 1;
+				}
+			}
+		}
+		
+		if (first_push) 
+		{
+			led_stat[j_min] = 0x01;
+			but_cmnds_temp[j_min] = 0x01;
+			first_push = 0;
+			LED_TGL;	
+		}
+
+		LL_mDelay(5);//подбирается экспериментально исходя из загрузки МК
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

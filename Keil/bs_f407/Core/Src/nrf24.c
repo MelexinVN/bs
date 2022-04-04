@@ -20,7 +20,7 @@ uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};			//приемный буфер
 volatile uint8_t rx_flag = 0, tx_flag = 0;	//флаги приема и передачи
 extern char str[20];												//строка для вывода данных
 extern uint8_t f_receive;
-extern uint8_t led_stat[NUM_OF_BUTS];
+extern uint32_t but_times[NUM_OF_BUTS];
 //самодельная функция микросекундной задержки
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
@@ -207,6 +207,7 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	CE_SET;
 	DelayMicro(15); //minimum 10us high pulse (Page 21)
 	CE_RESET;
+	//LED_TGL;			
 	return 0;
 }
 //------------------------------------------------
@@ -215,7 +216,6 @@ void nrf24l01_receive(void)
 {
 	if(rx_flag == 1)				//если флаг приема поднят
 	{
-		//LED_TGL;	
 		if ((*(unsigned long*)&rx_buf[1]) != 0xFFFFFFFF)
 		{
 			sprintf(str,"%X\t",rx_buf[0]);
@@ -223,11 +223,13 @@ void nrf24l01_receive(void)
 			unsigned long time = *(unsigned long*)&rx_buf[1];
 			sprintf(str,"%lu\r\n",time);//передаем принятое в порт
 			USART_TX((uint8_t*)str,strlen(str));
+			but_times[rx_buf[0] - 1] = time;
 		}
 		else
 		{
 			sprintf(str,"%X\t np\r\n",rx_buf[0]);
 			USART_TX((uint8_t*)str,strlen(str));
+			but_times[rx_buf[0] - 1] = 4294967295;
 		}
 		rx_flag = 0;
 	}

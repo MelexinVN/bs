@@ -198,6 +198,7 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
 {//отправка данных в эфир
+	//LED_TGL;
   uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
 	NRF24L01_TX_Mode(pBuf);
 	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
