@@ -3,7 +3,7 @@
 <title>Static Call Graph - [bs_f407\bs_f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image bs_f407\bs_f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Apr 04 14:29:21 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Apr 05 07:46:14 2022
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -554,7 +554,7 @@ Global Symbols
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[85]"></a>_printf_pre_padding</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, _printf_pad.o(.text))
@@ -610,7 +610,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strlen
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[a8]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text))
@@ -840,7 +840,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
 
-<P><STRONG><a name="[cc]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
+<P><STRONG><a name="[ce]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LL_mDelay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1084,7 +1084,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_TX
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[8]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.UsageFault_Handler))
@@ -1094,11 +1094,11 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 
-<P><STRONG><a name="[76]"></a>main</STRONG> (Thumb, 844 bytes, Stack size 8 bytes, main.o(i.main))
+<P><STRONG><a name="[76]"></a>main</STRONG> (Thumb, 824 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
 <LI>Call Chain = main &rArr; MX_USART1_UART_Init &rArr; LL_USART_Init &rArr; LL_USART_SetBaudRate &rArr; __aeabi_uldivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
+<BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_SetPriority
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_GetPriorityGrouping
@@ -1108,10 +1108,10 @@ Global Symbols
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_IWDG_Init
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_USART_Enable
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_GPIO_TogglePin
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_GPIO_TogglePin
 <LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_APB2_GRP1_EnableClock
 <LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 <LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_init
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_Read_Buf
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_ReadReg
@@ -1122,7 +1122,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[cd]"></a>nrf24l01_receive</STRONG> (Thumb, 146 bytes, Stack size 16 bytes, nrf24.o(i.nrf24l01_receive))
+<P><STRONG><a name="[cc]"></a>nrf24l01_receive</STRONG> (Thumb, 146 bytes, Stack size 16 bytes, nrf24.o(i.nrf24l01_receive))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = nrf24l01_receive &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1261,7 +1261,7 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 </UL>
 
-<P><STRONG><a name="[ce]"></a>LL_GPIO_TogglePin</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, main.o(i.LL_GPIO_TogglePin))
+<P><STRONG><a name="[cd]"></a>LL_GPIO_TogglePin</STRONG> (Thumb, 20 bytes, Stack size 8 bytes, main.o(i.LL_GPIO_TogglePin))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LL_GPIO_TogglePin
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main

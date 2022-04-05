@@ -53,11 +53,11 @@ extern volatile int command;
 extern volatile int rec_cmnd;
 uint8_t but_cmnds[NUM_OF_BUTS] = {0x01};
 uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0x01};
-uint32_t but_times[NUM_OF_BUTS] = {4294967295, 4294967295, 4294967295, 4294967295};
-uint8_t but_addrs[] = {0x01, 0x02, 0x03, 0x04};
+uint32_t but_times[NUM_OF_BUTS] = {MAX_TIME};
+uint8_t but_addrs[] = {0x01, 0x02};
 uint8_t but_counter = 0;
 uint8_t push_rst = 0;
-uint32_t min_time = 4294967295;
+uint32_t min_time = MAX_TIME;
 extern volatile uint8_t f_uart_rec;
 uint8_t first_push = 0;
 
@@ -159,12 +159,16 @@ int main(void)
   sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf[0],buf[1],buf[2]);
 	USART_TX((uint8_t*)str,strlen(str));
 
-	LL_mDelay(100);
-	tx_buf[0] = 0xFF;
-	tx_buf[1] = 0x01;
-	tx_buf[2] = 0x00;
-	NRF24L01_Send(tx_buf);
-
+	rec_cmnd = 255;
+	//LL_mDelay(100);
+	//nrf24l01_receive();
+	//LL_mDelay(100);
+	//tx_buf[0] = 0xFF;
+	//tx_buf[1] = 0x01;
+	//tx_buf[2] = 0x00;
+	//NRF24L01_Send(tx_buf);
+	
+	
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -195,9 +199,9 @@ int main(void)
 			{
 				but_cmnds_temp[i] = 0x01;
 				led_stat[i] = 0x00;
-				but_times[i] = 4294967295;
+				but_times[i] = MAX_TIME;
 			}
-			min_time = 4294967295;
+			min_time = MAX_TIME;
 			rec_cmnd = 0;
 			push_rst = 0;
 			first_push = 0;
@@ -215,7 +219,7 @@ int main(void)
 
 		for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 		{
-			if (but_times[i] < 4294967295)
+			if (but_times[i] < MAX_TIME)
 			{
 				if (but_times[i] < min_time)
 				{
@@ -234,7 +238,7 @@ int main(void)
 			LED_TGL;	
 		}
 
-		LL_mDelay(5);//подбирается экспериментально исходя из загрузки МК
+		LL_mDelay(50);//подбирается экспериментально исходя из загрузки МК
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -414,7 +418,7 @@ static void MX_USART1_UART_Init(void)
   /* USER CODE BEGIN USART1_Init 1 */
 
   /* USER CODE END USART1_Init 1 */
-  USART_InitStruct.BaudRate = 9600;
+  USART_InitStruct.BaudRate = 115200;
   USART_InitStruct.DataWidth = LL_USART_DATAWIDTH_8B;
   USART_InitStruct.StopBits = LL_USART_STOPBITS_1;
   USART_InitStruct.Parity = LL_USART_PARITY_NONE;

@@ -7,33 +7,33 @@
 #define TX_ADR_WIDTH 3						//размер адреса передачи
 #define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
 
-#ifdef BAS
+#ifdef BAS	//если база
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 1
 #endif
 
-#ifdef BUT
+#ifdef BUT	//если кнопка
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
 #endif
 
-uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};			//приемный буфер
-uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};			
-volatile uint8_t rx_flag = 0, tx_flag = 0;	//флаги приема и передачи
-extern uint8_t pushed;											//
+uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};				//буфер приема
+uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};				//буфер передачи			
+volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
+extern volatile uint8_t f_pushed;						//флаг нажатия
 extern uint8_t f_send;											//флаг отправки
-extern uint32_t time_ms;
-extern uint32_t milisec;
+extern volatile uint32_t time_ms;						//сохраненное время мс
+extern volatile uint32_t miliseconds;				//счетчик милисекунд
 extern uint8_t buf1[20];										//буфер
-extern char str1[20];												//строка для вывода данных
-//самодельная функция микросекундной задержки
+
 //------------------------------------------------
+//самодельная функция микросекундной задержки
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
 {
-  micros *= (SystemCoreClock / 1000000) / 9;	//делитель (9) получен экспериментально
-  /* Wait till done */
-  while (micros--) ;
+  micros *= (SystemCoreClock / 1000000) / 9;	//присваиваем значение переменной, делитель (9) получен экспериментально
+  while (micros--) ;				//декрементируем переменную пока она не обнулится 
 }
+//------------------------------------------------
 //функция чтения регистра модуля
 uint8_t NRF24_ReadReg(uint8_t addr)
 {
@@ -56,7 +56,8 @@ uint8_t NRF24_ReadReg(uint8_t addr)
   return dt;	//возвращаемое значение
 }
 //------------------------------------------------
-void NRF24_WriteReg(uint8_t addr, uint8_t dt)		//запись регистра
+//функция записи регистра в модуль
+void NRF24_WriteReg(uint8_t addr, uint8_t dt)		
 {
   addr |= W_REGISTER;//включим бит записи в адрес	
   CS_ON;
@@ -175,7 +176,7 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
   NRF24_FlushRX();
   NRF24_FlushTX();
 }
-
+//------------------------------------------------
 void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 {//передача данных в модуль
   CE_RESET;
@@ -198,12 +199,11 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
 {//отправка данных в эфир
-	//LED_TGL;
   uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
-	NRF24L01_TX_Mode(pBuf);
+	NRF24L01_TX_Mode(pBuf);					//включаем режим передачи
 	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
 	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
-	regval |= (1<<PWR_UP);
+	regval |= (1<<PWR_UP);					
 	regval &= ~(1<<PRIM_RX);
 	NRF24_WriteReg(CONFIG,regval);//записываем новое значение конфигурационного регистра
 	DelayMicro(150); //Задержка минимум 130 мкс
@@ -217,29 +217,29 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 //------------------------------------------------
 void NRF24L01_Receive(void)
 {
-	if(rx_flag==1)				//если флаг приема поднят
+	if(f_rx == 1)				//если флаг приема поднят
 	{
-		rx_flag = 0;				//опускаем флаг приема		
-		if (rx_buf[0] == 0xFF)
+		f_rx = 0;					//опускаем флаг приема		
+		if (rx_buf[0] == RESET)	//если первый принятый байт - команда сброса
 		{
-			pushed = 0;
-			time_ms = 0;
-			milisec = 0;
-			LED_OFF;
+			f_pushed = 0;					//опускаем ылаг нажатия
+			time_ms = 0;					//обнуляем значение времени
+			miliseconds = 0;			//обнуляем счетчик мс
+			LED_OFF;							//гасим светодиод
 		}
-		if (rx_buf[0] == BUT_ADDR)
+		if (rx_buf[0] == BUT_ADDR)	//если первый принятый байт совпадает с адресом кнопки
 		{
-			if (pushed)
+			if (f_pushed)							//если поднят флаг нажатия
 			{
-				tx_buf[0] = BUT_ADDR;
-				(*(unsigned long*)&tx_buf[1]) = time_ms;
+				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
+				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
 				DelayMicro(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
-				NRF24L01_Send(tx_buf);				
+				NRF24L01_Send(tx_buf);	//			
 			}
 			else
 			{
 				tx_buf[0] = BUT_ADDR;
-				(*(unsigned long*)&tx_buf[1]) = 0xFFFFFFFF;
+				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
 				DelayMicro(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
 			}
@@ -287,13 +287,13 @@ void IRQ_Callback(void)
   {
     NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
     NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
-    rx_flag = 1;									//поднимаем флаг приема
+    f_rx = 1;									//поднимаем флаг приема
   }
   if(status & TX_DS) //данные успешно отправлены
   {
     NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
     NRF24L01_RX_Mode();						//переход в режим приема
-    tx_flag = 1;									//поднимаем флаг передачи
+    f_tx = 1;									//поднимаем флаг передачи
   }
   else if(status & MAX_RT)//превышение количества попыток отправки
   {

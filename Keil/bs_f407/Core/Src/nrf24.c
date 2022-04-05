@@ -229,7 +229,7 @@ void nrf24l01_receive(void)
 		{
 			sprintf(str,"%X\t np\r\n",rx_buf[0]);
 			USART_TX((uint8_t*)str,strlen(str));
-			but_times[rx_buf[0] - 1] = 4294967295;
+			but_times[rx_buf[0] - 1] = MAX_TIME;
 		}
 		rx_flag = 0;
 	}

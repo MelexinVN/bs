@@ -42,10 +42,9 @@
 
 /* USER CODE BEGIN PV */
 
-uint8_t buf[5]={0};
-uint32_t milisec = 0;
-uint8_t pushed = 0;
-uint32_t time_ms = 0;
+volatile uint32_t miliseconds = 0;	//счетчик милисекунд
+volatile uint8_t f_pushed = 0;			//флаг нажатия
+volatile uint32_t time_ms = 0;			//сохраненное время мс
 
 /* USER CODE END PV */
 
@@ -108,15 +107,12 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-	LL_TIM_EnableCounter(TIM2);
-	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);
-	LL_TIM_EnableIT_UPDATE(TIM2);
-  LL_SPI_Enable(SPI1);
+	LL_TIM_EnableCounter(TIM2);												//включение счетчика
+	LL_TIM_CC_EnableChannel(TIM1, LL_TIM_CHANNEL_CH1);//включение канала
+	LL_TIM_EnableIT_UPDATE(TIM2);											//разрешение прерываний по сравнению
+  LL_SPI_Enable(SPI1);															//включение SPI
 
-	NRF24_init();
-	
-	buf[0] = BUT_ADDR;
-	//(*(unsigned long*)&buf[1]) = 0xFFFFFFFF;
+	NRF24_init();																			//инициализация радиомодуля
 	
   /* USER CODE END 2 */
 
@@ -124,14 +120,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		NRF24L01_Receive();
-		
-		//LL_mDelay(10);
+		NRF24L01_Receive();								//обработка принятых данных радиомодулем (при наличии)
 		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		LL_IWDG_ReloadCounter(IWDG);
+		LL_IWDG_ReloadCounter(IWDG);			//перезагрузка сторожевого таймера
   }
   /* USER CODE END 3 */
 }
@@ -381,23 +375,24 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 void TIM2_Callback(void)
-{
-	if(LL_TIM_IsActiveFlag_UPDATE(TIM2))			//если флаг прерывания т/с
+{//обработка прерывания таймера
+	if(LL_TIM_IsActiveFlag_UPDATE(TIM2))			//если флаг прерывания таймера поднят
 	{
 		LL_TIM_ClearFlag_UPDATE(TIM2);					//опускаем флаг прерывания
-		milisec++;
+		miliseconds++;													//считаем мс
 	}
 }
 
 void BUT_PUSH_Callback(void)
-{
-	if (!LL_GPIO_IsInputPinSet(BUT_GPIO_Port, BUT_Pin))	
+{//обработка прерывания нажатия
+	if (!LL_GPIO_IsInputPinSet(BUT_GPIO_Port, BUT_Pin))	//если на входе низкий уровень
 	{
-		if(!pushed)
+		if(!f_pushed)							//если опущен флаг нажатия
 		{
-			pushed = 1;
-			time_ms = milisec;
+			f_pushed = 1;						//поднимаем флаг нажатия
+			time_ms = miliseconds;	//сохраняем количество мс
 		}
 	}
 }
