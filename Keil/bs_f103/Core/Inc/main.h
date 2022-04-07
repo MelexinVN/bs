@@ -100,7 +100,7 @@ void Error_Handler(void);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-#define BUT_ADDR 		0x02				//адрес кнопки
+#define BUT_ADDR 		0x03				//адрес кнопки
 #define RESET 			0xFF				//команда сброса
 #define NOT_PUSHED 	0xFFFFFFFF	//сообщение "кнопка не нажата"
 /* USER CODE END Private defines */

@@ -1,0 +1,177 @@
+Dependencies for Project 'bs_f401', Target 'bs_f401': (DO NOT MODIFY !)
+CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
+F (startup_stm32f401xc.s)(0x624EDB5B)(--cpu Cortex-M4.fp.sp --pd "__EVAL SETA 1" -g --apcs=interwork -I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 536" --pd "_RTE_ SETA 1" --pd "STM32F401xC SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f401xc.lst --xref -o bs_f401\startup_stm32f401xc.o --depend bs_f401\startup_stm32f401xc.d)
+F (..\Core\Src\nrf24.c)(0x624C497D)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\nrf24.o --omf_browse bs_f401\nrf24.crf --depend bs_f401\nrf24.d)
+I (../Core/Inc/nrf24.h)(0x62430879)
+I (../Core/Inc/main.h)(0x624EE71B)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_iwdg.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h)(0x61EE47D7)
+I (D:\Keil\ARM\ARMCC\include\string.h)(0x602569CE)
+I (D:\Keil\ARM\ARMCC\include\stdio.h)(0x602569C4)
+F (../Core/Src/main.c)(0x624EE775)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\main.o --omf_browse bs_f401\main.crf --depend bs_f401\main.d)
+I (../Core/Inc/main.h)(0x624EE71B)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_iwdg.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h)(0x61EE47D7)
+I (../Core/Inc/nrf24.h)(0x62430879)
+I (D:\Keil\ARM\ARMCC\include\string.h)(0x602569CE)
+I (D:\Keil\ARM\ARMCC\include\stdio.h)(0x602569C4)
+F (../Core/Src/stm32f4xx_it.c)(0x624EE63F)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_it.o --omf_browse bs_f401\stm32f4xx_it.crf --depend bs_f401\stm32f4xx_it.d)
+I (../Core/Inc/main.h)(0x624EE71B)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_iwdg.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_cortex.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h)(0x61EE47D7)
+I (../Core/Inc/nrf24.h)(0x62430879)
+I (D:\Keil\ARM\ARMCC\include\string.h)(0x602569CE)
+I (D:\Keil\ARM\ARMCC\include\stdio.h)(0x602569C4)
+I (../Core/Inc/stm32f4xx_it.h)(0x624EDB58)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_gpio.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_gpio.o --omf_browse bs_f401\stm32f4xx_ll_gpio.crf --depend bs_f401\stm32f4xx_ll_gpio.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_gpio.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_rcc.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_rcc.o --omf_browse bs_f401\stm32f4xx_ll_rcc.crf --depend bs_f401\stm32f4xx_ll_rcc.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_utils.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_utils.o --omf_browse bs_f401\stm32f4xx_ll_utils.crf --depend bs_f401\stm32f4xx_ll_utils.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_utils.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_system.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_pwr.h)(0x61EE47D7)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_exti.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_exti.o --omf_browse bs_f401\stm32f4xx_ll_exti.crf --depend bs_f401\stm32f4xx_ll_exti.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_exti.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_spi.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_spi.o --omf_browse bs_f401\stm32f4xx_ll_spi.crf --depend bs_f401\stm32f4xx_ll_spi.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_spi.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_rcc.h)(0x61EE47D7)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_dma.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_dma.o --omf_browse bs_f401\stm32f4xx_ll_dma.crf --depend bs_f401\stm32f4xx_ll_dma.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_dma.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+F (../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_ll_tim.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\stm32f4xx_ll_tim.o --omf_browse bs_f401\stm32f4xx_ll_tim.crf --depend bs_f401\stm32f4xx_ll_tim.d)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_tim.h)(0x61EE47D7)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_bus.h)(0x61EE47D7)
+F (../Core/Src/system_stm32f4xx.c)(0x61EE47D7)(--c99 -c --cpu Cortex-M4.fp.sp -D__EVAL -g -O3 --apcs=interwork --split_sections -I ../Core/Inc -I ../Drivers/STM32F4xx_HAL_Driver/Inc -I ../Drivers/CMSIS/Device/ST/STM32F4xx/Include -I ../Drivers/CMSIS/Include-I.\RTE\_bs_f401-IF:\melexin\Keil\Packs\ARM\CMSIS\5.8.0\CMSIS\Core\Include-IF:\melexin\Keil\Packs\Keil\STM32F4xx_DFP\2.15.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="536" -D_RTE_ -DSTM32F401xC -D_RTE_ -DUSE_FULL_LL_DRIVER -DHSE_VALUE="25000000" -DHSE_STARTUP_TIMEOUT="100" -DLSE_STARTUP_TIMEOUT="5000" -DLSE_VALUE="32768" -DEXTERNAL_CLOCK_VALUE="12288000" -DHSI_VALUE="16000000" -DLSI_VALUE="32000" -DVDD_VALUE="3300" -DPREFETCH_ENABLE="1" -DINSTRUCTION_CACHE_ENABLE="1" -DDATA_CACHE_ENABLE="1" -DSTM32F401xC-o bs_f401\system_stm32f4xx.o --omf_browse bs_f401\system_stm32f4xx.crf --depend bs_f401\system_stm32f4xx.d)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f401xc.h)(0x61EE47D6)
+I (../Drivers/CMSIS/Include/core_cm4.h)(0x61EE4773)
+I (D:\Keil\ARM\ARMCC\include\stdint.h)(0x602569CE)
+I (../Drivers/CMSIS/Include/cmsis_version.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_compiler.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/cmsis_armcc.h)(0x61EE4773)
+I (../Drivers/CMSIS/Include/mpu_armv7.h)(0x61EE4773)
+I (../Drivers/CMSIS/Device/ST/STM32F4xx/Include/system_stm32f4xx.h)(0x61EE47D6)
