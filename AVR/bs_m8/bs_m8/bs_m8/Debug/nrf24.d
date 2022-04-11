@@ -1,4 +1,4 @@
-main.d main.o: .././main.c .././main.h \
+nrf24.d nrf24.o: .././nrf24.c .././nrf24.h .././main.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\inttypes.h \
@@ -19,7 +19,9 @@ main.d main.o: .././main.c .././main.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\lib\gcc\avr\5.4.0\include\stddef.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\stdlib.h \
  d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h \
- .././usart.h .././spi.h .././nrf24.h
+ .././usart.h .././spi.h
+
+.././nrf24.h:
 
 .././main.h:
 
@@ -66,5 +68,3 @@ d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\string.h:
 .././usart.h:
 
 .././spi.h:
-
-.././nrf24.h:
