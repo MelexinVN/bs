@@ -36,6 +36,7 @@ uint8_t NRF24_ReadReg(uint8_t addr)
 	if (addr!=STATUS)//а если не равен
 	{
 		cmd=0xFF;				//команда NOP для получения данных
+		spi_sendByte(cmd);
 		dt = spi_changeByte(cmd);
 	}
 	CS_OFF;																			//поднимаем ногу CS
@@ -183,14 +184,14 @@ void NRF24L01_Receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(75);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);	//			
 			}
 			else
 			{
 				tx_buf[0] = BUT_ADDR;
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(75);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
 			}
 			if (rx_buf[1] == 0x01)

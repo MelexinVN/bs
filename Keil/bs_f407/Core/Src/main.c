@@ -238,7 +238,7 @@ int main(void)
 			LED_TGL;	
 		}
 
-		LL_mDelay(50);//подбирается экспериментально исходя из загрузки МК
+		LL_mDelay(100);//подбирается экспериментально исходя из загрузки МК
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
