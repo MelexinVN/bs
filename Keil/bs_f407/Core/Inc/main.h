@@ -106,7 +106,7 @@ void USART_TX (uint8_t* dt, uint16_t sz);
                                                                  0 bit  for subpriority */
 #endif
 /* USER CODE BEGIN Private defines */
-#define NUM_OF_BUTS 4
+#define NUM_OF_BUTS 20
 #define UART_RX_BUFFER_SIZE   32					//размер приемного буфера
 #define MAX_TIME 4294967295
 /* USER CODE END Private defines */

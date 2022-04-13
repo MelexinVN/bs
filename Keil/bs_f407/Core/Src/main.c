@@ -54,7 +54,7 @@ extern volatile int rec_cmnd;
 uint8_t but_cmnds[NUM_OF_BUTS] = {0x01};
 uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0x01};
 uint32_t but_times[NUM_OF_BUTS] = {MAX_TIME};
-uint8_t but_addrs[] = {0x01, 0x02, 0x03, 0x04};
+uint8_t but_addrs[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,0x10, 0x11, 0x12, 0x13, 0x14};
 uint8_t but_counter = 0;
 uint8_t push_rst = 0;
 uint32_t min_time = MAX_TIME;
@@ -238,7 +238,7 @@ int main(void)
 			LED_TGL;	
 		}
 
-		LL_mDelay(100);//подбирается экспериментально исходя из загрузки МК
+		LL_mDelay(1);//подбирается экспериментально исходя из загрузки МК
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
