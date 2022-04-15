@@ -6,7 +6,6 @@
  */ 
 
 #include "main.h"
-#include "spi.h"
 
 volatile uint32_t miliseconds = 0;		//счетчик милисекунд
 volatile uint8_t f_pushed = 0;			//флаг нажатия
