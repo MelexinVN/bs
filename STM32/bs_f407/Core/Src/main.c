@@ -4,14 +4,8 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
   *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
+	* Прошивка базы беспроводной системы на отладочной плате STM32F407VET
   *
   ******************************************************************************
   */
@@ -41,26 +35,26 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char str[64] = {0};
-uint8_t tx_buf[3]={0};
-extern uint8_t rx_buf[];
-extern volatile char rx_str[UART_RX_BUFFER_SIZE];
-uint8_t buf[5]={0};
-uint8_t dt_reg = 0;
-uint8_t led_stat[NUM_OF_BUTS] = {0x00};
-extern volatile int led_st;
-extern volatile int command;
-extern volatile int rec_cmnd;
-uint8_t but_cmnds[NUM_OF_BUTS] = {0x01};
-uint8_t but_cmnds_temp[NUM_OF_BUTS] = {0x01};
-uint32_t but_times[NUM_OF_BUTS] = {MAX_TIME};
+char str[64] = {0};																//строка для вывода данных в порт
+uint8_t tx_buf[3]={0};														//буфер для отправки (попробовать 5 байт)
+extern uint8_t rx_buf[];													//приемный буфер
+extern volatile char rx_str[UART_RX_BUFFER_SIZE];	//приемная строка уарта
+uint8_t buf[5]={0};																//буфер для чтения адресов модуля
+uint8_t dt_reg = 0;																//переменная для чтения значения регистра
+uint8_t led_stat[NUM_OF_BUTS] = {0x00};						//массив текущих состояний светодиодов кнопок
+extern volatile int led_st;												//переменная для состояния текущего светодиода
+extern volatile int command;											//переменная команды для текущего устройства
+extern volatile int rec_cmnd;											//принятая из порта команда
+uint8_t but_cmnds[NUM_OF_BUTS] = {0x01};					//массив команд для кнопок
+uint32_t but_times[NUM_OF_BUTS] = {MAX_TIME};			//массив хранения значений времени, присланых кнопками
+//массив адресов кнопок
 uint8_t but_addrs[] = {0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,0x10, 0x11, 0x12, 0x13, 0x14};
-uint8_t but_counter = 0;
-uint8_t push_rst = 0;
-uint32_t min_time = MAX_TIME;
-extern volatile uint8_t f_uart_rec;
-uint8_t first_push = 0;
-
+uint8_t but_counter = 0;													//переменная для перебора кнопок
+uint8_t f_push_rst = 0;														//флаг нажатия кнопки сброса
+uint32_t min_time = MAX_TIME;											//переменная для поиска минимального значения времени 
+extern volatile uint8_t f_uart_rec;								//флаг приема по уарту
+uint8_t f_first_push = 0;													//флаг первого нажатия
+uint8_t j_min = 0;																//индекс минимального значения в массиве
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -75,10 +69,10 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-void USART_TX (uint8_t* dt, uint16_t sz)
+//Процедура передачи данных в порт
+void USART_TX (uint8_t* dt, uint16_t sz)					//
 {
-  uint16_t ind = 0;
+  uint16_t ind = 0;				
   while (ind<sz)
   {
     while (!LL_USART_IsActiveFlag_TXE(USART1)) {}
@@ -87,6 +81,63 @@ void USART_TX (uint8_t* dt, uint16_t sz)
   }
 }
 
+//Процедура приема данных по уарту
+void uart_receiving(void)
+{
+	if (f_uart_rec)					//если есть данные из уарта на прием
+	{												//если команда касается одной из кнопок, номер кнопки
+		if ((0 < rec_cmnd) && (rec_cmnd <= NUM_OF_BUTS))
+		{											//записываем в соответсвии с номером кнопки
+			but_cmnds[rec_cmnd - 1] = (uint8_t)command;	//команду
+			led_stat[rec_cmnd - 1] = (uint8_t)led_st;		//состояние светодиода
+			f_uart_rec = 0;															//опускаем флаг приема по уарту
+		}
+	}
+}
+
+//Процедура сброса по нажатию кнопки сброса
+void reset_button_pushed(void)
+{
+	tx_buf[0] = 0xFF;		//записываем команду на сброс в буфер
+	tx_buf[1] = 0x01;		//значение по умолчанию
+	tx_buf[2] = 0x00;		//значение по умолчанию
+	NRF24L01_Send(tx_buf);	//отправка в эфир посылки
+	for (uint8_t i = 0; i < NUM_OF_BUTS; i++)	
+	{//установка значений по умолчанию в массивы
+		but_cmnds[i] = 0x01;		//команд
+		led_stat[i] = 0x00;			//состояния светодиодов
+		but_times[i] = MAX_TIME;//времени 
+	}
+	min_time = MAX_TIME;	//значения по умолчанию
+	rec_cmnd = 0;					//
+	f_push_rst = 0;				//опускаем флаги
+	f_first_push = 0;			//
+}
+
+//процедура поиска первого нажатия 
+void first_push_finding(void)
+{
+	//поиск кнопки с минимальным временем (первая нажатая)
+	for (uint8_t i = 0; i < NUM_OF_BUTS; i++)//цикл по всем кнопкам
+	{
+		if (but_times[i] < MAX_TIME)		//если время меньше максимального (кнопка нажата)
+		{
+			if (but_times[i] < min_time)	//сравнение со значением минимального времени
+			{//обновляем переменную минимального времени
+				min_time = but_times[i];
+				j_min = i;				//обновляем индекс кнопки с минимальным временем
+				f_first_push = 1;	//поднимаем флаг первого нажатия
+			}
+		}
+	}
+	//обработка первого нажатия
+	if (f_first_push) //если поднят флаг первого нажатия
+	{
+		led_stat[j_min] = 0x01;		//устанавливаем состояние первого нажатого светодиода
+		but_cmnds[j_min] = 0x01;	//устанавливаем команду на зажжение светодиода
+		f_first_push = 0;					//опускаем флаг первого нажатия
+	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -129,14 +180,14 @@ int main(void)
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  LL_SPI_Enable(SPI1);
-	LL_USART_EnableIT_RXNE(USART1);									//Разрешаем прерывания USART
-	LL_USART_Enable(USART1);
-	NRF24_init();
-	
-	sprintf(str,"\r\nSTART\r\n\r\n");
+  LL_SPI_Enable(SPI1);										//Включение spi
+	LL_USART_EnableIT_RXNE(USART1);					//Разрешаем прерывания USART
+	LL_USART_Enable(USART1);								//включение уарта
+	NRF24_init();														//инициализация модуля
+	//вывод стартовой строки в порт
+	sprintf(str,"\r\nSTART\r\n\r\n");				
 	USART_TX((uint8_t*)str,strlen(str));
-
+	//вывод значений регистров модуля в порт
 	dt_reg = NRF24_ReadReg(CONFIG);
   sprintf(str,"CONFIG: 0x%02X\r\n",dt_reg);
 	USART_TX((uint8_t*)str,strlen(str));
@@ -159,15 +210,7 @@ int main(void)
   sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf[0],buf[1],buf[2]);
 	USART_TX((uint8_t*)str,strlen(str));
 
-	rec_cmnd = 255;
-	//LL_mDelay(100);
-	//nrf24l01_receive();
-	//LL_mDelay(100);
-	//tx_buf[0] = 0xFF;
-	//tx_buf[1] = 0x01;
-	//tx_buf[2] = 0x00;
-	//NRF24L01_Send(tx_buf);
-	
+	rec_cmnd = 255;//команда сброса для сброса при запуске/перезапуске базы
 	
   /* USER CODE END 2 */
 
@@ -175,70 +218,27 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		uint8_t j_min = 0;
+		nrf24l01_receive();			//процедура приема данных радиомодуля
+
 		
-		nrf24l01_receive();
-
-		if (f_uart_rec)
-		{
-			if ((0 < rec_cmnd) && (rec_cmnd <= NUM_OF_BUTS))
-			{
-				but_cmnds_temp[rec_cmnd - 1] = (uint8_t)command;
-				led_stat[rec_cmnd - 1] = (uint8_t)led_st;
-				f_uart_rec = 0;
-			}
-		}
-
-		if ((push_rst) || (rec_cmnd == 255))
-		{
-			tx_buf[0] = 0xFF;
-			tx_buf[1] = 0x01;
-			tx_buf[2] = 0x00;
-			NRF24L01_Send(tx_buf);
-			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
-			{
-				but_cmnds_temp[i] = 0x01;
-				led_stat[i] = 0x00;
-				but_times[i] = MAX_TIME;
-			}
-			min_time = MAX_TIME;
-			rec_cmnd = 0;
-			push_rst = 0;
-			first_push = 0;
-			LED_TGL;	
+		//обработка команды сброса
+		if ((f_push_rst) || (rec_cmnd == 255)) 		
+		{//если нажата кнопка сброса или пршла команда сброса
+			reset_button_pushed();
 		}
 		else
-		{
-			tx_buf[0] = but_addrs[but_counter];
-			tx_buf[1] = but_cmnds_temp[but_counter];
-			tx_buf[2] = led_stat[but_counter];
-			NRF24L01_Send(tx_buf);
-			but_counter++;
-			if (but_counter == NUM_OF_BUTS) but_counter = 0;
+		{//если нет команды сброса, запись в буфер
+			tx_buf[0] = but_addrs[but_counter];	//адреса текущей кнопки
+			tx_buf[1] = but_cmnds[but_counter];	//команды
+			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
+			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
+			but_counter++;											//переход к следующей кнопке
+			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
 		}
 
-		for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
-		{
-			if (but_times[i] < MAX_TIME)
-			{
-				if (but_times[i] < min_time)
-				{
-					min_time = but_times[i];
-					j_min = i;
-					first_push = 1;
-				}
-			}
-		}
-		
-		if (first_push) 
-		{
-			led_stat[j_min] = 0x01;
-			but_cmnds_temp[j_min] = 0x01;
-			first_push = 0;
-			LED_TGL;	
-		}
+		first_push_finding();
 
-		LL_mDelay(1);//подбирается экспериментально исходя из загрузки МК
+		LL_mDelay(1);//подбирается экспериментально 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -520,10 +520,10 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void RST_PUSH_Callback(void)
-{
-	if (!LL_GPIO_IsInputPinSet(RST_BUT_GPIO_Port, RST_BUT_Pin))	
+{//обработка прерывания по нажатию кнопки сброса
+	if (!LL_GPIO_IsInputPinSet(RST_BUT_GPIO_Port, RST_BUT_Pin))	//если состояние входа - 0, кнопка нажата
 	{
-		push_rst = 1;
+		f_push_rst = 1;	//поднимаем флаг нажатия 
 	}
 }
 /* USER CODE END 4 */

@@ -260,50 +260,37 @@ void USART1_IRQHandler(void)
 	if(LL_USART_IsActiveFlag_RXNE(USART1) && LL_USART_IsEnabledIT_RXNE(USART1))
 	  {
 			LL_USART_DisableIT_RXNE(USART1);
-			//if (!f_uart_rec)
-			//{
-				char in_char = LL_USART_ReceiveData8(USART1);	
-				if (in_char == '#') 									//если начало посылки
+			char in_char = LL_USART_ReceiveData8(USART1);	
+			if (in_char == '#') 									//если начало посылки
+			{
+				byte_counter = 0;										//обнуляем счетчик байтов
+				rx_counter = 0;											//обнуляем счетчик цифр
+			}
+			else if (('0' <= in_char) && (in_char <= '9'))//если пришла цифра
+			{
+				rx_str[rx_counter] = in_char;								//записываем цифру
+				rx_counter++;																//считам принятое число
+			}
+			else if (in_char == ',')			//если пришел разделитель чисел или конец посылки
+			{																			
+				if (byte_counter == 0) 
 				{
-					byte_counter = 0;										//обнуляем счетчик байтов
-					rx_counter = 0;											//обнуляем счетчик цифр
+					rec_cmnd = atol(rx_str);	//если пришло первое число, записываем адрес 
 				}
-				else if (('0' <= in_char) && (in_char <= '9'))//если пришла цифра
+				else if (byte_counter == 1) 
 				{
-					rx_str[rx_counter] = in_char;								//записываем цифру
-					rx_counter++;																//считам принятое число
+					command = atol(rx_str);		//если пришло второе число
 				}
-				else if (in_char == ',')							//если пришел разделитель чисел или конец посылки
-				{																			
-					if (byte_counter == 0) 
-					{
-						rec_cmnd = atol(rx_str);	//если пришло первое число, записываем адрес 
-						//sprintf(str,"rec_cmnd = %d\r\n", rec_cmnd);
-						//USART_TX((uint8_t*)str,strlen(str));
-					}
-					else if (byte_counter == 1) 
-					{
-						command = atol(rx_str);	//если пришло второе число
-						//sprintf(str,"command = %d\r\n", command);
-						//USART_TX((uint8_t*)str,strlen(str));
-						//byte_counter++;							//считаем этот байт		
-						//rx_counter = 0;							//обнуляем счетчик  чисел					
-					}
-					else if (byte_counter == 2) 
-					{
-						led_st = atol(rx_str);	//если пришло третье число
-						//sprintf(str,"led_st= %d\r\n", led_st);
-						//USART_TX((uint8_t*)str,strlen(str));
-						//byte_counter = 0;
-						//rx_counter = 0;							//обнуляем счетчик  чисел				
-						f_uart_rec = 1;
-					}
-					byte_counter++;							//считаем этот байт		
-					rx_counter = 0;							//обнуляем счетчик  чисел		
-					rx_str[0] = 0x00;
-					rx_str[1] = 0x00;
-					rx_str[2] = 0x00;		
-				//}
+				else if (byte_counter == 2) 
+				{
+					led_st = atol(rx_str);		//если пришло третье число
+					f_uart_rec = 1;
+				}
+				byte_counter++;							//считаем этот байт		
+				rx_counter = 0;							//обнуляем счетчик  чисел		
+				rx_str[0] = 0x00;
+				rx_str[1] = 0x00;
+				rx_str[2] = 0x00;		
 			}
 			LL_USART_EnableIT_RXNE(USART1);
 	  }

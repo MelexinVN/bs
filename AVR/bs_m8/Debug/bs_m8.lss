@@ -836,7 +836,7 @@ void nrf24l01_receive(void)
 		}
 		if (rx_buf[0] == BUT_ADDR)	//если первый принятый байт совпадает с адресом кнопки
  3f8:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <rx_buf>
- 3fc:	8b 30       	cpi	r24, 0x0B	; 11
+ 3fc:	8d 30       	cpi	r24, 0x0D	; 13
  3fe:	e1 f5       	brne	.+120    	; 0x478 <__stack+0x19>
 		{
 			if (f_pushed)							//если поднят флаг нажатия
@@ -847,7 +847,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
  408:	e7 e7       	ldi	r30, 0x77	; 119
  40a:	f0 e0       	ldi	r31, 0x00	; 0
- 40c:	8b e0       	ldi	r24, 0x0B	; 11
+ 40c:	8d e0       	ldi	r24, 0x0D	; 13
  40e:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
  410:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <__data_end>
@@ -872,7 +872,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;
  434:	e7 e7       	ldi	r30, 0x77	; 119
  436:	f0 e0       	ldi	r31, 0x00	; 0
- 438:	8b e0       	ldi	r24, 0x0B	; 11
+ 438:	8d e0       	ldi	r24, 0x0D	; 13
  43a:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
  43c:	8f ef       	ldi	r24, 0xFF	; 255
