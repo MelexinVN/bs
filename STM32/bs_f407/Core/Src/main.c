@@ -220,7 +220,6 @@ int main(void)
   {
 		nrf24l01_receive();			//процедура приема данных радиомодуля
 
-		
 		//обработка команды сброса
 		if ((f_push_rst) || (rec_cmnd == 255)) 		
 		{//если нажата кнопка сброса или пршла команда сброса
@@ -238,7 +237,7 @@ int main(void)
 
 		first_push_finding();
 
-		LL_mDelay(1);//подбирается экспериментально 
+		LL_mDelay(10);//подбирается экспериментально 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

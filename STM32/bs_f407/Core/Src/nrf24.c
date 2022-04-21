@@ -245,7 +245,7 @@ void nrf24l01_receive(void)
 				}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
 			}
 		}
-		rx_flag = 0;
+		rx_flag = 0;		//опускаем флаг приема
 	}
 }
 
@@ -266,7 +266,8 @@ void NRF24_init(void)
 	NRF24_WriteReg(DYNPD, 0);//отключение динамического размера полезной нагрузки
 	NRF24_WriteReg(STATUS, 0x70); //Reset flags for IRQ
 	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
-	NRF24_WriteReg(RF_SETUP, 0x06); //TX_PWR:0dBm, Datarate:1Mbps
+	NRF24_WriteReg(RF_SETUP, 0x02); // 0x06 - TX_PWR:0dBm, Datarate:1Mbps
+	//0x04 - TX_PWR:-6dBm / 0x02 - TX_PWR:-12dBm / 0x00 - TX_PWR:-18dBm
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
 	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
