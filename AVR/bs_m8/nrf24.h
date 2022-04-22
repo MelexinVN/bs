@@ -3,13 +3,13 @@
 //------------------------------------------------
 #include "main.h"
 //------------------------------------------------
-#define CS_ON		CSN_GPIO_Port&=~(1<<CSN_Pin)
-#define CS_OFF		CSN_GPIO_Port|=(1<<CSN_Pin)
-#define CE_RESET	CE_GPIO_Port&=~(1<<CE_Pin)
-#define CE_SET		CE_GPIO_Port|=(1<<CE_Pin)
-#define LED_ON		LED_GPIO_Port|=(1<<LED_Pin)
-#define LED_OFF		LED_GPIO_Port&=~(1<<LED_Pin)
-#define IRQ			IRQ_Pin&(1<<IRQ_Pin)
+#define CS_ON()			CSN_GPIO_Port&=~(1<<CSN_Pin)
+#define CS_OFF()		CSN_GPIO_Port|=(1<<CSN_Pin)
+#define CE_RESET()		CE_GPIO_Port&=~(1<<CE_Pin)
+#define CE_SET()		CE_GPIO_Port|=(1<<CE_Pin)
+#define LED_ON()		LED_GPIO_Port|=(1<<LED_Pin)
+#define LED_OFF()		LED_GPIO_Port&=~(1<<LED_Pin)
+#define IRQ()			IRQ_Pin&(1<<IRQ_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD		0x61 // Define RX payload register address

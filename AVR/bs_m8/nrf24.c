@@ -30,7 +30,7 @@ extern uint8_t buf1[20];							//буфер
 uint8_t NRF24_ReadReg(uint8_t addr)
 {
 	uint8_t dt=0, cmd;								//переменные данных и команды
-	CS_ON;											//ногу cs к земле
+	CS_ON();											//ногу cs к земле
 	dt = spi_changeByte(addr);						//ѕрием/отправкадайта адреса регистра
 	//если адрес равен адрес регистра статус то и возварщаем его состо€ние	
 	if (addr!=STATUS)//а если не равен
@@ -38,7 +38,7 @@ uint8_t NRF24_ReadReg(uint8_t addr)
 		cmd=0xFF;									//команда NOP дл€ получени€ данных
 		dt = spi_changeByte(cmd);					//
 	}
-	CS_OFF;											//поднимаем ногу CS
+	CS_OFF();											//поднимаем ногу CS
 	return dt;	//возвращаемое значение
 }
 //------------------------------------------------
@@ -46,63 +46,63 @@ uint8_t NRF24_ReadReg(uint8_t addr)
 void NRF24_WriteReg(uint8_t addr, uint8_t dt)		
 {
 	addr |= W_REGISTER;//включим бит записи в адрес	
-	CS_ON;
+	CS_ON();
 	spi_sendByte(addr);									//
 	spi_sendByte(dt);										//
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_ToggleFeatures(void)							//активаци€ команд R_RX_PL_WID, W_ACK_PAYLOAD и W_TX_PAYLOAD_NOACK
 {	//есть в даташите "без плюса"
 	uint8_t dt[1] = {ACTIVATE};
-	CS_ON;
+	CS_ON();
 	spi_sendByte(dt[0]);	
 	_delay_us(1);
 	dt[0] = 0x73;
 	spi_sendByte(dt[0]);	
-	CS_OFF;
+	CS_OFF();
 }
 //-----------------------------------------------
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 {//чтение буфера (несколько байт)
-	CS_ON;
+	CS_ON();
 	spi_sendByte(addr);	
 	for (uint8_t i = 0 ; i < bytes ; i++) 		//дл€ нужного количества байт
 	{																					//
 		pBuf[i] = spi_changeByte(addr);
 	}
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)	
 {//запись буфера
 	addr |= W_REGISTER;//включим бит записи в адрес
-	CS_ON;
+	CS_ON();
 	spi_sendByte(addr);	
 	_delay_us(1);
 	for (uint8_t i = 0 ; i < bytes ; i++) 		//дл€ нужного количества байт
 	{
 		spi_sendByte(pBuf[i]);	
 	}
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_FlushRX(void)
 {//очистка буфера приема
 	uint8_t dt[1] = {FLUSH_RX};
-	CS_ON;
+	CS_ON();
 	spi_sendByte(dt[0]);	
 	_delay_us(1); //пауза в микросекунду дл€ завершени€ процесса
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_FlushTX(void)
 {//очистка буфера передачи
 	uint8_t dt[1] = {FLUSH_TX};
-	CS_ON;
+	CS_ON();
 	spi_sendByte(dt[0]);
 	_delay_us(1); //пауза в микросекунду дл€ завершени€ процесса
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24L01_RX_Mode(void)
@@ -116,7 +116,7 @@ void NRF24L01_RX_Mode(void)
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS1, TX_ADR_WIDTH);		//записываем  адрес передатчика
 	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS1, TX_ADR_WIDTH);	//записываем адрес приемника
 	
-	CE_SET;
+	CE_SET();
 	_delay_us(150); //«адержка минимум 130 мкс
 	// Flush buffers
 	NRF24_FlushRX();
@@ -127,7 +127,7 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 {//режим передатчика
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);		//записываем адрес передатчика
 	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);	//записываем адрес приемника
-	CE_RESET;
+	CE_RESET();
 	// Flush buffers
 	NRF24_FlushRX();
 	NRF24_FlushTX();
@@ -135,16 +135,16 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 //------------------------------------------------
 void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 {//передача данных в модуль
-	CE_RESET;
-	CS_ON;
+	CE_RESET();
+	CS_ON();
 	spi_sendByte(addr);
 	_delay_us(1); //пауза в микросекунду дл€ завершени€ процесса
 	for (uint8_t i = 0 ; i < bytes ; i++) 
 	{
 		spi_sendByte(pBuf[i]);
 	}
-	CS_OFF;
-	CE_SET;
+	CS_OFF();
+	CE_SET();
 }
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
@@ -159,9 +159,9 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	_delay_us(150); //«адержка минимум 130 мкс
 	//ќтправим данные в воздух
 	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);//отправка данных
-	CE_SET;
+	CE_SET();
 	_delay_us(15); //minimum 10us high pulse (Page 21)
-	CE_RESET;
+	CE_RESET();
 	return 0;
 }
 //------------------------------------------------
@@ -175,7 +175,7 @@ void nrf24l01_receive(void)
 			f_pushed = 0;					//опускаем ылаг нажати€
 			time_ms = 0;					//обнул€ем значение времени
 			miliseconds = 0;			//обнул€ем счетчик мс
-			LED_OFF;							//гасим светодиод
+			LED_OFF();							//гасим светодиод
 		}
 		if (rx_buf[0] == BUT_ADDR)	//если первый прин€тый байт совпадает с адресом кнопки
 		{
@@ -183,20 +183,20 @@ void nrf24l01_receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
-				_delay_us(75);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				_delay_us(99);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);	//			
 			}
 			else
 			{
 				tx_buf[0] = BUT_ADDR;
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
-				_delay_us(75);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				_delay_us(99);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);
 			}
 			if (rx_buf[1] == 0x01)
 			{
-				if(rx_buf[2] == 0x01) LED_ON;
-				if(rx_buf[2] == 0x00) LED_OFF;
+				if(rx_buf[2] == 0x01) LED_ON();
+				if(rx_buf[2] == 0x00) LED_OFF();
 			}
 		}
 	}
@@ -205,7 +205,7 @@ void nrf24l01_receive(void)
 //------------------------------------------------
 void nrf24_init(void)
 {//инициализаци€
-	CE_RESET;							//опускаем к земле вывод ce
+	CE_RESET();							//опускаем к земле вывод ce
 	_delay_us(5000);					//задержка 5 мс
 	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
@@ -225,7 +225,7 @@ void nrf24_init(void)
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
 	//пока уходим в режим приЄмника
 	NRF24L01_RX_Mode();					//режим приема
-	LED_OFF;
+	LED_OFF();
 }
 //--------------------------------------------------
 void IRQ_Callback(void)

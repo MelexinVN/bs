@@ -219,7 +219,8 @@ void nrf24l01_receive(void)
 	{
 		if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
 		{//если врем€, присланное кнопкой не максимально возможное (кнопка нажата)
-			sprintf(str,"%X\t",rx_buf[0]);				//
+			if (rx_buf[0] >= 0x10) 	sprintf(str,"0x%X\t",rx_buf[0]);				//
+			else 										sprintf(str,"0x0%X\t",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));	//отправл€ем в порт первый байт (адрес кнопки)
 			unsigned long time = *(unsigned long*)&rx_buf[1];	//преобразуем оставшиес€ байты во врем€
 			sprintf(str,"%lu\r\n",time);//передаем прин€тое в порт
@@ -235,7 +236,8 @@ void nrf24l01_receive(void)
 		}
 		else
 		{//отправл€ем в порт, посылка от какой кнопки прин€та и что она не нажата
-			sprintf(str,"%X\t np\r\n",rx_buf[0]);
+			if (rx_buf[0] >= 0x10) 	sprintf(str,"0x%X\t np\r\n",rx_buf[0]);				//
+			else 										sprintf(str,"0x0%X\t np\r\n",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));
 			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 			{//перебираем все кнопки
@@ -266,7 +268,7 @@ void NRF24_init(void)
 	NRF24_WriteReg(DYNPD, 0);//отключение динамического размера полезной нагрузки
 	NRF24_WriteReg(STATUS, 0x70); //Reset flags for IRQ
 	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
-	NRF24_WriteReg(RF_SETUP, 0x02); // 0x06 - TX_PWR:0dBm, Datarate:1Mbps
+	NRF24_WriteReg(RF_SETUP, 0x06); // 0x06 - TX_PWR:0dBm, Datarate:1Mbps
 	//0x04 - TX_PWR:-6dBm / 0x02 - TX_PWR:-12dBm / 0x00 - TX_PWR:-18dBm
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
 	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема

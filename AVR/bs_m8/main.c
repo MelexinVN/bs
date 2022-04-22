@@ -136,6 +136,16 @@ int main(void)
 	sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X",buf[0],buf[1],buf[2]);
 	usart_println(str);
 	*/
+	uint8_t blink_counter = 5;
+	while (blink_counter)
+	{
+		LED_ON();
+		_delay_ms(50);
+		LED_OFF();
+		_delay_ms(50);
+		blink_counter--;
+	}
+
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля
