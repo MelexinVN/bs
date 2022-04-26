@@ -14,7 +14,7 @@
 #include "spi.h"
 #include "nrf24.h"
 
-#define BUT_ADDR 		0x07				//адрес кнопки
+#define BUT_ADDR 		0x05				//адрес кнопки
 #define RESET 			0xFF				//команда сброса
 #define NOT_PUSHED 		0xFFFFFFFF			//сообщение "кнопка не нажата"
 

@@ -219,8 +219,7 @@ void nrf24l01_receive(void)
 	{
 		if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
 		{//если время, присланное кнопкой не максимально возможное (кнопка нажата)
-			if (rx_buf[0] >= 0x10) 	sprintf(str,"0x%X\t",rx_buf[0]);				//
-			else 										sprintf(str,"0x0%X\t",rx_buf[0]);				//
+			sprintf(str,"%X\t",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
 			unsigned long time = *(unsigned long*)&rx_buf[1];	//преобразуем оставшиеся байты во время
 			sprintf(str,"%lu\r\n",time);//передаем принятое в порт
@@ -236,8 +235,7 @@ void nrf24l01_receive(void)
 		}
 		else
 		{//отправляем в порт, посылка от какой кнопки принята и что она не нажата
-			if (rx_buf[0] >= 0x10) 	sprintf(str,"0x%X\t np\r\n",rx_buf[0]);				//
-			else 										sprintf(str,"0x0%X\t np\r\n",rx_buf[0]);				//
+			sprintf(str,"%X\t np\r\n",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));
 			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 			{//перебираем все кнопки
@@ -259,12 +257,12 @@ void NRF24_init(void)
 	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a); // Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
   DelayMicro(5000);
-	NRF24_WriteReg(EN_AA, 0x01); // Enable Pipe0
+	NRF24_WriteReg(EN_AA, 0x00); // 0x01 Enable Pipe0 0x01
 	NRF24_WriteReg(EN_RXADDR, 0x01); // Enable Pipe0
 	NRF24_WriteReg(SETUP_AW, 0x01); // Setup address width=3 bytes
-	NRF24_WriteReg(SETUP_RETR, 0x5F); // // 1500us, 15 retrans
+	NRF24_WriteReg(SETUP_RETR, 0x00); // // 0x5F 1500us, 15 retrans 
 	NRF24_ToggleFeatures();//активация команд
-	NRF24_WriteReg(FEATURE, 0);//установка стандартных значений регистра FEATURE 
+	NRF24_WriteReg(FEATURE, 0x07);// 0 установка стандартных значений регистра FEATURE 
 	NRF24_WriteReg(DYNPD, 0);//отключение динамического размера полезной нагрузки
 	NRF24_WriteReg(STATUS, 0x70); //Reset flags for IRQ
 	NRF24_WriteReg(RF_CH, 76); // частота 2476 MHz
@@ -292,12 +290,14 @@ void IRQ_Callback(void)
 	
   if(status & TX_DS) //данные успешно отправлены
   {
-    NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
+    //USART_TX((uint8_t*)"tx ok\r\n",7);
+		NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
     NRF24L01_RX_Mode();						//переход в режим приема
   }
   
 	else if(status & MAX_RT)//превышение количества попыток отправки
   {
+		USART_TX((uint8_t*)"tx fl\r\n",7);
     NRF24_WriteReg(STATUS, 0x10);//однуление всех остальных битов, кроме 4го
     NRF24_FlushTX();			//очистка буфера отправки
     //Уходим в режим приёмника

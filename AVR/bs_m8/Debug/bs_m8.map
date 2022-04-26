@@ -516,13 +516,13 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x15ab
+.debug_info     0x00000000     0x15aa
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x48c D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
  .debug_info    0x0000048c      0x300 main.o
- .debug_info    0x0000078c      0xc0b nrf24.o
- .debug_info    0x00001397       0xdc spi.o
- .debug_info    0x00001473      0x138 usart.o
+ .debug_info    0x0000078c      0xc0a nrf24.o
+ .debug_info    0x00001396       0xdc spi.o
+ .debug_info    0x00001472      0x138 usart.o
 
 .debug_abbrev   0x00000000      0x90c
  *(.debug_abbrev)

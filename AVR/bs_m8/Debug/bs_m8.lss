@@ -15,11 +15,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000140  00000000  00000000  0000072c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000015ab  00000000  00000000  0000086c  2**0
+  6 .debug_info   000015aa  00000000  00000000  0000086c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000090c  00000000  00000000  00001e17  2**0
+  7 .debug_abbrev 0000090c  00000000  00000000  00001e16  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000b00  00000000  00000000  00002723  2**0
+  8 .debug_line   00000b00  00000000  00000000  00002722  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  00000328  00000000  00000000  00003224  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -890,7 +890,7 @@ void nrf24l01_receive(void)
 		}
 		if (rx_buf[0] == BUT_ADDR)	//если первый принятый байт совпадает с адресом кнопки
  432:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <rx_buf>
- 436:	87 30       	cpi	r24, 0x07	; 7
+ 436:	85 30       	cpi	r24, 0x05	; 5
  438:	09 f0       	breq	.+2      	; 0x43c <__DATA_REGION_LENGTH__+0x3c>
  43a:	42 c0       	rjmp	.+132    	; 0x4c0 <__stack+0x61>
 		{
@@ -902,7 +902,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
  444:	e7 e7       	ldi	r30, 0x77	; 119
  446:	f0 e0       	ldi	r31, 0x00	; 0
- 448:	87 e0       	ldi	r24, 0x07	; 7
+ 448:	85 e0       	ldi	r24, 0x05	; 5
  44a:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
  44c:	80 91 6c 00 	lds	r24, 0x006C	; 0x80006c <__data_end>
@@ -913,13 +913,13 @@ void nrf24l01_receive(void)
  45e:	92 83       	std	Z+2, r25	; 0x02
  460:	a3 83       	std	Z+3, r26	; 0x03
  462:	b4 83       	std	Z+4, r27	; 0x04
- 464:	85 ec       	ldi	r24, 0xC5	; 197
+ 464:	87 ec       	ldi	r24, 0xC7	; 199
  466:	90 e0       	ldi	r25, 0x00	; 0
  468:	01 97       	sbiw	r24, 0x01	; 1
  46a:	f1 f7       	brne	.-4      	; 0x468 <__stack+0x9>
  46c:	00 c0       	rjmp	.+0      	; 0x46e <__stack+0xf>
  46e:	00 00       	nop
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);	//			
  470:	cf 01       	movw	r24, r30
  472:	9d df       	rcall	.-198    	; 0x3ae <NRF24L01_Send>
@@ -930,7 +930,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;
  476:	e7 e7       	ldi	r30, 0x77	; 119
  478:	f0 e0       	ldi	r31, 0x00	; 0
- 47a:	87 e0       	ldi	r24, 0x07	; 7
+ 47a:	85 e0       	ldi	r24, 0x05	; 5
  47c:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
  47e:	8f ef       	ldi	r24, 0xFF	; 255
@@ -940,13 +940,13 @@ void nrf24l01_receive(void)
  486:	92 83       	std	Z+2, r25	; 0x02
  488:	a3 83       	std	Z+3, r26	; 0x03
  48a:	b4 83       	std	Z+4, r27	; 0x04
- 48c:	85 ec       	ldi	r24, 0xC5	; 197
+ 48c:	87 ec       	ldi	r24, 0xC7	; 199
  48e:	90 e0       	ldi	r25, 0x00	; 0
  490:	01 97       	sbiw	r24, 0x01	; 1
  492:	f1 f7       	brne	.-4      	; 0x490 <__stack+0x31>
  494:	00 c0       	rjmp	.+0      	; 0x496 <__stack+0x37>
  496:	00 00       	nop
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
  498:	cf 01       	movw	r24, r30
  49a:	89 df       	rcall	.-238    	; 0x3ae <NRF24L01_Send>
@@ -1001,8 +1001,8 @@ void nrf24_init(void)
  4e2:	00 c0       	rjmp	.+0      	; 0x4e4 <nrf24_init+0x22>
  4e4:	00 00       	nop
 	_delay_us(5000);
-	NRF24_WriteReg(EN_AA, 0x01);		// Enable Pipe0
- 4e6:	61 e0       	ldi	r22, 0x01	; 1
+	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
+ 4e6:	60 e0       	ldi	r22, 0x00	; 0
  4e8:	81 e0       	ldi	r24, 0x01	; 1
  4ea:	91 de       	rcall	.-734    	; 0x20e <NRF24_WriteReg>
 	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
@@ -1013,14 +1013,14 @@ void nrf24_init(void)
  4f2:	61 e0       	ldi	r22, 0x01	; 1
  4f4:	83 e0       	ldi	r24, 0x03	; 3
  4f6:	8b de       	rcall	.-746    	; 0x20e <NRF24_WriteReg>
-	NRF24_WriteReg(SETUP_RETR, 0x5F);	// 1500us, 15 retrans
- 4f8:	6f e5       	ldi	r22, 0x5F	; 95
+	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
+ 4f8:	60 e0       	ldi	r22, 0x00	; 0
  4fa:	84 e0       	ldi	r24, 0x04	; 4
  4fc:	88 de       	rcall	.-752    	; 0x20e <NRF24_WriteReg>
 	NRF24_ToggleFeatures();				//активация команд
  4fe:	95 de       	rcall	.-726    	; 0x22a <NRF24_ToggleFeatures>
-	NRF24_WriteReg(FEATURE, 0);			//установка стандартных значений регистра FEATURE 
- 500:	60 e0       	ldi	r22, 0x00	; 0
+	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE 
+ 500:	67 e0       	ldi	r22, 0x07	; 7
  502:	8d e1       	ldi	r24, 0x1D	; 29
  504:	84 de       	rcall	.-760    	; 0x20e <NRF24_WriteReg>
 	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки

@@ -149,7 +149,7 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
 {//отправка данных в эфир
-  uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
+	uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
 	NRF24L01_TX_Mode(pBuf);					//включаем режим передачи
 	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
 	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
@@ -183,14 +183,14 @@ void nrf24l01_receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;		//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);	//			
 			}
 			else
 			{
 				tx_buf[0] = BUT_ADDR;
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;
-				_delay_us(99);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
 			}
 			if (rx_buf[1] == 0x01)
@@ -210,12 +210,12 @@ void nrf24_init(void)
 	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
 	_delay_us(5000);
-	NRF24_WriteReg(EN_AA, 0x01);		// Enable Pipe0
+	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
 	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
 	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
-	NRF24_WriteReg(SETUP_RETR, 0x5F);	// 1500us, 15 retrans
+	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
 	NRF24_ToggleFeatures();				//активация команд
-	NRF24_WriteReg(FEATURE, 0);			//установка стандартных значений регистра FEATURE 
+	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE 
 	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
 	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
 	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
