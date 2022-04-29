@@ -30,7 +30,21 @@ namespace mozgocolco
 
         private void gameForm_Load(object sender, EventArgs e)
         {
+            byte i = 0;
 
+            while (i < 10)
+            {
+                dataGridView1.Rows.Add();
+                i++;
+            }
+
+            i = 1;
+            while (i <= 10)
+            {
+                dataGridView1.Rows[i - 1].Cells[0].Value = i;
+                dataGridView1.Rows[i - 1].Cells[1].Value = i + 10;
+                i++;
+            }
         }
 
         private void time1Update(object sender, EventArgs e)
@@ -78,6 +92,31 @@ namespace mozgocolco
         private void timer2_Tick(object sender, EventArgs e)
         {
             pictureBox1.Visible = visiblity;
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void gameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
     }
 }
