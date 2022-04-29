@@ -34,7 +34,7 @@ __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
 uint8_t NRF24_ReadReg(uint8_t addr)
 {
   uint8_t dt=0, cmd;												//переменные данных и команды
-  CS_ON;																		//ногу cs к земле
+  CS_ON();																		//ногу cs к земле
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	//ждем пока не поднимется флаг txe (готовность к передаче)
   LL_SPI_TransmitData8 (SPI1, addr);				//передаем байт адреса по spi
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {} //ждем пока не поднимется флаг rxne (есть данные на прием)
@@ -48,14 +48,14 @@ uint8_t NRF24_ReadReg(uint8_t addr)
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}	
 		dt = LL_SPI_ReceiveData8(SPI1);						//получаем данные, 1 байт
   }
-	CS_OFF;																			//поднимаем ногу CS
+	CS_OFF();																			//поднимаем ногу CS
   return dt;	//возвращаемое значение
 }
 //------------------------------------------------
 void NRF24_WriteReg(uint8_t addr, uint8_t dt)		//запись регистра
 {
   addr |= W_REGISTER;//включим бит записи в адрес	
-  CS_ON;
+  CS_ON();
   while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, addr);				//записываем адрес с командой записи
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}
@@ -64,13 +64,13 @@ void NRF24_WriteReg(uint8_t addr, uint8_t dt)		//запись регистра
 	LL_SPI_TransmitData8 (SPI1, dt);					//запись данных
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;													//имитация чтения
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_ToggleFeatures(void)							//активация команд R_RX_PL_WID, W_ACK_PAYLOAD и W_TX_PAYLOAD_NOACK
 {	//есть в даташите "без плюса"
   uint8_t dt[1] = {ACTIVATE};
-  CS_ON;
+  CS_ON();
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
@@ -81,12 +81,12 @@ void NRF24_ToggleFeatures(void)							//активация команд R_RX_PL_WID, W_ACK_PAYL
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
-  CS_OFF;
+  CS_OFF();
 }
 //-----------------------------------------------
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 {//чтение буфера (несколько байт)
-  CS_ON;
+  CS_ON();
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}	
 	LL_SPI_TransmitData8 (SPI1, addr);				//сначала пишем адрес
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
@@ -99,13 +99,13 @@ void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}	
 		pBuf[i] = LL_SPI_ReceiveData8(SPI1);		//читаем очередной байт
 	}
-  CS_OFF;
+  CS_OFF();
 }
 //------------------------------------------------
 void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)	
 {//запись буфера
   addr |= W_REGISTER;//включим бит записи в адрес
-  CS_ON;
+  CS_ON();
   while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8(SPI1, addr);					//записываем адрес регистра, откуда будем читать
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
@@ -118,31 +118,31 @@ void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 		(void) SPI1->DR;	
 	}
-	CS_OFF;
+	CS_OFF();
 }
 //------------------------------------------------
 void NRF24_FlushRX(void)
 {//очистка буфера приема
   uint8_t dt[1] = {FLUSH_RX};
-  CS_ON;
+  CS_ON();
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
   DelayMicro(1);//пауза в микросекунду для завершения процесса
-  CS_OFF;
+  CS_OFF();
 }
 //------------------------------------------------
 void NRF24_FlushTX(void)
 {//очистка буфера передачи
   uint8_t dt[1] = {FLUSH_TX};
-  CS_ON;
+  CS_ON();
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, dt[0]);
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 	(void) SPI1->DR;
   DelayMicro(1);//пауза в микросекунду для завершения процесса
-  CS_OFF;
+  CS_OFF();
 }
 //------------------------------------------------
 void NRF24L01_RX_Mode(void)
@@ -156,7 +156,7 @@ void NRF24L01_RX_Mode(void)
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS1, TX_ADR_WIDTH);		//записываем  адрес передатчика
 	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS1, TX_ADR_WIDTH);	//записываем адрес приемника
 	
-  CE_SET;
+  CE_SET();
   DelayMicro(150); //Задержка минимум 130 мкс
   // Flush buffers
   NRF24_FlushRX();
@@ -167,7 +167,7 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 {//режим передатчика
   NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);		//записываем адрес передатчика
 	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);	//записываем адрес приемника
-  CE_RESET;
+  CE_RESET();
   // Flush buffers
   NRF24_FlushRX();
   NRF24_FlushTX();
@@ -175,8 +175,8 @@ void NRF24L01_TX_Mode(uint8_t *pBuf)
 
 void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 {//передача данных в модуль
-  CE_RESET;
-  CS_ON;
+  CE_RESET();
+  CS_ON();
 	while(!LL_SPI_IsActiveFlag_TXE(SPI1)) {}
 	LL_SPI_TransmitData8 (SPI1, addr);				//отправляем адрес регистра
 	while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
@@ -189,8 +189,8 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 		while(!LL_SPI_IsActiveFlag_RXNE(SPI1)) {}		
 		(void) SPI1->DR;	
 	}
-  CS_OFF;
-  CE_SET;
+  CS_OFF();
+  CE_SET();
 }
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
@@ -205,9 +205,9 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	DelayMicro(150); //Задержка минимум 130 мкс
 	//Отправим данные в воздух
 	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);//отправка данных
-	CE_SET;
+	CE_SET();
 	DelayMicro(15); //minimum 10us high pulse (Page 21)
-	CE_RESET;
+	CE_RESET();
 	//LED_TGL;			
 	return 0;
 }
@@ -252,7 +252,7 @@ void nrf24l01_receive(void)
 //------------------------------------------------
 void NRF24_init(void)
 {//инициализация
-	CE_RESET;						//опускаем к земле вывод ce
+	CE_RESET();						//опускаем к земле вывод ce
   DelayMicro(5000);		//задержка 5 мс
 	//записываем конфигурационный байт, 
 	NRF24_WriteReg(CONFIG, 0x0a); // Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
@@ -273,7 +273,7 @@ void NRF24_init(void)
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
  //пока уходим в режим приёмника
   NRF24L01_RX_Mode();	//режим приема
-	LED_OFF;
+	LED_OFF();
 }
 //--------------------------------------------------
 void IRQ_Callback(void)
@@ -294,7 +294,7 @@ void IRQ_Callback(void)
 		NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
     NRF24L01_RX_Mode();						//переход в режим приема
   }
-  
+  /*В СЛУЧАЕ ВКЛЮЧЕННОГО АА
 	else if(status & MAX_RT)//превышение количества попыток отправки
   {
 		USART_TX((uint8_t*)"tx fl\r\n",7);
@@ -303,6 +303,7 @@ void IRQ_Callback(void)
     //Уходим в режим приёмника
     NRF24L01_RX_Mode();
   }
+	*/
 }
 //--------------------------------------------------
 void TIM2_Callback(void)

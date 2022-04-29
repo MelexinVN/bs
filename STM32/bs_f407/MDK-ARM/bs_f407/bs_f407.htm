@@ -3,7 +3,7 @@
 <title>Static Call Graph - [bs_f407\bs_f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image bs_f407\bs_f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Apr 26 13:06:57 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Wed Apr 27 10:09:10 2022
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -841,10 +841,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
 
-<P><STRONG><a name="[cf]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
+<P><STRONG><a name="[ce]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LL_mDelay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[6]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.MemManage_Handler))
@@ -1097,19 +1098,19 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 
-<P><STRONG><a name="[ce]"></a>first_push_finding</STRONG> (Thumb, 94 bytes, Stack size 8 bytes, main.o(i.first_push_finding))
+<P><STRONG><a name="[cf]"></a>first_push_finding</STRONG> (Thumb, 102 bytes, Stack size 8 bytes, main.o(i.first_push_finding))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = first_push_finding
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[76]"></a>main</STRONG> (Thumb, 608 bytes, Stack size 8 bytes, main.o(i.main))
+<P><STRONG><a name="[76]"></a>main</STRONG> (Thumb, 614 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
 <LI>Call Chain = main &rArr; MX_USART1_UART_Init &rArr; LL_USART_Init &rArr; LL_USART_SetBaudRate &rArr; __aeabi_uldivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
+<BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;first_push_finding
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;first_push_finding
 <LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_SetPriority
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_GetPriorityGrouping
@@ -1143,10 +1144,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[cd]"></a>reset_button_pushed</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, main.o(i.reset_button_pushed))
+<P><STRONG><a name="[cd]"></a>reset_button_pushed</STRONG> (Thumb, 84 bytes, Stack size 8 bytes, main.o(i.reset_button_pushed))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = reset_button_pushed &rArr; NRF24L01_Send &rArr; NRF24L01_TX_Mode &rArr; NRF24_Write_Buf &rArr; DelayMicro
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24L01_Send
+<BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24L01_Send
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

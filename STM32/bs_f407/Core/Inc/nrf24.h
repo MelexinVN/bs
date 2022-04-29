@@ -9,15 +9,15 @@
 //#define CS_ON LL_GPIO_ResetOutputPin(CE_GPIO_Port, CE_Pin)
 //#define CS_OFF LL_GPIO_SetOutputPin(CE_GPIO_Port, CE_Pin)
 
-#define CS_ON LL_GPIO_ResetOutputPin(CSN_GPIO_Port, CSN_Pin)
-#define CS_OFF LL_GPIO_SetOutputPin(CSN_GPIO_Port, CSN_Pin)
-#define CE_RESET LL_GPIO_ResetOutputPin(CE_GPIO_Port, CE_Pin)
-#define CE_SET LL_GPIO_SetOutputPin(CE_GPIO_Port, CE_Pin)
+#define CS_ON() LL_GPIO_ResetOutputPin(CSN_GPIO_Port, CSN_Pin)
+#define CS_OFF() LL_GPIO_SetOutputPin(CSN_GPIO_Port, CSN_Pin)
+#define CE_RESET() LL_GPIO_ResetOutputPin(CE_GPIO_Port, CE_Pin)
+#define CE_SET() LL_GPIO_SetOutputPin(CE_GPIO_Port, CE_Pin)
 
-#define LED_ON LL_GPIO_ResetOutputPin(D2_GPIO_Port, D2_Pin)
-#define LED_OFF LL_GPIO_SetOutputPin(D2_GPIO_Port, D2_Pin)
-#define LED_TGL LL_GPIO_TogglePin(D2_GPIO_Port, D2_Pin)
-#define IRQ LL_GPIO_IsInputPinSet(IRQ_GPIO_Port, IRQ_Pin)
+#define LED_ON() LL_GPIO_ResetOutputPin(D2_GPIO_Port, D2_Pin)
+#define LED_OFF() LL_GPIO_SetOutputPin(D2_GPIO_Port, D2_Pin)
+#define LED_TGL() LL_GPIO_TogglePin(D2_GPIO_Port, D2_Pin)
+#define IRQ() LL_GPIO_IsInputPinSet(IRQ_GPIO_Port, IRQ_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD 0x61 // Define RX payload register address

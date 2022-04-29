@@ -102,7 +102,7 @@ void reset_button_pushed(void)
 	tx_buf[1] = 0x01;		//значение по умолчанию
 	tx_buf[2] = 0x00;		//значение по умолчанию
 	NRF24L01_Send(tx_buf);	//отправка в эфир посылки
-	//LL_mDelay(1);
+	LL_mDelay(1);
 	for (uint8_t i = 0; i < NUM_OF_BUTS; i++)	
 	{//установка значений по умолчанию в массивы
 		but_cmnds[i] = 0x01;		//команд
@@ -130,6 +130,7 @@ void first_push_finding(void)
 				f_first_push = 1;	//поднимаем флаг первого нажатия
 			}
 		}
+		else led_stat[i] = 0x00;
 	}
 	//обработка первого нажатия
 	if (f_first_push) //если поднят флаг первого нажатия
@@ -210,7 +211,7 @@ int main(void)
   NRF24_Read_Buf(RX_ADDR_P1,buf,3);
   sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X\r\n",buf[0],buf[1],buf[2]);
 	USART_TX((uint8_t*)str,strlen(str));
-	LED_OFF;
+	LED_OFF();
 	rec_cmnd = 255;//команда сброса для сброса при запуске/перезапуске базы
 	
   /* USER CODE END 2 */
@@ -232,7 +233,7 @@ int main(void)
 			tx_buf[1] = but_cmnds[but_counter];	//команды
 			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
 			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
-			//LL_mDelay(1);
+			LL_mDelay(1);
 			but_counter++;											//переход к следующей кнопке
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
 		}

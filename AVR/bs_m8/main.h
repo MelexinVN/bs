@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+#include <avr/wdt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +15,7 @@
 #include "spi.h"
 #include "nrf24.h"
 
-#define BUT_ADDR 		0x05				//адрес кнопки
+#define BUT_ADDR 		0x04				//адрес кнопки
 #define RESET 			0xFF				//команда сброса
 #define NOT_PUSHED 		0xFFFFFFFF			//сообщение "кнопка не нажата"
 

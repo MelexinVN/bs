@@ -1,0 +1,11 @@
+F:\melexin\GitHub\bs\visual\mozgocolco\bin\Debug\mozgocolco.exe.config
+F:\melexin\GitHub\bs\visual\mozgocolco\bin\Debug\mozgocolco.exe
+F:\melexin\GitHub\bs\visual\mozgocolco\bin\Debug\mozgocolco.pdb
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.csproj.AssemblyReference.cache
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.Properties.Resources.resources
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.csproj.GenerateResource.cache
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.csproj.CoreCompileInputs.cache
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.exe
+F:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.pdb
+f:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.MainForm.resources
+f:\melexin\GitHub\bs\visual\mozgocolco\obj\Debug\mozgocolco.gameForm.resources

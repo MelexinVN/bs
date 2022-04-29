@@ -145,7 +145,7 @@ int main(void)
 		_delay_ms(50);
 		blink_counter--;
 	}
-
+	wdt_enable(WDTO_120MS);
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля

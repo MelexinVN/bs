@@ -175,12 +175,13 @@ Section Cross References
     main.o(i.main) refers to nrf24.o(i.nrf24l01_receive) for nrf24l01_receive
     main.o(i.main) refers to main.o(i.reset_button_pushed) for reset_button_pushed
     main.o(i.main) refers to nrf24.o(i.NRF24L01_Send) for NRF24L01_Send
-    main.o(i.main) refers to main.o(i.first_push_finding) for first_push_finding
     main.o(i.main) refers to stm32f4xx_ll_utils.o(i.LL_mDelay) for LL_mDelay
+    main.o(i.main) refers to main.o(i.first_push_finding) for first_push_finding
     main.o(i.main) refers to main.o(.bss) for str
     main.o(i.main) refers to main.o(.data) for dt_reg
     main.o(i.main) refers to stm32f4xx_it.o(.data) for rec_cmnd
     main.o(i.reset_button_pushed) refers to nrf24.o(i.NRF24L01_Send) for NRF24L01_Send
+    main.o(i.reset_button_pushed) refers to stm32f4xx_ll_utils.o(i.LL_mDelay) for LL_mDelay
     main.o(i.reset_button_pushed) refers to main.o(.data) for tx_buf
     main.o(i.reset_button_pushed) refers to main.o(.bss) for led_stat
     main.o(i.reset_button_pushed) refers to stm32f4xx_it.o(.data) for rec_cmnd
@@ -845,22 +846,22 @@ Image Symbol Table
     __NVIC_SetPriority                       0x08001e8d   Thumb Code    32  main.o(i.__NVIC_SetPriority)
     i._is_digit                              0x08001eb4   Section        0  __printf_wp.o(i._is_digit)
     i.first_push_finding                     0x08001ec4   Section        0  main.o(i.first_push_finding)
-    i.main                                   0x08001f3c   Section        0  main.o(i.main)
-    i.nrf24l01_receive                       0x08002294   Section        0  nrf24.o(i.nrf24l01_receive)
-    i.reset_button_pushed                    0x08002378   Section        0  main.o(i.reset_button_pushed)
-    locale$$code                             0x080023e8   Section       44  lc_ctype_c.o(locale$$code)
-    x$fpl$fpinit                             0x08002414   Section       10  fpinit.o(x$fpl$fpinit)
-    $v0                                      0x08002414   Number         0  fpinit.o(x$fpl$fpinit)
-    .constdata                               0x0800241e   Section       24  system_stm32f4xx.o(.constdata)
-    .constdata                               0x08002436   Section       40  _printf_hex_int.o(.constdata)
-    uc_hextab                                0x08002436   Data          20  _printf_hex_int.o(.constdata)
-    lc_hextab                                0x0800244a   Data          20  _printf_hex_int.o(.constdata)
-    .constdata                               0x0800245e   Section       17  __printf_flags_ss_wp.o(.constdata)
-    maptable                                 0x0800245e   Data          17  __printf_flags_ss_wp.o(.constdata)
-    locale$$data                             0x08002490   Section      272  lc_ctype_c.o(locale$$data)
-    __lcctype_c_name                         0x08002494   Data           2  lc_ctype_c.o(locale$$data)
-    __lcctype_c_start                        0x0800249c   Data           0  lc_ctype_c.o(locale$$data)
-    __lcctype_c_end                          0x080025a0   Data           0  lc_ctype_c.o(locale$$data)
+    i.main                                   0x08001f44   Section        0  main.o(i.main)
+    i.nrf24l01_receive                       0x080022a4   Section        0  nrf24.o(i.nrf24l01_receive)
+    i.reset_button_pushed                    0x08002388   Section        0  main.o(i.reset_button_pushed)
+    locale$$code                             0x080023fc   Section       44  lc_ctype_c.o(locale$$code)
+    x$fpl$fpinit                             0x08002428   Section       10  fpinit.o(x$fpl$fpinit)
+    $v0                                      0x08002428   Number         0  fpinit.o(x$fpl$fpinit)
+    .constdata                               0x08002432   Section       24  system_stm32f4xx.o(.constdata)
+    .constdata                               0x0800244a   Section       40  _printf_hex_int.o(.constdata)
+    uc_hextab                                0x0800244a   Data          20  _printf_hex_int.o(.constdata)
+    lc_hextab                                0x0800245e   Data          20  _printf_hex_int.o(.constdata)
+    .constdata                               0x08002472   Section       17  __printf_flags_ss_wp.o(.constdata)
+    maptable                                 0x08002472   Data          17  __printf_flags_ss_wp.o(.constdata)
+    locale$$data                             0x080024a4   Section      272  lc_ctype_c.o(locale$$data)
+    __lcctype_c_name                         0x080024a8   Data           2  lc_ctype_c.o(locale$$data)
+    __lcctype_c_start                        0x080024b0   Data           0  lc_ctype_c.o(locale$$data)
+    __lcctype_c_end                          0x080025b4   Data           0  lc_ctype_c.o(locale$$data)
     .data                                    0x20000000   Section       13  nrf24.o(.data)
     .data                                    0x20000010   Section      142  main.o(.data)
     .data                                    0x200000a0   Section       16  stm32f4xx_it.o(.data)
@@ -1133,19 +1134,19 @@ Image Symbol Table
     USART_TX                                 0x08001e2d   Thumb Code    42  main.o(i.USART_TX)
     UsageFault_Handler                       0x08001e5d   Thumb Code     4  stm32f4xx_it.o(i.UsageFault_Handler)
     _is_digit                                0x08001eb5   Thumb Code    14  __printf_wp.o(i._is_digit)
-    first_push_finding                       0x08001ec5   Thumb Code    94  main.o(i.first_push_finding)
-    main                                     0x08001f3d   Thumb Code   608  main.o(i.main)
-    nrf24l01_receive                         0x08002295   Thumb Code   184  nrf24.o(i.nrf24l01_receive)
-    reset_button_pushed                      0x08002379   Thumb Code    78  main.o(i.reset_button_pushed)
-    _get_lc_ctype                            0x080023e9   Thumb Code    44  lc_ctype_c.o(locale$$code)
-    _fp_init                                 0x08002415   Thumb Code    10  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x0800241d   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x0800241d   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    AHBPrescTable                            0x0800241e   Data          16  system_stm32f4xx.o(.constdata)
-    APBPrescTable                            0x0800242e   Data           8  system_stm32f4xx.o(.constdata)
-    Region$$Table$$Base                      0x08002470   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002490   Number         0  anon$$obj.o(Region$$Table)
-    __ctype                                  0x0800249d   Data           0  lc_ctype_c.o(locale$$data)
+    first_push_finding                       0x08001ec5   Thumb Code   102  main.o(i.first_push_finding)
+    main                                     0x08001f45   Thumb Code   614  main.o(i.main)
+    nrf24l01_receive                         0x080022a5   Thumb Code   184  nrf24.o(i.nrf24l01_receive)
+    reset_button_pushed                      0x08002389   Thumb Code    84  main.o(i.reset_button_pushed)
+    _get_lc_ctype                            0x080023fd   Thumb Code    44  lc_ctype_c.o(locale$$code)
+    _fp_init                                 0x08002429   Thumb Code    10  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x08002431   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x08002431   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    AHBPrescTable                            0x08002432   Data          16  system_stm32f4xx.o(.constdata)
+    APBPrescTable                            0x08002442   Data           8  system_stm32f4xx.o(.constdata)
+    Region$$Table$$Base                      0x08002484   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x080024a4   Number         0  anon$$obj.o(Region$$Table)
+    __ctype                                  0x080024b1   Data           0  lc_ctype_c.o(locale$$data)
     TX_ADDRESS0                              0x20000000   Data           3  nrf24.o(.data)
     TX_ADDRESS1                              0x20000003   Data           3  nrf24.o(.data)
     rx_buf                                   0x20000006   Data           5  nrf24.o(.data)
@@ -1183,9 +1184,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000189
 
-  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002654, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x08000000, Size: 0x00002668, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000025a0, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x000025b4, Max: 0x00080000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1355,30 +1356,30 @@ Memory Map of the image
     0x08001e8c   0x08001e8c   0x00000028   Code   RO          259    i.__NVIC_SetPriority  main.o
     0x08001eb4   0x08001eb4   0x0000000e   Code   RO         1170    i._is_digit         c_w.l(__printf_wp.o)
     0x08001ec2   0x08001ec2   0x00000002   PAD
-    0x08001ec4   0x08001ec4   0x00000078   Code   RO          260    i.first_push_finding  main.o
-    0x08001f3c   0x08001f3c   0x00000358   Code   RO          261    i.main              main.o
-    0x08002294   0x08002294   0x000000e4   Code   RO           33    i.nrf24l01_receive  nrf24.o
-    0x08002378   0x08002378   0x00000070   Code   RO          262    i.reset_button_pushed  main.o
-    0x080023e8   0x080023e8   0x0000002c   Code   RO         1248    locale$$code        c_w.l(lc_ctype_c.o)
-    0x08002414   0x08002414   0x0000000a   Code   RO         1332    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x0800241e   0x0800241e   0x00000018   Data   RO          538    .constdata          system_stm32f4xx.o
-    0x08002436   0x08002436   0x00000028   Data   RO         1143    .constdata          c_w.l(_printf_hex_int.o)
-    0x0800245e   0x0800245e   0x00000011   Data   RO         1178    .constdata          c_w.l(__printf_flags_ss_wp.o)
-    0x0800246f   0x0800246f   0x00000001   PAD
-    0x08002470   0x08002470   0x00000020   Data   RO         1390    Region$$Table       anon$$obj.o
-    0x08002490   0x08002490   0x00000110   Data   RO         1247    locale$$data        c_w.l(lc_ctype_c.o)
+    0x08001ec4   0x08001ec4   0x00000080   Code   RO          260    i.first_push_finding  main.o
+    0x08001f44   0x08001f44   0x00000360   Code   RO          261    i.main              main.o
+    0x080022a4   0x080022a4   0x000000e4   Code   RO           33    i.nrf24l01_receive  nrf24.o
+    0x08002388   0x08002388   0x00000074   Code   RO          262    i.reset_button_pushed  main.o
+    0x080023fc   0x080023fc   0x0000002c   Code   RO         1248    locale$$code        c_w.l(lc_ctype_c.o)
+    0x08002428   0x08002428   0x0000000a   Code   RO         1332    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x08002432   0x08002432   0x00000018   Data   RO          538    .constdata          system_stm32f4xx.o
+    0x0800244a   0x0800244a   0x00000028   Data   RO         1143    .constdata          c_w.l(_printf_hex_int.o)
+    0x08002472   0x08002472   0x00000011   Data   RO         1178    .constdata          c_w.l(__printf_flags_ss_wp.o)
+    0x08002483   0x08002483   0x00000001   PAD
+    0x08002484   0x08002484   0x00000020   Data   RO         1390    Region$$Table       anon$$obj.o
+    0x080024a4   0x080024a4   0x00000110   Data   RO         1247    locale$$data        c_w.l(lc_ctype_c.o)
 
 
-    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080025a0, Size: 0x00000788, Max: 0x0001c000, ABSOLUTE)
+    Execution Region RW_IRAM1 (Exec base: 0x20000000, Load base: 0x080025b4, Size: 0x00000788, Max: 0x0001c000, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x080025a0   0x0000000d   Data   RW           35    .data               nrf24.o
-    0x2000000d   0x080025ad   0x00000003   PAD
-    0x20000010   0x080025b0   0x0000008e   Data   RW          266    .data               main.o
-    0x2000009e   0x0800263e   0x00000002   PAD
-    0x200000a0   0x08002640   0x00000010   Data   RW          432    .data               stm32f4xx_it.o
-    0x200000b0   0x08002650   0x00000004   Data   RW          539    .data               system_stm32f4xx.o
+    0x20000000   0x080025b4   0x0000000d   Data   RW           35    .data               nrf24.o
+    0x2000000d   0x080025c1   0x00000003   PAD
+    0x20000010   0x080025c4   0x0000008e   Data   RW          266    .data               main.o
+    0x2000009e   0x08002652   0x00000002   PAD
+    0x200000a0   0x08002654   0x00000010   Data   RW          432    .data               stm32f4xx_it.o
+    0x200000b0   0x08002664   0x00000004   Data   RW          539    .data               system_stm32f4xx.o
     0x200000b4        -       0x00000054   Zero   RW          264    .bss                main.o
     0x20000108        -       0x00000020   Zero   RW          430    .bss                stm32f4xx_it.o
     0x20000128        -       0x00000060   Zero   RW         1213    .bss                c_w.l(libspace.o)
@@ -1386,7 +1387,7 @@ Memory Map of the image
     0x20000388        -       0x00000400   Zero   RW            1    STACK               startup_stm32f407xx.o
 
 
-    Execution Region RW_IRAM2 (Exec base: 0x2001c000, Load base: 0x08002654, Size: 0x00000000, Max: 0x00004000, ABSOLUTE)
+    Execution Region RW_IRAM2 (Exec base: 0x2001c000, Load base: 0x08002668, Size: 0x00000000, Max: 0x00004000, ABSOLUTE)
 
     **** No section assigned to this execution region ****
 
@@ -1398,7 +1399,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      2558        410          0        142         84     110454   main.o
+      2578        410          0        142         84     110466   main.o
       1730        186          0         13          0     633674   nrf24.o
         64         26        392          0       1536        840   startup_stm32f407xx.o
        500         44          0         16         32      23670   stm32f4xx_it.o
@@ -1411,7 +1412,7 @@ Image component sizes
         20          6         24          4          0       1123   system_stm32f4xx.o
 
     ----------------------------------------------------------------------
-      6646        792        448        180       1652     853339   Object Totals
+      6666        792        448        180       1652     853351   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          8          0          0          5          0          0   (incl. Padding)
 
@@ -1487,15 +1488,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8854        866        778        180       1748     847315   Grand Totals
-      8854        866        778        180       1748     847315   ELF Image Totals
-      8854        866        778        180          0          0   ROM Totals
+      8874        866        778        180       1748     847327   Grand Totals
+      8874        866        778        180       1748     847327   ELF Image Totals
+      8874        866        778        180          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 9632 (   9.41kB)
+    Total RO  Size (Code + RO Data)                 9652 (   9.43kB)
     Total RW  Size (RW Data + ZI Data)              1928 (   1.88kB)
-    Total ROM Size (Code + RO Data + RW Data)       9812 (   9.58kB)
+    Total ROM Size (Code + RO Data + RW Data)       9832 (   9.60kB)
 
 ==============================================================================
 
