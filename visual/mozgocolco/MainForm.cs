@@ -16,6 +16,7 @@ using System.Xml;
 using System.Net;
 using System.Resources;
 using System.Reflection;
+using System.Media;
 
 public enum BaudRate
 {
@@ -93,6 +94,8 @@ namespace mozgocolco
     {
         private gameForm gameForm1 = new gameForm();
 
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -111,6 +114,11 @@ namespace mozgocolco
             serialPort1.DataBits = Convert.ToInt32(comboBox3.Text);
             comboBox2.SelectedIndex = 12;                                           //Выбор BaudRate
             serialPort1.BaudRate = Convert.ToInt32(comboBox2.Text);
+
+            gameForm1.KeyPreview = true;
+
+            //sp.SoundLocation = "sounds/answer.wav";
+            //sp.Load();
         }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -197,6 +205,18 @@ namespace mozgocolco
         private void button3_Click_1(object sender, EventArgs e)
         {
             gameForm1.visiblity = false;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            //sp.Play();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            //sp.Dispose();            
+            //sp.SoundLocation = "sounds/" + comboBox5.Text;
+            //sp.Load();
         }
     }
 }

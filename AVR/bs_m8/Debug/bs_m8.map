@@ -200,7 +200,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x630
+.text           0x00000000      0x63e
  *(.vectors)
  .vectors       0x00000000       0x26 D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
                 0x00000000                __vector_default
@@ -333,37 +333,37 @@ END GROUP
                 0x000003be       0x44 nrf24.o
                 0x000003be                NRF24L01_Send
  .text.nrf24l01_receive
-                0x00000402       0xd2 nrf24.o
+                0x00000402       0xdc nrf24.o
                 0x00000402                nrf24l01_receive
  .text.nrf24_init
-                0x000004d4       0x80 nrf24.o
-                0x000004d4                nrf24_init
+                0x000004de       0x80 nrf24.o
+                0x000004de                nrf24_init
  .text.IRQ_Callback
-                0x00000554       0x50 nrf24.o
-                0x00000554                IRQ_Callback
+                0x0000055e       0x54 nrf24.o
+                0x0000055e                IRQ_Callback
  .text.spi_init
-                0x000005a4       0x12 spi.o
-                0x000005a4                spi_init
+                0x000005b2       0x12 spi.o
+                0x000005b2                spi_init
  .text.spi_sendByte
-                0x000005b6        0x8 spi.o
-                0x000005b6                spi_sendByte
+                0x000005c4        0x8 spi.o
+                0x000005c4                spi_sendByte
  .text.spi_changeByte
-                0x000005be        0xa spi.o
-                0x000005be                spi_changeByte
+                0x000005cc        0xa spi.o
+                0x000005cc                spi_changeByte
  .text.USART_Init
-                0x000005c8       0x1a usart.o
-                0x000005c8                USART_Init
+                0x000005d6       0x1a usart.o
+                0x000005d6                USART_Init
  .text.USART_Transmit
-                0x000005e2        0x8 usart.o
-                0x000005e2                USART_Transmit
+                0x000005f0        0x8 usart.o
+                0x000005f0                USART_Transmit
  .text.usart_println
-                0x000005ea       0x42 usart.o
-                0x000005ea                usart_println
-                0x0000062c                . = ALIGN (0x2)
+                0x000005f8       0x42 usart.o
+                0x000005f8                usart_println
+                0x0000063a                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000062c        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
-                0x0000062c                _exit
-                0x0000062c                exit
+ .fini9         0x0000063a        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+                0x0000063a                _exit
+                0x0000063a                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -382,11 +382,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000062c        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+ .fini0         0x0000063a        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000630                _etext = .
+                0x0000063e                _etext = .
 
-.data           0x00800060        0xc load address 0x00000630
+.data           0x00800060        0xc load address 0x0000063e
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -427,8 +427,8 @@ END GROUP
                 0x0080007c                rx_buf
  *(COMMON)
                 0x00800081                PROVIDE (__bss_end, .)
-                0x00000630                __data_load_start = LOADADDR (.data)
-                0x0000063c                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000063e                __data_load_start = LOADADDR (.data)
+                0x0000064a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800081        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -559,12 +559,12 @@ END GROUP
  .debug_str     0x0000050d       0x26 usart.o
                                 0x183 (size before relaxing)
 
-.debug_loc      0x00000000      0xc33
+.debug_loc      0x00000000      0xc34
  *(.debug_loc)
  .debug_loc     0x00000000      0x26f main.o
- .debug_loc     0x0000026f      0x8dc nrf24.o
- .debug_loc     0x00000b4b       0x1f spi.o
- .debug_loc     0x00000b6a       0xc9 usart.o
+ .debug_loc     0x0000026f      0x8dd nrf24.o
+ .debug_loc     0x00000b4c       0x1f spi.o
+ .debug_loc     0x00000b6b       0xc9 usart.o
 
 .debug_macinfo
  *(.debug_macinfo)

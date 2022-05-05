@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Media;
 
 namespace mozgocolco
 {
@@ -17,6 +18,8 @@ namespace mozgocolco
         public bool visiblity = true;
 
         private MainForm m_owner = null;
+
+        SoundPlayer sp = new SoundPlayer();
 
         public MainForm MainForm
         {
@@ -31,6 +34,9 @@ namespace mozgocolco
         private void gameForm_Load(object sender, EventArgs e)
         {
             byte i = 0;
+
+            sp.SoundLocation = "sounds/answer.wav";
+            sp.Load();
 
             while (i < 10)
             {
@@ -116,7 +122,30 @@ namespace mozgocolco
 
         private void gameForm_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.S)       
+            {
+                s_make();
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
             
+        }
+
+        private void s_make()
+        {
+            label20.Text = "S";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            s_make();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            sp.Play();
         }
     }
 }
