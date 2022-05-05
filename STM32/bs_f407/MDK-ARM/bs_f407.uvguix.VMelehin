@@ -93,8 +93,8 @@
       <flags>2</flags>
       <showCmd>3</showCmd>
       <MinPosition>
-        <xPos>-32000</xPos>
-        <yPos>-32000</yPos>
+        <xPos>-1</xPos>
+        <yPos>-1</yPos>
       </MinPosition>
       <MaxPosition>
         <xPos>-1</xPos>
@@ -3606,18 +3606,18 @@
       <ActiveTab>0</ActiveTab>
       <Doc>
         <Name>../Core/Src/main.c</Name>
-        <ColumnNumber>32</ColumnNumber>
-        <TopLine>223</TopLine>
-        <CurrentLine>247</CurrentLine>
+        <ColumnNumber>1</ColumnNumber>
+        <TopLine>60</TopLine>
+        <CurrentLine>250</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders>144,251,256,298,304,328,334,383,389,438,444,532,537,547</ContractedFolders>
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
         <Name>../Core/Inc/main.h</Name>
-        <ColumnNumber>50</ColumnNumber>
+        <ColumnNumber>7</ColumnNumber>
         <TopLine>80</TopLine>
-        <CurrentLine>111</CurrentLine>
+        <CurrentLine>112</CurrentLine>
         <Folding>0</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>

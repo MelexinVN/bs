@@ -929,13 +929,13 @@ void nrf24l01_receive(void)
  470:	92 83       	std	Z+2, r25	; 0x02
  472:	a3 83       	std	Z+3, r26	; 0x03
  474:	b4 83       	std	Z+4, r27	; 0x04
- 476:	8f e6       	ldi	r24, 0x6F	; 111
- 478:	97 e1       	ldi	r25, 0x17	; 23
+ 476:	8f e0       	ldi	r24, 0x0F	; 15
+ 478:	97 e2       	ldi	r25, 0x27	; 39
  47a:	01 97       	sbiw	r24, 0x01	; 1
  47c:	f1 f7       	brne	.-4      	; 0x47a <__stack+0x1b>
  47e:	00 c0       	rjmp	.+0      	; 0x480 <__stack+0x21>
  480:	00 00       	nop
-				_delay_us(3000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(5000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);	//			
  482:	cf 01       	movw	r24, r30
  484:	9c df       	rcall	.-200    	; 0x3be <NRF24L01_Send>
@@ -957,13 +957,13 @@ void nrf24l01_receive(void)
  4a2:	92 83       	std	Z+2, r25	; 0x02
  4a4:	a3 83       	std	Z+3, r26	; 0x03
  4a6:	b4 83       	std	Z+4, r27	; 0x04
- 4a8:	8f e6       	ldi	r24, 0x6F	; 111
- 4aa:	97 e1       	ldi	r25, 0x17	; 23
+ 4a8:	8f e0       	ldi	r24, 0x0F	; 15
+ 4aa:	97 e2       	ldi	r25, 0x27	; 39
  4ac:	01 97       	sbiw	r24, 0x01	; 1
  4ae:	f1 f7       	brne	.-4      	; 0x4ac <__stack+0x4d>
  4b0:	00 c0       	rjmp	.+0      	; 0x4b2 <__stack+0x53>
  4b2:	00 00       	nop
-				_delay_us(3000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				_delay_us(5000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
  4b4:	cf 01       	movw	r24, r30
  4b6:	83 df       	rcall	.-250    	; 0x3be <NRF24L01_Send>
@@ -1087,15 +1087,15 @@ void nrf24_init(void)
 void IRQ_Callback(void)
 {
  55e:	cf 93       	push	r28
- 560:	87 ec       	ldi	r24, 0xC7	; 199
- 562:	90 e0       	ldi	r25, 0x00	; 0
+ 560:	87 ee       	ldi	r24, 0xE7	; 231
+ 562:	93 e0       	ldi	r25, 0x03	; 3
  564:	01 97       	sbiw	r24, 0x01	; 1
  566:	f1 f7       	brne	.-4      	; 0x564 <IRQ_Callback+0x6>
  568:	00 c0       	rjmp	.+0      	; 0x56a <IRQ_Callback+0xc>
  56a:	00 00       	nop
 	//LED_ON();
 	uint8_t status=0x01;	//переменная статус
-	_delay_us(100);			//_delay_us(10);
+	_delay_us(500);			//_delay_us(10);
 	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
  56c:	87 e0       	ldi	r24, 0x07	; 7
  56e:	47 de       	rcall	.-882    	; 0x1fe <NRF24_ReadReg>

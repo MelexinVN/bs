@@ -112,7 +112,7 @@ namespace mozgocolco
             serialPort1.PortName = comboBox1.Text;
             comboBox3.SelectedIndex = 3;                           			        //Выбор Bit=8
             serialPort1.DataBits = Convert.ToInt32(comboBox3.Text);
-            comboBox2.SelectedIndex = 12;                                           //Выбор BaudRate
+            comboBox2.SelectedIndex = 6;                                           //Выбор BaudRate
             serialPort1.BaudRate = Convert.ToInt32(comboBox2.Text);
 
             gameForm1.KeyPreview = true;
@@ -127,8 +127,19 @@ namespace mozgocolco
         }
         private void DoUpdate(object s, EventArgs e)
         {
-            string s_input = serialPort1.ReadLine();
+            int kol_bytes = serialPort1.BytesToRead;  //количество вновь принятых байтов
+            byte[] input_bytes = new byte[kol_bytes];
+            serialPort1.Read(input_bytes, 0, kol_bytes);
+
+            string s_input = "";
+
+            for (int i = 0; i < kol_bytes; i++)
+            {
+                s_input += Convert.ToChar(input_bytes[i]);
+            }
+
             textBox2.Text += s_input + "\r\n";
+            gameForm1.input_string = s_input;
         }
 
         private void Scroll_text(object sender, EventArgs e)
@@ -200,11 +211,6 @@ namespace mozgocolco
                 gameForm1.Show();
             else
                 gameForm1.Hide();
-        }
-
-        private void button3_Click_1(object sender, EventArgs e)
-        {
-            gameForm1.visiblity = false;
         }
 
         private void button4_Click(object sender, EventArgs e)
