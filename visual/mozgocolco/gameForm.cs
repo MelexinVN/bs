@@ -18,9 +18,23 @@ namespace mozgocolco
         public long time_ms = 0;
         public bool visiblity = true;
         public string input_string = " ";
+        public string sound_answ_path = "sounds/answer.wav";
+        public string sound_fals_path = "sounds/falstart.wav";
+        public string sound_stop_path = "sounds/stop.wav";
+        public string sound_strt_path = "sounds/start.wav";
+        public string sound_time_path = "sounds/time.wav";
+
+        public int main_time = 60;
+        public int dop_time = 20;
+        public int mode = 1;
+
         private MainForm m_owner = null;
 
-        SoundPlayer sp = new SoundPlayer();
+        SoundPlayer answ_p = new SoundPlayer();
+        SoundPlayer fals_p = new SoundPlayer();
+        SoundPlayer stop_p = new SoundPlayer();
+        SoundPlayer strt_p = new SoundPlayer();
+        SoundPlayer time_p = new SoundPlayer();
 
         private byte count = 0;
 
@@ -38,8 +52,17 @@ namespace mozgocolco
         {
             byte i = 0;
 
-            sp.SoundLocation = "sounds/answer.wav";
-            sp.Load();
+            answ_p.SoundLocation = sound_answ_path;
+            fals_p.SoundLocation = sound_fals_path;
+            stop_p.SoundLocation = sound_stop_path;
+            strt_p.SoundLocation = sound_strt_path;
+            time_p.SoundLocation = sound_time_path;
+
+            answ_p.Load();
+            fals_p.Load();
+            stop_p.Load();
+            strt_p.Load();
+            time_p.Load();
 
             label01.Text = " ";
             label02.Text = " ";
@@ -93,12 +116,26 @@ namespace mozgocolco
             else              s_secs = '0' + Convert.ToString(secs);
 
             label1.Text = s_mins + ':' + s_secs;
+
+            if (time_clock == dop_time) time_p.Play();
+            if (time_clock == main_time)
+            {
+                stop_p.Play();
+                time_clock = 0;
+                timer1.Enabled = false;
+            }
         }
 
 
         private void button2_Click(object sender, EventArgs e)
         {
-            time_ms = 0;            
+            start_procedure();
+        }
+
+        private void start_procedure()
+        {
+            strt_p.Play();
+            time_ms = 0;
             if (timer1.Enabled)
             {
                 timer1.Enabled = false;
@@ -116,7 +153,9 @@ namespace mozgocolco
             time_ms++;
             if (input_string[0] != ' ')
             {
-                sp.Play();
+                if (timer1.Enabled) answ_p.Play();
+                else fals_p.Play();
+
                 for (int i = 0; i < input_string.Length; i++)
                 {
                     if (input_string[i] == '0')
@@ -296,7 +335,19 @@ namespace mozgocolco
         {
             if (e.KeyCode == Keys.S)       
             {
-                s_make();
+                start_procedure();
+            }
+            if (e.KeyCode == Keys.N)
+            {
+                next_procedure();
+            }
+            if (e.KeyCode == Keys.Space)
+            {
+                //s_make();
+            }
+            if (e.KeyCode == Keys.R)
+            {
+                sbros_procedure();
             }
         }
 
@@ -305,9 +356,28 @@ namespace mozgocolco
             
         }
 
-        private void s_make()
+        private void sbros_procedure()
         {
-            label20.Text = "S";
+            timer1.Enabled = false;
+            time_clock = 0;
+            time_ms = 0;
+            label1.Text = "00:00";
+            count = 0;
+        }
+
+        private void next_procedure()
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            sbros_procedure();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            next_procedure();
         }
     }
 }

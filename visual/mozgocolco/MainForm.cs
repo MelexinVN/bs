@@ -87,7 +87,6 @@ public enum ConnectionError
     SensorFailure = -300
 }
 
-
 namespace mozgocolco
 {
     public partial class MainForm : Form
@@ -101,8 +100,7 @@ namespace mozgocolco
             InitializeComponent();
 
             gameForm1.MainForm = this;
-            gameForm1.Hide();
-
+            gameForm1.Show();
         }
 
         private void Form1_Load_1(object sender, EventArgs e)
@@ -115,10 +113,17 @@ namespace mozgocolco
             comboBox2.SelectedIndex = 6;                                           //Выбор BaudRate
             serialPort1.BaudRate = Convert.ToInt32(comboBox2.Text);
 
+            comboBox4.SelectedIndex = 1;
+            comboBox5.SelectedIndex = 0;
+            comboBox6.SelectedIndex = 0;
+            comboBox7.SelectedIndex = 0;
+            comboBox8.SelectedIndex = 0;
+            comboBox9.SelectedIndex = 0;
+
             gameForm1.KeyPreview = true;
 
-            //sp.SoundLocation = "sounds/answer.wav";
-            //sp.Load();
+            gameForm1.main_time = (int)numericUpDown1.Value;
+            gameForm1.dop_time = (int)numericUpDown2.Value;
         }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -220,9 +225,33 @@ namespace mozgocolco
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //sp.Dispose();            
-            //sp.SoundLocation = "sounds/" + comboBox5.Text;
-            //sp.Load();
+            gameForm1.sound_answ_path = "sounds/" + Convert.ToString(comboBox5.SelectedItem);
+            gameForm1.sound_fals_path = "sounds/" + Convert.ToString(comboBox6.SelectedItem);
+            gameForm1.sound_stop_path = "sounds/" + Convert.ToString(comboBox8.SelectedItem);
+            gameForm1.sound_strt_path = "sounds/" + Convert.ToString(comboBox9.SelectedItem);
+            gameForm1.sound_time_path = "sounds/" + Convert.ToString(comboBox7.SelectedItem);
+        }
+
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox5_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox6_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            gameForm1.main_time = (int)numericUpDown1.Value;
+            gameForm1.dop_time = (int)numericUpDown2.Value;
+            gameForm1.mode = comboBox4.SelectedIndex;
         }
     }
 }
