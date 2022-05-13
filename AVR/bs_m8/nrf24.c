@@ -21,6 +21,7 @@ uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};				//буфер приема
 uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};				//буфер передачи			
 volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
 extern volatile uint8_t f_pushed;					//флаг нажати€
+extern volatile uint8_t f_reset;					//
 extern uint8_t f_send;								//флаг отправки
 extern volatile uint32_t time_ms;					//сохраненное врем€ мс
 extern volatile uint32_t miliseconds;				//счетчик милисекунд
@@ -169,10 +170,11 @@ void nrf24l01_receive(void)
 {
 	if(f_rx == 1)						//если флаг приема подн€т
 	{
-		wdt_reset();
+
 		f_rx = 0;						//опускаем флаг приема		
 		if (rx_buf[0] == RESET)			//если первый прин€тый байт - команда сброса
 		{
+			f_reset = 1;
 			f_pushed = 0;				//опускаем ылаг нажати€
 			time_ms = 0;				//обнул€ем значение времени
 			miliseconds = 0;			//обнул€ем счетчик мс
@@ -184,14 +186,14 @@ void nrf24l01_receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;	//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
-				_delay_us(5000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				_delay_us(3000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);	//			
 			}
 			else
 			{
 				tx_buf[0] = BUT_ADDR;
-				(*(unsigned long*)&tx_buf[1]) = miliseconds;//NOT_PUSHED;
-				_delay_us(5000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
+				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;//miliseconds;//
+				_delay_us(3000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);
 			}
 			if (rx_buf[1] == 0x01)
@@ -233,7 +235,7 @@ void IRQ_Callback(void)
 {
 	//LED_ON();
 	uint8_t status=0x01;	//переменна€ статус
-	_delay_us(500);			//_delay_us(10);
+	_delay_us(100);			//_delay_us(10);
 	status = NRF24_ReadReg(STATUS);	//чтение значени€ регистра статуса
 	if(status & RX_DR)				//если есть данные на прием
 	{

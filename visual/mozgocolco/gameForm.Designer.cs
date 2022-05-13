@@ -30,9 +30,9 @@ namespace mozgocolco
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(gameForm));
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.button1 = new System.Windows.Forms.Button();
@@ -119,9 +119,9 @@ namespace mozgocolco
             // button1
             // 
             this.button1.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.button1.Location = new System.Drawing.Point(12, 709);
+            this.button1.Location = new System.Drawing.Point(856, 250);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(272, 23);
+            this.button1.Size = new System.Drawing.Size(155, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Сброс";
             this.button1.UseVisualStyleBackColor = true;
@@ -131,7 +131,7 @@ namespace mozgocolco
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Consolas", 72F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(16, 27);
+            this.label1.Location = new System.Drawing.Point(16, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(312, 112);
             this.label1.TabIndex = 1;
@@ -141,9 +141,9 @@ namespace mozgocolco
             // 
             this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(663, 423);
+            this.groupBox1.Location = new System.Drawing.Point(502, 250);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(341, 178);
+            this.groupBox1.Size = new System.Drawing.Size(348, 133);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Время";
@@ -156,20 +156,20 @@ namespace mozgocolco
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox1.Location = new System.Drawing.Point(12, 607);
+            this.textBox1.Location = new System.Drawing.Point(502, 389);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1.Size = new System.Drawing.Size(992, 96);
+            this.textBox1.Size = new System.Drawing.Size(509, 208);
             this.textBox1.TabIndex = 2;
             this.textBox1.TextChanged += new System.EventHandler(this.Scroll_text);
             // 
             // button2
             // 
             this.button2.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.button2.Location = new System.Drawing.Point(290, 709);
+            this.button2.Location = new System.Drawing.Point(856, 279);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(433, 23);
+            this.button2.Size = new System.Drawing.Size(155, 23);
             this.button2.TabIndex = 3;
             this.button2.Text = "Пуск";
             this.button2.UseVisualStyleBackColor = true;
@@ -178,9 +178,9 @@ namespace mozgocolco
             // button3
             // 
             this.button3.Cursor = System.Windows.Forms.Cursors.Arrow;
-            this.button3.Location = new System.Drawing.Point(729, 709);
+            this.button3.Location = new System.Drawing.Point(856, 308);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(269, 23);
+            this.button3.Size = new System.Drawing.Size(155, 23);
             this.button3.TabIndex = 4;
             this.button3.Text = "Далее";
             this.button3.UseVisualStyleBackColor = true;
@@ -191,44 +191,44 @@ namespace mozgocolco
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView1.ColumnHeadersHeight = 4;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2,
             this.Column1});
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle8;
-            this.dataGridView1.Location = new System.Drawing.Point(663, 12);
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            this.dataGridView1.Location = new System.Drawing.Point(502, 12);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidth = 40;
-            this.dataGridView1.RowTemplate.Height = 30;
+            this.dataGridView1.RowTemplate.Height = 20;
             this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(341, 402);
+            this.dataGridView1.Size = new System.Drawing.Size(509, 232);
             this.dataGridView1.TabIndex = 5;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -356,7 +356,7 @@ namespace mozgocolco
             // 
             this.pictureBox11.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox11.ErrorImage")));
             this.pictureBox11.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox11.Image")));
-            this.pictureBox11.Location = new System.Drawing.Point(378, 523);
+            this.pictureBox11.Location = new System.Drawing.Point(296, 523);
             this.pictureBox11.Name = "pictureBox11";
             this.pictureBox11.Size = new System.Drawing.Size(50, 50);
             this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -367,7 +367,7 @@ namespace mozgocolco
             // 
             this.pictureBox12.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox12.ErrorImage")));
             this.pictureBox12.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox12.Image")));
-            this.pictureBox12.Location = new System.Drawing.Point(378, 467);
+            this.pictureBox12.Location = new System.Drawing.Point(296, 467);
             this.pictureBox12.Name = "pictureBox12";
             this.pictureBox12.Size = new System.Drawing.Size(50, 50);
             this.pictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -378,7 +378,7 @@ namespace mozgocolco
             // 
             this.pictureBox13.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox13.ErrorImage")));
             this.pictureBox13.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox13.Image")));
-            this.pictureBox13.Location = new System.Drawing.Point(378, 411);
+            this.pictureBox13.Location = new System.Drawing.Point(296, 411);
             this.pictureBox13.Name = "pictureBox13";
             this.pictureBox13.Size = new System.Drawing.Size(50, 50);
             this.pictureBox13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -389,7 +389,7 @@ namespace mozgocolco
             // 
             this.pictureBox14.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox14.ErrorImage")));
             this.pictureBox14.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox14.Image")));
-            this.pictureBox14.Location = new System.Drawing.Point(378, 355);
+            this.pictureBox14.Location = new System.Drawing.Point(296, 355);
             this.pictureBox14.Name = "pictureBox14";
             this.pictureBox14.Size = new System.Drawing.Size(50, 50);
             this.pictureBox14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -400,7 +400,7 @@ namespace mozgocolco
             // 
             this.pictureBox15.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox15.ErrorImage")));
             this.pictureBox15.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox15.Image")));
-            this.pictureBox15.Location = new System.Drawing.Point(378, 299);
+            this.pictureBox15.Location = new System.Drawing.Point(296, 299);
             this.pictureBox15.Name = "pictureBox15";
             this.pictureBox15.Size = new System.Drawing.Size(50, 50);
             this.pictureBox15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -411,7 +411,7 @@ namespace mozgocolco
             // 
             this.pictureBox16.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox16.ErrorImage")));
             this.pictureBox16.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox16.Image")));
-            this.pictureBox16.Location = new System.Drawing.Point(378, 243);
+            this.pictureBox16.Location = new System.Drawing.Point(296, 243);
             this.pictureBox16.Name = "pictureBox16";
             this.pictureBox16.Size = new System.Drawing.Size(50, 50);
             this.pictureBox16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -422,7 +422,7 @@ namespace mozgocolco
             // 
             this.pictureBox17.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox17.ErrorImage")));
             this.pictureBox17.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox17.Image")));
-            this.pictureBox17.Location = new System.Drawing.Point(378, 187);
+            this.pictureBox17.Location = new System.Drawing.Point(296, 187);
             this.pictureBox17.Name = "pictureBox17";
             this.pictureBox17.Size = new System.Drawing.Size(50, 50);
             this.pictureBox17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -433,7 +433,7 @@ namespace mozgocolco
             // 
             this.pictureBox18.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox18.ErrorImage")));
             this.pictureBox18.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox18.Image")));
-            this.pictureBox18.Location = new System.Drawing.Point(378, 131);
+            this.pictureBox18.Location = new System.Drawing.Point(296, 131);
             this.pictureBox18.Name = "pictureBox18";
             this.pictureBox18.Size = new System.Drawing.Size(50, 50);
             this.pictureBox18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -444,7 +444,7 @@ namespace mozgocolco
             // 
             this.pictureBox19.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox19.ErrorImage")));
             this.pictureBox19.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox19.Image")));
-            this.pictureBox19.Location = new System.Drawing.Point(378, 75);
+            this.pictureBox19.Location = new System.Drawing.Point(296, 75);
             this.pictureBox19.Name = "pictureBox19";
             this.pictureBox19.Size = new System.Drawing.Size(50, 50);
             this.pictureBox19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -455,7 +455,7 @@ namespace mozgocolco
             // 
             this.pictureBox20.ErrorImage = ((System.Drawing.Image)(resources.GetObject("pictureBox20.ErrorImage")));
             this.pictureBox20.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox20.Image")));
-            this.pictureBox20.Location = new System.Drawing.Point(378, 19);
+            this.pictureBox20.Location = new System.Drawing.Point(296, 19);
             this.pictureBox20.Name = "pictureBox20";
             this.pictureBox20.Size = new System.Drawing.Size(50, 50);
             this.pictureBox20.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -546,7 +546,7 @@ namespace mozgocolco
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label14.Location = new System.Drawing.Point(434, 190);
+            this.label14.Location = new System.Drawing.Point(352, 190);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(42, 47);
             this.label14.TabIndex = 39;
@@ -556,7 +556,7 @@ namespace mozgocolco
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label13.Location = new System.Drawing.Point(434, 134);
+            this.label13.Location = new System.Drawing.Point(352, 134);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(42, 47);
             this.label13.TabIndex = 38;
@@ -566,7 +566,7 @@ namespace mozgocolco
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label12.Location = new System.Drawing.Point(434, 78);
+            this.label12.Location = new System.Drawing.Point(352, 78);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(42, 47);
             this.label12.TabIndex = 37;
@@ -576,7 +576,7 @@ namespace mozgocolco
             // 
             this.label11.AutoSize = true;
             this.label11.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label11.Location = new System.Drawing.Point(434, 22);
+            this.label11.Location = new System.Drawing.Point(352, 22);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(42, 47);
             this.label11.TabIndex = 36;
@@ -586,7 +586,7 @@ namespace mozgocolco
             // 
             this.label18.AutoSize = true;
             this.label18.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label18.Location = new System.Drawing.Point(434, 414);
+            this.label18.Location = new System.Drawing.Point(352, 414);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(42, 47);
             this.label18.TabIndex = 43;
@@ -596,7 +596,7 @@ namespace mozgocolco
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label17.Location = new System.Drawing.Point(434, 358);
+            this.label17.Location = new System.Drawing.Point(352, 358);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(42, 47);
             this.label17.TabIndex = 42;
@@ -606,7 +606,7 @@ namespace mozgocolco
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label16.Location = new System.Drawing.Point(434, 302);
+            this.label16.Location = new System.Drawing.Point(352, 302);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(42, 47);
             this.label16.TabIndex = 41;
@@ -616,7 +616,7 @@ namespace mozgocolco
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label15.Location = new System.Drawing.Point(434, 246);
+            this.label15.Location = new System.Drawing.Point(352, 246);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(42, 47);
             this.label15.TabIndex = 40;
@@ -646,7 +646,7 @@ namespace mozgocolco
             // 
             this.label20.AutoSize = true;
             this.label20.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label20.Location = new System.Drawing.Point(434, 526);
+            this.label20.Location = new System.Drawing.Point(352, 526);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(42, 47);
             this.label20.TabIndex = 45;
@@ -656,7 +656,7 @@ namespace mozgocolco
             // 
             this.label19.AutoSize = true;
             this.label19.Font = new System.Drawing.Font("Consolas", 30F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label19.Location = new System.Drawing.Point(434, 470);
+            this.label19.Location = new System.Drawing.Point(352, 470);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(42, 47);
             this.label19.TabIndex = 44;
@@ -704,9 +704,9 @@ namespace mozgocolco
             this.groupBox2.Controls.Add(this.label02);
             this.groupBox2.Controls.Add(this.pictureBox11);
             this.groupBox2.Controls.Add(this.label01);
-            this.groupBox2.Location = new System.Drawing.Point(12, 7);
+            this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(645, 594);
+            this.groupBox2.Size = new System.Drawing.Size(493, 594);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Кнопки";
@@ -715,7 +715,7 @@ namespace mozgocolco
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1016, 744);
+            this.ClientSize = new System.Drawing.Size(1016, 604);
             this.ControlBox = false;
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.dataGridView1);

@@ -200,7 +200,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x63e
+.text           0x00000000      0x642
  *(.vectors)
  .vectors       0x00000000       0x26 D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
                 0x00000000                __vector_default
@@ -297,73 +297,73 @@ END GROUP
  .text.__vector_6
                 0x0000014e       0x4a main.o
                 0x0000014e                __vector_6
- .text.main     0x00000198       0x66 main.o
+ .text.main     0x00000198       0x70 main.o
                 0x00000198                main
  .text.NRF24_ReadReg
-                0x000001fe       0x20 nrf24.o
-                0x000001fe                NRF24_ReadReg
+                0x00000208       0x20 nrf24.o
+                0x00000208                NRF24_ReadReg
  .text.NRF24_WriteReg
-                0x0000021e       0x1c nrf24.o
-                0x0000021e                NRF24_WriteReg
+                0x00000228       0x1c nrf24.o
+                0x00000228                NRF24_WriteReg
  .text.NRF24_ToggleFeatures
-                0x0000023a       0x1e nrf24.o
-                0x0000023a                NRF24_ToggleFeatures
+                0x00000244       0x1e nrf24.o
+                0x00000244                NRF24_ToggleFeatures
  .text.NRF24_Read_Buf
-                0x00000258       0x4c nrf24.o
-                0x00000258                NRF24_Read_Buf
+                0x00000262       0x4c nrf24.o
+                0x00000262                NRF24_Read_Buf
  .text.NRF24_Write_Buf
-                0x000002a4       0x42 nrf24.o
-                0x000002a4                NRF24_Write_Buf
+                0x000002ae       0x42 nrf24.o
+                0x000002ae                NRF24_Write_Buf
  .text.NRF24_FlushRX
-                0x000002e6       0x1a nrf24.o
-                0x000002e6                NRF24_FlushRX
+                0x000002f0       0x1a nrf24.o
+                0x000002f0                NRF24_FlushRX
  .text.NRF24_FlushTX
-                0x00000300       0x1a nrf24.o
-                0x00000300                NRF24_FlushTX
+                0x0000030a       0x1a nrf24.o
+                0x0000030a                NRF24_FlushTX
  .text.NRF24L01_RX_Mode
-                0x0000031a       0x38 nrf24.o
-                0x0000031a                NRF24L01_RX_Mode
+                0x00000324       0x38 nrf24.o
+                0x00000324                NRF24L01_RX_Mode
  .text.NRF24L01_TX_Mode
-                0x00000352       0x20 nrf24.o
-                0x00000352                NRF24L01_TX_Mode
+                0x0000035c       0x20 nrf24.o
+                0x0000035c                NRF24L01_TX_Mode
  .text.NRF24_Transmit
-                0x00000372       0x4c nrf24.o
-                0x00000372                NRF24_Transmit
+                0x0000037c       0x4c nrf24.o
+                0x0000037c                NRF24_Transmit
  .text.NRF24L01_Send
-                0x000003be       0x44 nrf24.o
-                0x000003be                NRF24L01_Send
+                0x000003c8       0x44 nrf24.o
+                0x000003c8                NRF24L01_Send
  .text.nrf24l01_receive
-                0x00000402       0xdc nrf24.o
-                0x00000402                nrf24l01_receive
+                0x0000040c       0xd6 nrf24.o
+                0x0000040c                nrf24l01_receive
  .text.nrf24_init
-                0x000004de       0x80 nrf24.o
-                0x000004de                nrf24_init
+                0x000004e2       0x80 nrf24.o
+                0x000004e2                nrf24_init
  .text.IRQ_Callback
-                0x0000055e       0x54 nrf24.o
-                0x0000055e                IRQ_Callback
+                0x00000562       0x54 nrf24.o
+                0x00000562                IRQ_Callback
  .text.spi_init
-                0x000005b2       0x12 spi.o
-                0x000005b2                spi_init
+                0x000005b6       0x12 spi.o
+                0x000005b6                spi_init
  .text.spi_sendByte
-                0x000005c4        0x8 spi.o
-                0x000005c4                spi_sendByte
+                0x000005c8        0x8 spi.o
+                0x000005c8                spi_sendByte
  .text.spi_changeByte
-                0x000005cc        0xa spi.o
-                0x000005cc                spi_changeByte
+                0x000005d0        0xa spi.o
+                0x000005d0                spi_changeByte
  .text.USART_Init
-                0x000005d6       0x1a usart.o
-                0x000005d6                USART_Init
+                0x000005da       0x1a usart.o
+                0x000005da                USART_Init
  .text.USART_Transmit
-                0x000005f0        0x8 usart.o
-                0x000005f0                USART_Transmit
+                0x000005f4        0x8 usart.o
+                0x000005f4                USART_Transmit
  .text.usart_println
-                0x000005f8       0x42 usart.o
-                0x000005f8                usart_println
-                0x0000063a                . = ALIGN (0x2)
+                0x000005fc       0x42 usart.o
+                0x000005fc                usart_println
+                0x0000063e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000063a        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
-                0x0000063a                _exit
-                0x0000063a                exit
+ .fini9         0x0000063e        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+                0x0000063e                _exit
+                0x0000063e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -382,11 +382,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000063a        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+ .fini0         0x0000063e        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000063e                _etext = .
+                0x00000642                _etext = .
 
-.data           0x00800060        0xc load address 0x0000063e
+.data           0x00800060        0xc load address 0x00000642
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -406,35 +406,37 @@ END GROUP
                 0x0080006c                _edata = .
                 0x0080006c                PROVIDE (__data_end, .)
 
-.bss            0x0080006c       0x15
+.bss            0x0080006c       0x16
                 0x0080006c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.time_ms   0x0080006c        0x4 main.o
-                0x0080006c                time_ms
- .bss.f_pushed  0x00800070        0x1 main.o
-                0x00800070                f_pushed
+ .bss.f_reset   0x0080006c        0x1 main.o
+                0x0080006c                f_reset
+ .bss.time_ms   0x0080006d        0x4 main.o
+                0x0080006d                time_ms
+ .bss.f_pushed  0x00800071        0x1 main.o
+                0x00800071                f_pushed
  .bss.miliseconds
-                0x00800071        0x4 main.o
-                0x00800071                miliseconds
- .bss.f_tx      0x00800075        0x1 nrf24.o
-                0x00800075                f_tx
- .bss.f_rx      0x00800076        0x1 nrf24.o
-                0x00800076                f_rx
- .bss.tx_buf    0x00800077        0x5 nrf24.o
-                0x00800077                tx_buf
- .bss.rx_buf    0x0080007c        0x5 nrf24.o
-                0x0080007c                rx_buf
+                0x00800072        0x4 main.o
+                0x00800072                miliseconds
+ .bss.f_tx      0x00800076        0x1 nrf24.o
+                0x00800076                f_tx
+ .bss.f_rx      0x00800077        0x1 nrf24.o
+                0x00800077                f_rx
+ .bss.tx_buf    0x00800078        0x5 nrf24.o
+                0x00800078                tx_buf
+ .bss.rx_buf    0x0080007d        0x5 nrf24.o
+                0x0080007d                rx_buf
  *(COMMON)
-                0x00800081                PROVIDE (__bss_end, .)
-                0x0000063e                __data_load_start = LOADADDR (.data)
-                0x0000064a                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800082                PROVIDE (__bss_end, .)
+                0x00000642                __data_load_start = LOADADDR (.data)
+                0x0000064e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800081        0x0
+.noinit         0x00800082        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800081                _end = .
+                0x00800082                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -516,13 +518,13 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x15ef
+.debug_info     0x00000000     0x160e
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x48c D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_info    0x0000048c      0x345 main.o
- .debug_info    0x000007d1      0xc0a nrf24.o
- .debug_info    0x000013db       0xdc spi.o
- .debug_info    0x000014b7      0x138 usart.o
+ .debug_info    0x0000048c      0x357 main.o
+ .debug_info    0x000007e3      0xc17 nrf24.o
+ .debug_info    0x000013fa       0xdc spi.o
+ .debug_info    0x000014d6      0x138 usart.o
 
 .debug_abbrev   0x00000000      0x93a
  *(.debug_abbrev)
@@ -532,13 +534,13 @@ END GROUP
  .debug_abbrev  0x000007ad       0xa3 spi.o
  .debug_abbrev  0x00000850       0xea usart.o
 
-.debug_line     0x00000000      0xb64
+.debug_line     0x00000000      0xb70
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x10a D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_line    0x0000010a      0x2f5 main.o
- .debug_line    0x000003ff      0x563 nrf24.o
- .debug_line    0x00000962       0xec spi.o
- .debug_line    0x00000a4e      0x116 usart.o
+ .debug_line    0x0000010a      0x302 main.o
+ .debug_line    0x0000040c      0x562 nrf24.o
+ .debug_line    0x0000096e       0xec spi.o
+ .debug_line    0x00000a5a      0x116 usart.o
 
 .debug_frame    0x00000000      0x328
  *(.debug_frame)
@@ -547,16 +549,16 @@ END GROUP
  .debug_frame   0x0000028c       0x44 spi.o
  .debug_frame   0x000002d0       0x58 usart.o
 
-.debug_str      0x00000000      0x533
+.debug_str      0x00000000      0x53b
  *(.debug_str)
  .debug_str     0x00000000      0x17a D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_str     0x0000017a      0x248 main.o
-                                0x281 (size before relaxing)
- .debug_str     0x000003c2      0x13b nrf24.o
-                                0x301 (size before relaxing)
- .debug_str     0x000004fd       0x10 spi.o
+ .debug_str     0x0000017a      0x250 main.o
+                                0x289 (size before relaxing)
+ .debug_str     0x000003ca      0x13b nrf24.o
+                                0x309 (size before relaxing)
+ .debug_str     0x00000505       0x10 spi.o
                                 0x179 (size before relaxing)
- .debug_str     0x0000050d       0x26 usart.o
+ .debug_str     0x00000515       0x26 usart.o
                                 0x183 (size before relaxing)
 
 .debug_loc      0x00000000      0xc34

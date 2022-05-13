@@ -31,20 +31,7 @@ namespace mozgocolco
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.comboBox6 = new System.Windows.Forms.ComboBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.comboBox5 = new System.Windows.Forms.ComboBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.comboBox4 = new System.Windows.Forms.ComboBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -60,13 +47,26 @@ namespace mozgocolco
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.comboBox9 = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
             this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.comboBox9 = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.comboBox6 = new System.Windows.Forms.ComboBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.comboBox5 = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.comboBox4 = new System.Windows.Forms.ComboBox();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -99,87 +99,6 @@ namespace mozgocolco
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры порта";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label14);
-            this.groupBox2.Controls.Add(this.comboBox9);
-            this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Controls.Add(this.comboBox7);
-            this.groupBox2.Controls.Add(this.comboBox8);
-            this.groupBox2.Controls.Add(this.label13);
-            this.groupBox2.Controls.Add(this.label10);
-            this.groupBox2.Controls.Add(this.comboBox6);
-            this.groupBox2.Controls.Add(this.button5);
-            this.groupBox2.Controls.Add(this.comboBox5);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Location = new System.Drawing.Point(319, 1);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(298, 194);
-            this.groupBox2.TabIndex = 124;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Звуки";
-            // 
-            // label10
-            // 
-            this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label10.Location = new System.Drawing.Point(2, 43);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(72, 22);
-            this.label10.TabIndex = 127;
-            this.label10.Text = "Фальстарт";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label10.Click += new System.EventHandler(this.label10_Click);
-            // 
-            // comboBox6
-            // 
-            this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Items.AddRange(new object[] {
-            "falstart.wav",
-            "falstart_1.wav",
-            "falstart_2.wav"});
-            this.comboBox6.Location = new System.Drawing.Point(80, 46);
-            this.comboBox6.MaxDropDownItems = 4;
-            this.comboBox6.Name = "comboBox6";
-            this.comboBox6.Size = new System.Drawing.Size(210, 21);
-            this.comboBox6.TabIndex = 126;
-            this.comboBox6.SelectedIndexChanged += new System.EventHandler(this.comboBox6_SelectedIndexChanged);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(181, 156);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(109, 20);
-            this.button5.TabIndex = 125;
-            this.button5.Text = "Загрузить";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // comboBox5
-            // 
-            this.comboBox5.AutoCompleteCustomSource.AddRange(new string[] {
-            "answer.vaw"});
-            this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Items.AddRange(new object[] {
-            "answer.wav",
-            "answer_1.wav",
-            "answer_2.wav"});
-            this.comboBox5.Location = new System.Drawing.Point(80, 20);
-            this.comboBox5.MaxDropDownItems = 4;
-            this.comboBox5.Name = "comboBox5";
-            this.comboBox5.Size = new System.Drawing.Size(210, 21);
-            this.comboBox5.TabIndex = 117;
-            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
-            // 
-            // label7
-            // 
-            this.label7.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label7.Location = new System.Drawing.Point(23, 19);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 22);
-            this.label7.TabIndex = 116;
-            this.label7.Text = "Ответ";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(187, 156);
@@ -189,82 +108,6 @@ namespace mozgocolco
             this.button4.Text = "звук";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // numericUpDown2
-            // 
-            this.numericUpDown2.Location = new System.Drawing.Point(497, 256);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown2.TabIndex = 122;
-            this.numericUpDown2.Value = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(497, 229);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 121;
-            this.numericUpDown1.Value = new decimal(new int[] {
-            60,
-            0,
-            0,
-            0});
-            // 
-            // label9
-            // 
-            this.label9.Location = new System.Drawing.Point(327, 256);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(164, 22);
-            this.label9.TabIndex = 120;
-            this.label9.Text = "Дополнительное время, с";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label8
-            // 
-            this.label8.Location = new System.Drawing.Point(327, 227);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(164, 22);
-            this.label8.TabIndex = 119;
-            this.label8.Text = "Основное время, с";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label6
-            // 
-            this.label6.Location = new System.Drawing.Point(319, 200);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 22);
-            this.label6.TabIndex = 115;
-            this.label6.Text = "Режим";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // comboBox4
-            // 
-            this.comboBox4.FormattingEnabled = true;
-            this.comboBox4.Items.AddRange(new object[] {
-            "Брейн-ринг",
-            "Брейн-хип",
-            "Буденновский к"});
-            this.comboBox4.Location = new System.Drawing.Point(375, 200);
-            this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(242, 21);
-            this.comboBox4.TabIndex = 5;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(319, 332);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(73, 17);
-            this.checkBox1.TabIndex = 113;
-            this.checkBox1.Text = "показать";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // button1
             // 
@@ -431,9 +274,48 @@ namespace mozgocolco
             this.label1.TabIndex = 0;
             this.label1.Text = "Порт";
             // 
-            // serialPort1
+            // groupBox2
             // 
-            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
+            this.groupBox2.Controls.Add(this.label14);
+            this.groupBox2.Controls.Add(this.comboBox9);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.comboBox7);
+            this.groupBox2.Controls.Add(this.comboBox8);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.comboBox6);
+            this.groupBox2.Controls.Add(this.button5);
+            this.groupBox2.Controls.Add(this.comboBox5);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Location = new System.Drawing.Point(319, 1);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(298, 194);
+            this.groupBox2.TabIndex = 124;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Звуки";
+            // 
+            // label14
+            // 
+            this.label14.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label14.Location = new System.Drawing.Point(23, 126);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(51, 22);
+            this.label14.TabIndex = 133;
+            this.label14.Text = "Старт";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // comboBox9
+            // 
+            this.comboBox9.FormattingEnabled = true;
+            this.comboBox9.Items.AddRange(new object[] {
+            "start.wav",
+            "start_1.wav",
+            "start_2.wav"});
+            this.comboBox9.Location = new System.Drawing.Point(80, 127);
+            this.comboBox9.MaxDropDownItems = 4;
+            this.comboBox9.Name = "comboBox9";
+            this.comboBox9.Size = new System.Drawing.Size(210, 21);
+            this.comboBox9.TabIndex = 132;
             // 
             // label12
             // 
@@ -481,28 +363,146 @@ namespace mozgocolco
             this.label13.Text = "Стоп";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label14
+            // label10
             // 
-            this.label14.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label14.Location = new System.Drawing.Point(23, 126);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(51, 22);
-            this.label14.TabIndex = 133;
-            this.label14.Text = "Старт";
-            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label10.Location = new System.Drawing.Point(2, 43);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(72, 22);
+            this.label10.TabIndex = 127;
+            this.label10.Text = "Фальстарт";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
-            // comboBox9
+            // comboBox6
             // 
-            this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Items.AddRange(new object[] {
-            "start.wav",
-            "start_1.wav",
-            "start_2.wav"});
-            this.comboBox9.Location = new System.Drawing.Point(80, 127);
-            this.comboBox9.MaxDropDownItems = 4;
-            this.comboBox9.Name = "comboBox9";
-            this.comboBox9.Size = new System.Drawing.Size(210, 21);
-            this.comboBox9.TabIndex = 132;
+            this.comboBox6.FormattingEnabled = true;
+            this.comboBox6.Items.AddRange(new object[] {
+            "falstart.wav",
+            "falstart_1.wav",
+            "falstart_2.wav"});
+            this.comboBox6.Location = new System.Drawing.Point(80, 46);
+            this.comboBox6.MaxDropDownItems = 4;
+            this.comboBox6.Name = "comboBox6";
+            this.comboBox6.Size = new System.Drawing.Size(210, 21);
+            this.comboBox6.TabIndex = 126;
+            this.comboBox6.SelectedIndexChanged += new System.EventHandler(this.comboBox6_SelectedIndexChanged);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(181, 156);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(109, 20);
+            this.button5.TabIndex = 125;
+            this.button5.Text = "Загрузить";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // comboBox5
+            // 
+            this.comboBox5.AutoCompleteCustomSource.AddRange(new string[] {
+            "answer.vaw"});
+            this.comboBox5.FormattingEnabled = true;
+            this.comboBox5.Items.AddRange(new object[] {
+            "answer.wav",
+            "answer_1.wav",
+            "answer_2.wav"});
+            this.comboBox5.Location = new System.Drawing.Point(80, 20);
+            this.comboBox5.MaxDropDownItems = 4;
+            this.comboBox5.Name = "comboBox5";
+            this.comboBox5.Size = new System.Drawing.Size(210, 21);
+            this.comboBox5.TabIndex = 117;
+            this.comboBox5.SelectedIndexChanged += new System.EventHandler(this.comboBox5_SelectedIndexChanged);
+            // 
+            // label7
+            // 
+            this.label7.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label7.Location = new System.Drawing.Point(23, 19);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 22);
+            this.label7.TabIndex = 116;
+            this.label7.Text = "Ответ";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(497, 256);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown2.TabIndex = 122;
+            this.numericUpDown2.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(497, 229);
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown1.TabIndex = 121;
+            this.numericUpDown1.Value = new decimal(new int[] {
+            60,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.Location = new System.Drawing.Point(327, 256);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(164, 22);
+            this.label9.TabIndex = 120;
+            this.label9.Text = "Дополнительное время, с";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(327, 227);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(164, 22);
+            this.label8.TabIndex = 119;
+            this.label8.Text = "Основное время, с";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(319, 200);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(50, 22);
+            this.label6.TabIndex = 115;
+            this.label6.Text = "Режим";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // comboBox4
+            // 
+            this.comboBox4.FormattingEnabled = true;
+            this.comboBox4.Items.AddRange(new object[] {
+            "Брейн-ринг",
+            "Брейн-хип",
+            "Буденновский к"});
+            this.comboBox4.Location = new System.Drawing.Point(375, 200);
+            this.comboBox4.Name = "comboBox4";
+            this.comboBox4.Size = new System.Drawing.Size(242, 21);
+            this.comboBox4.TabIndex = 5;
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Checked = true;
+            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1.Location = new System.Drawing.Point(319, 332);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(73, 17);
+            this.checkBox1.TabIndex = 113;
+            this.checkBox1.Text = "показать";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // serialPort1
+            // 
+            this.serialPort1.DataReceived += new System.IO.Ports.SerialDataReceivedEventHandler(this.serialPort1_DataReceived);
             // 
             // button3
             // 

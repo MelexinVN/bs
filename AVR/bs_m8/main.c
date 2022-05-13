@@ -14,6 +14,7 @@
 volatile uint32_t miliseconds = 0;		//счетчик милисекунд
 volatile uint8_t f_pushed = 0;			//флаг нажатия
 volatile uint32_t time_ms = 0;			//сохраненное время мс
+volatile uint8_t f_reset = 0;			//сохраненное время мс
 
 void port_init(void)//Инициализация портов 
 {
@@ -149,6 +150,7 @@ int main(void)
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля
+		if (!f_reset) wdt_reset();
     }
 }
 

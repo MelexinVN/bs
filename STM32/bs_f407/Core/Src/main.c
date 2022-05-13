@@ -240,7 +240,7 @@ int main(void)
 
 		first_push_finding();
 
-		LL_mDelay(5);//подбирается экспериментально 
+		LL_mDelay(2);//подбирается экспериментально 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
