@@ -233,14 +233,14 @@ int main(void)
 			tx_buf[1] = but_cmnds[but_counter];	//команды
 			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
 			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
-			LL_mDelay(1);
+			//LL_mDelay(1);
 			but_counter++;											//переход к следующей кнопке
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
 		}
 
 		first_push_finding();
 
-		LL_mDelay(2);//подбирается экспериментально 
+		LL_mDelay(5);//подбирается экспериментально 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

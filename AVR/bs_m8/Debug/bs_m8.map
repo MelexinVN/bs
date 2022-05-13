@@ -1,5 +1,7 @@
 Archive member included to satisfy reference by file (symbol)
 
+d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+                              main.o (__udivmodsi4)
 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
                               D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o (exit)
 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_copy_data.o)
@@ -23,6 +25,20 @@ Discarded input sections
  .text          0x00000000        0x0 usart.o
  .data          0x00000000        0x0 usart.o
  .bss           0x00000000        0x0 usart.o
+ .text          0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .data          0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .bss           0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.mul
+                0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc   0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.prologue
+                0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.builtins
+                0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.fmul
+                0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+ .text.libgcc.fixed
+                0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
  .text          0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
  .data          0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
  .bss           0x00000000        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
@@ -200,7 +216,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x642
+.text           0x00000000      0x70a
  *(.vectors)
  .vectors       0x00000000       0x26 D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
                 0x00000000                __vector_default
@@ -282,88 +298,97 @@ END GROUP
  .text.timer_init
                 0x00000074       0x1a main.o
                 0x00000074                timer_init
+ .text.adc_init
+                0x0000008e        0xc main.o
+                0x0000008e                adc_init
  .text.interrupt_init
-                0x0000008e       0x14 main.o
-                0x0000008e                interrupt_init
+                0x0000009a       0x14 main.o
+                0x0000009a                interrupt_init
+ .text.read_adc
+                0x000000ae       0x20 main.o
+                0x000000ae                read_adc
  .text.__vector_11
-                0x000000a2       0x14 main.o
-                0x000000a2                __vector_11
+                0x000000ce       0x14 main.o
+                0x000000ce                __vector_11
  .text.__vector_1
-                0x000000b6       0x46 main.o
-                0x000000b6                __vector_1
+                0x000000e2       0x46 main.o
+                0x000000e2                __vector_1
  .text.__vector_2
-                0x000000fc       0x52 main.o
-                0x000000fc                __vector_2
+                0x00000128       0x52 main.o
+                0x00000128                __vector_2
  .text.__vector_6
-                0x0000014e       0x4a main.o
-                0x0000014e                __vector_6
- .text.main     0x00000198       0x70 main.o
-                0x00000198                main
+                0x0000017a       0x94 main.o
+                0x0000017a                __vector_6
+ .text.main     0x0000020e       0x72 main.o
+                0x0000020e                main
  .text.NRF24_ReadReg
-                0x00000208       0x20 nrf24.o
-                0x00000208                NRF24_ReadReg
+                0x00000280       0x20 nrf24.o
+                0x00000280                NRF24_ReadReg
  .text.NRF24_WriteReg
-                0x00000228       0x1c nrf24.o
-                0x00000228                NRF24_WriteReg
+                0x000002a0       0x1c nrf24.o
+                0x000002a0                NRF24_WriteReg
  .text.NRF24_ToggleFeatures
-                0x00000244       0x1e nrf24.o
-                0x00000244                NRF24_ToggleFeatures
+                0x000002bc       0x1e nrf24.o
+                0x000002bc                NRF24_ToggleFeatures
  .text.NRF24_Read_Buf
-                0x00000262       0x4c nrf24.o
-                0x00000262                NRF24_Read_Buf
+                0x000002da       0x4c nrf24.o
+                0x000002da                NRF24_Read_Buf
  .text.NRF24_Write_Buf
-                0x000002ae       0x42 nrf24.o
-                0x000002ae                NRF24_Write_Buf
+                0x00000326       0x42 nrf24.o
+                0x00000326                NRF24_Write_Buf
  .text.NRF24_FlushRX
-                0x000002f0       0x1a nrf24.o
-                0x000002f0                NRF24_FlushRX
+                0x00000368       0x1a nrf24.o
+                0x00000368                NRF24_FlushRX
  .text.NRF24_FlushTX
-                0x0000030a       0x1a nrf24.o
-                0x0000030a                NRF24_FlushTX
+                0x00000382       0x1a nrf24.o
+                0x00000382                NRF24_FlushTX
  .text.NRF24L01_RX_Mode
-                0x00000324       0x38 nrf24.o
-                0x00000324                NRF24L01_RX_Mode
+                0x0000039c       0x38 nrf24.o
+                0x0000039c                NRF24L01_RX_Mode
  .text.NRF24L01_TX_Mode
-                0x0000035c       0x20 nrf24.o
-                0x0000035c                NRF24L01_TX_Mode
+                0x000003d4       0x20 nrf24.o
+                0x000003d4                NRF24L01_TX_Mode
  .text.NRF24_Transmit
-                0x0000037c       0x4c nrf24.o
-                0x0000037c                NRF24_Transmit
+                0x000003f4       0x4c nrf24.o
+                0x000003f4                NRF24_Transmit
  .text.NRF24L01_Send
-                0x000003c8       0x44 nrf24.o
-                0x000003c8                NRF24L01_Send
+                0x00000440       0x44 nrf24.o
+                0x00000440                NRF24L01_Send
  .text.nrf24l01_receive
-                0x0000040c       0xd6 nrf24.o
-                0x0000040c                nrf24l01_receive
+                0x00000484       0xe2 nrf24.o
+                0x00000484                nrf24l01_receive
  .text.nrf24_init
-                0x000004e2       0x80 nrf24.o
-                0x000004e2                nrf24_init
+                0x00000566       0x80 nrf24.o
+                0x00000566                nrf24_init
  .text.IRQ_Callback
-                0x00000562       0x54 nrf24.o
-                0x00000562                IRQ_Callback
+                0x000005e6       0x54 nrf24.o
+                0x000005e6                IRQ_Callback
  .text.spi_init
-                0x000005b6       0x12 spi.o
-                0x000005b6                spi_init
+                0x0000063a       0x12 spi.o
+                0x0000063a                spi_init
  .text.spi_sendByte
-                0x000005c8        0x8 spi.o
-                0x000005c8                spi_sendByte
+                0x0000064c        0x8 spi.o
+                0x0000064c                spi_sendByte
  .text.spi_changeByte
-                0x000005d0        0xa spi.o
-                0x000005d0                spi_changeByte
+                0x00000654        0xa spi.o
+                0x00000654                spi_changeByte
  .text.USART_Init
-                0x000005da       0x1a usart.o
-                0x000005da                USART_Init
+                0x0000065e       0x1a usart.o
+                0x0000065e                USART_Init
  .text.USART_Transmit
-                0x000005f4        0x8 usart.o
-                0x000005f4                USART_Transmit
+                0x00000678        0x8 usart.o
+                0x00000678                USART_Transmit
  .text.usart_println
-                0x000005fc       0x42 usart.o
-                0x000005fc                usart_println
-                0x0000063e                . = ALIGN (0x2)
+                0x00000680       0x42 usart.o
+                0x00000680                usart_println
+ .text.libgcc.div
+                0x000006c2       0x44 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_udivmodsi4.o)
+                0x000006c2                __udivmodsi4
+                0x00000706                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x0000063e        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
-                0x0000063e                _exit
-                0x0000063e                exit
+ .fini9         0x00000706        0x0 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+                0x00000706                _exit
+                0x00000706                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -382,11 +407,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x0000063e        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
+ .fini0         0x00000706        0x4 d:/ide/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr4\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000642                _etext = .
+                0x0000070a                _etext = .
 
-.data           0x00800060        0xc load address 0x00000642
+.data           0x00800060        0xc load address 0x0000070a
                 0x00800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -406,37 +431,39 @@ END GROUP
                 0x0080006c                _edata = .
                 0x0080006c                PROVIDE (__data_end, .)
 
-.bss            0x0080006c       0x16
+.bss            0x0080006c       0x19
                 0x0080006c                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.f_reset   0x0080006c        0x1 main.o
-                0x0080006c                f_reset
- .bss.time_ms   0x0080006d        0x4 main.o
-                0x0080006d                time_ms
- .bss.f_pushed  0x00800071        0x1 main.o
-                0x00800071                f_pushed
+ .bss.adc_res   0x0080006c        0x1 main.o
+                0x0080006c                adc_res
+ .bss.f_reset   0x0080006d        0x1 main.o
+                0x0080006d                f_reset
+ .bss.time_ms   0x0080006e        0x4 main.o
+                0x0080006e                time_ms
+ .bss.f_pushed  0x00800072        0x1 main.o
+                0x00800072                f_pushed
  .bss.miliseconds
-                0x00800072        0x4 main.o
-                0x00800072                miliseconds
- .bss.f_tx      0x00800076        0x1 nrf24.o
-                0x00800076                f_tx
- .bss.f_rx      0x00800077        0x1 nrf24.o
-                0x00800077                f_rx
- .bss.tx_buf    0x00800078        0x5 nrf24.o
-                0x00800078                tx_buf
- .bss.rx_buf    0x0080007d        0x5 nrf24.o
-                0x0080007d                rx_buf
+                0x00800073        0x4 main.o
+                0x00800073                miliseconds
+ .bss.f_tx      0x00800077        0x1 nrf24.o
+                0x00800077                f_tx
+ .bss.f_rx      0x00800078        0x1 nrf24.o
+                0x00800078                f_rx
+ .bss.tx_buf    0x00800079        0x6 nrf24.o
+                0x00800079                tx_buf
+ .bss.rx_buf    0x0080007f        0x6 nrf24.o
+                0x0080007f                rx_buf
  *(COMMON)
-                0x00800082                PROVIDE (__bss_end, .)
-                0x00000642                __data_load_start = LOADADDR (.data)
-                0x0000064e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00800085                PROVIDE (__bss_end, .)
+                0x0000070a                __data_load_start = LOADADDR (.data)
+                0x00000716                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800082        0x0
+.noinit         0x00800085        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800082                _end = .
+                0x00800085                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -504,69 +531,69 @@ END GROUP
 .debug_sfnames
  *(.debug_sfnames)
 
-.debug_aranges  0x00000000      0x140
+.debug_aranges  0x00000000      0x150
  *(.debug_aranges)
  .debug_aranges
-                0x00000000       0x58 main.o
+                0x00000000       0x68 main.o
  .debug_aranges
-                0x00000058       0x88 nrf24.o
+                0x00000068       0x88 nrf24.o
  .debug_aranges
-                0x000000e0       0x30 spi.o
+                0x000000f0       0x30 spi.o
  .debug_aranges
-                0x00000110       0x30 usart.o
+                0x00000120       0x30 usart.o
 
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x160e
+.debug_info     0x00000000     0x16ff
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x48c D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_info    0x0000048c      0x357 main.o
- .debug_info    0x000007e3      0xc17 nrf24.o
- .debug_info    0x000013fa       0xdc spi.o
- .debug_info    0x000014d6      0x138 usart.o
+ .debug_info    0x0000048c      0x43b main.o
+ .debug_info    0x000008c7      0xc24 nrf24.o
+ .debug_info    0x000014eb       0xdc spi.o
+ .debug_info    0x000015c7      0x138 usart.o
 
-.debug_abbrev   0x00000000      0x93a
+.debug_abbrev   0x00000000      0x99d
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x44e D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_abbrev  0x0000044e      0x195 main.o
- .debug_abbrev  0x000005e3      0x1ca nrf24.o
- .debug_abbrev  0x000007ad       0xa3 spi.o
- .debug_abbrev  0x00000850       0xea usart.o
+ .debug_abbrev  0x0000044e      0x1f8 main.o
+ .debug_abbrev  0x00000646      0x1ca nrf24.o
+ .debug_abbrev  0x00000810       0xa3 spi.o
+ .debug_abbrev  0x000008b3       0xea usart.o
 
-.debug_line     0x00000000      0xb70
+.debug_line     0x00000000      0xbf5
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x10a D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_line    0x0000010a      0x302 main.o
- .debug_line    0x0000040c      0x562 nrf24.o
- .debug_line    0x0000096e       0xec spi.o
- .debug_line    0x00000a5a      0x116 usart.o
+ .debug_line    0x0000010a      0x37c main.o
+ .debug_line    0x00000486      0x56d nrf24.o
+ .debug_line    0x000009f3       0xec spi.o
+ .debug_line    0x00000adf      0x116 usart.o
 
-.debug_frame    0x00000000      0x328
+.debug_frame    0x00000000      0x370
  *(.debug_frame)
- .debug_frame   0x00000000      0x128 main.o
- .debug_frame   0x00000128      0x164 nrf24.o
- .debug_frame   0x0000028c       0x44 spi.o
- .debug_frame   0x000002d0       0x58 usart.o
+ .debug_frame   0x00000000      0x170 main.o
+ .debug_frame   0x00000170      0x164 nrf24.o
+ .debug_frame   0x000002d4       0x44 spi.o
+ .debug_frame   0x00000318       0x58 usart.o
 
-.debug_str      0x00000000      0x53b
+.debug_str      0x00000000      0x55f
  *(.debug_str)
  .debug_str     0x00000000      0x17a D:/IDE/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega8a/avr4/crtatmega8a.o
- .debug_str     0x0000017a      0x250 main.o
-                                0x289 (size before relaxing)
- .debug_str     0x000003ca      0x13b nrf24.o
-                                0x309 (size before relaxing)
- .debug_str     0x00000505       0x10 spi.o
+ .debug_str     0x0000017a      0x283 main.o
+                                0x2bc (size before relaxing)
+ .debug_str     0x000003fd      0x12c nrf24.o
+                                0x311 (size before relaxing)
+ .debug_str     0x00000529       0x10 spi.o
                                 0x179 (size before relaxing)
- .debug_str     0x00000515       0x26 usart.o
+ .debug_str     0x00000539       0x26 usart.o
                                 0x183 (size before relaxing)
 
-.debug_loc      0x00000000      0xc34
+.debug_loc      0x00000000      0xd02
  *(.debug_loc)
- .debug_loc     0x00000000      0x26f main.o
- .debug_loc     0x0000026f      0x8dd nrf24.o
- .debug_loc     0x00000b4c       0x1f spi.o
- .debug_loc     0x00000b6b       0xc9 usart.o
+ .debug_loc     0x00000000      0x33d main.o
+ .debug_loc     0x0000033d      0x8dd nrf24.o
+ .debug_loc     0x00000c1a       0x1f spi.o
+ .debug_loc     0x00000c39       0xc9 usart.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -586,12 +613,12 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000      0x100
+.debug_ranges   0x00000000      0x110
  *(.debug_ranges)
- .debug_ranges  0x00000000       0x48 main.o
- .debug_ranges  0x00000048       0x78 nrf24.o
- .debug_ranges  0x000000c0       0x20 spi.o
- .debug_ranges  0x000000e0       0x20 usart.o
+ .debug_ranges  0x00000000       0x58 main.o
+ .debug_ranges  0x00000058       0x78 nrf24.o
+ .debug_ranges  0x000000d0       0x20 spi.o
+ .debug_ranges  0x000000f0       0x20 usart.o
 
 .debug_macro
  *(.debug_macro)

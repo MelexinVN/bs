@@ -15,7 +15,7 @@
 #include "spi.h"
 #include "nrf24.h"
 
-#define BUT_ADDR 		0x10				//адрес кнопки
+#define BUT_ADDR 		0x7				//адрес кнопки
 #define RESET 			0xFF				//команда сброса
 #define NOT_PUSHED 		0xFFFFFFFF			//сообщение "кнопка не нажата"
 
@@ -29,5 +29,9 @@
 #define CSN_GPIO_Port PORTD		//порт CSN
 #define BUT_Pin PORTD3			//пин кнопки
 #define BUT_GPIO_Port PORTD		//порт кнопки
+
+// Voltage Reference: AVCC pin
+#define ADC_VREF_TYPE ((0<<REFS1) | (1<<REFS0) | (1<<ADLAR))
+
 
 #endif /* MAIN_H_ */

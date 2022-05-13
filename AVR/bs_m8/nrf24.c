@@ -5,7 +5,7 @@
 #define BUT									//выбор устройства: BAZ - база, BUT - кнопка
 
 #define TX_ADR_WIDTH 3						//размер адреса передачи
-#define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
+#define TX_PLOAD_WIDTH 6					//размер полезной нагрузки
 
 #ifdef BAS	//если база
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
@@ -22,6 +22,7 @@ uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};				//буфер передачи
 volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
 extern volatile uint8_t f_pushed;					//флаг нажати€
 extern volatile uint8_t f_reset;					//
+extern volatile uint8_t adc_res;					//
 extern uint8_t f_send;								//флаг отправки
 extern volatile uint32_t time_ms;					//сохраненное врем€ мс
 extern volatile uint32_t miliseconds;				//счетчик милисекунд
@@ -186,6 +187,7 @@ void nrf24l01_receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;	//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
+				tx_buf[5] = adc_res;
 				_delay_us(3000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);	//			
 			}
@@ -193,6 +195,7 @@ void nrf24l01_receive(void)
 			{
 				tx_buf[0] = BUT_ADDR;
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;//miliseconds;//
+				tx_buf[5] = adc_res;
 				_delay_us(3000);		//ѕќƒќЅ–јЌќ Ё —ѕ≈–»ћ≈Ќ“јЋ№Ќќ!
 				NRF24L01_Send(tx_buf);
 			}

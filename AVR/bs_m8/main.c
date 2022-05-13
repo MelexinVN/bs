@@ -15,6 +15,7 @@ volatile uint32_t miliseconds = 0;		//счетчик милисекунд
 volatile uint8_t f_pushed = 0;			//флаг нажатия
 volatile uint32_t time_ms = 0;			//сохраненное время мс
 volatile uint8_t f_reset = 0;			//сохраненное время мс
+volatile uint8_t adc_res = 0;			//сохраненное время мс
 
 void port_init(void)//Инициализация портов 
 {
@@ -66,6 +67,16 @@ void timer_init(void)
 
 	}
 
+void adc_init(void)
+{
+	// ADC initialization
+	// ADC Clock frequency: 62,500 kHz
+	// ADC Voltage Reference: AVCC pin
+	ADMUX=ADC_VREF_TYPE;
+	ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADFR) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
+	SFIOR=(0<<ACME);
+}
+
 void interrupt_init(void)
 {
 	// External Interrupt(s) initialization
@@ -78,6 +89,21 @@ void interrupt_init(void)
 	GIFR=(1<<INTF1) | (1<<INTF0);
 	// Timer(s)/Counter(s) Interrupt(s) initialization
 	TIMSK=(0<<OCIE2) | (0<<TOIE2) | (0<<TICIE1) | (1<<OCIE1A) | (0<<OCIE1B) | (0<<TOIE1) | (1<<TOIE0);
+}
+
+// Read the 8 most significant bits
+// of the AD conversion result
+unsigned char read_adc(unsigned char adc_input)
+{
+	ADMUX=adc_input | ADC_VREF_TYPE;
+	// Delay needed for the stabilization of the ADC input voltage
+	_delay_us(10);
+	// Start the AD conversion
+	ADCSRA|=(1<<ADSC);
+	// Wait for the AD conversion to complete
+	while ((ADCSRA & (1<<ADIF))==0);
+	ADCSRA|=(1<<ADIF);
+	return ADCH;
 }
 
 ISR(USART_RXC_vect)
@@ -102,6 +128,10 @@ ISR(INT1_vect)
 ISR(TIMER1_COMPA_vect)
 {
 	miliseconds++;							//считаем мс
+	if (!(miliseconds % 100)) 
+	{
+		adc_res = read_adc(6);
+	}
 }
 
 int main(void)
@@ -112,6 +142,7 @@ int main(void)
 	spi_init();								//инициализация SPI
 	USART_Init (8);							//инициализация USART 115200 бод
 	nrf24_init();							//инициализация радиомодуля
+	adc_init();
     sei();									//глобальное разрешение прерываний
 	usart_println("start");					//отправка стартовой строки в порт
 	/*

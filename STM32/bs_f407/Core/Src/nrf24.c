@@ -2,7 +2,7 @@
 #include "main.h"
 //------------------------------------------------
 #define TX_ADR_WIDTH 3						//размер адреса передачи
-#define TX_PLOAD_WIDTH 5					//размер полезной нагрузки
+#define TX_PLOAD_WIDTH 6					//размер полезной нагрузки
 
 #define BAS							//выбор устройства: BAZ - база, BUT - кнопка
 
@@ -219,11 +219,13 @@ void nrf24l01_receive(void)
 	{
 		if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
 		{//если время, присланное кнопкой не максимально возможное (кнопка нажата)
-			sprintf(str,"%X\t",rx_buf[0]);				//
+			sprintf(str," %X\t",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
 			unsigned long time = *(unsigned long*)&rx_buf[1];	//преобразуем оставшиеся байты во время
-			sprintf(str,"%lu\r\n",time);//передаем принятое в порт
+			sprintf(str,"%lu\t",time);//передаем принятое в порт
 			USART_TX((uint8_t*)str,strlen(str));
+			sprintf(str,"%d\r\n",rx_buf[5]);				//
+			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
 			//определяем по адресу номер кнопки
 			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 			{//перебираем все кнопки
@@ -235,8 +237,10 @@ void nrf24l01_receive(void)
 		}
 		else
 		{//отправляем в порт, посылка от какой кнопки принята и что она не нажата
-			sprintf(str,"%X\t np\r\n",rx_buf[0]);				//
+			sprintf(str,"%X\t np\t",rx_buf[0]);				//
 			USART_TX((uint8_t*)str,strlen(str));
+			sprintf(str,"%d\r\n",rx_buf[5]);				//
+			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
 			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
 			{//перебираем все кнопки
 				if (rx_buf[0] == but_addrs[i]) 	//если найден принятый адрес
