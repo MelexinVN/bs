@@ -105,25 +105,66 @@ namespace mozgocolco
 
         private void Form1_Load_1(object sender, EventArgs e)
         {
+            byte i = 0;
+
             comboBox1.Items.AddRange(System.IO.Ports.SerialPort.GetPortNames());    //Создание списка COM портов 
             comboBox1.SelectedIndex = 0;                                            //Выбор COM                    
             serialPort1.PortName = comboBox1.Text;
             comboBox3.SelectedIndex = 3;                           			        //Выбор Bit=8
             serialPort1.DataBits = Convert.ToInt32(comboBox3.Text);
-            comboBox2.SelectedIndex = 6;                                           //Выбор BaudRate
+            comboBox2.SelectedIndex = 6;                                            //Выбор BaudRate
             serialPort1.BaudRate = Convert.ToInt32(comboBox2.Text);
 
-            comboBox4.SelectedIndex = 1;
-            comboBox5.SelectedIndex = 0;
-            comboBox6.SelectedIndex = 0;
-            comboBox7.SelectedIndex = 0;
-            comboBox8.SelectedIndex = 0;
-            comboBox9.SelectedIndex = 0;
+
 
             gameForm1.KeyPreview = true;
 
             gameForm1.main_time = (int)numericUpDown1.Value;
             gameForm1.dop_time = (int)numericUpDown2.Value;
+
+            
+
+            while (i < 10)
+            {
+                dataGridView1.Rows.Add();
+                i++;
+            }
+
+            i = 1;
+
+            while (i <= 10)
+            {
+                dataGridView1.Rows[i - 1].Cells[0].Value = i;
+                dataGridView1.Rows[i - 1].Cells[1].Value = i + 10;
+                i++;
+            }
+
+            for (i = 0; i < 10; i++)
+            {
+                gameForm1.commands[i] = Convert.ToString(dataGridView1.Rows[i].Cells[0].Value);
+            }
+            for (i = 10; i < 20; i++)
+            {
+                gameForm1.commands[i] = Convert.ToString(dataGridView1.Rows[i - 10].Cells[1].Value);
+            }
+
+            string[] soundfiles = Directory.GetFiles("sounds");
+
+            foreach (string filename in soundfiles)
+            {
+                comboBox5.Items.Add(filename);
+                comboBox6.Items.Add(filename);
+                comboBox7.Items.Add(filename);
+                comboBox8.Items.Add(filename);
+                comboBox9.Items.Add(filename);
+            }            
+
+            comboBox4.SelectedIndex = 1;
+            comboBox5.SelectedIndex = 0;
+            comboBox6.SelectedIndex = 1;
+            comboBox7.SelectedIndex = 2;
+            comboBox8.SelectedIndex = 3;
+            comboBox9.SelectedIndex = 4;
         }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -167,6 +208,7 @@ namespace mozgocolco
                 {
                     serialPort1.Open();
                     button2.Text = "Закрыть";
+                    gameForm1.is_serial_port_open = true;
                 }
                 catch
                 {
@@ -174,6 +216,7 @@ namespace mozgocolco
                                     "                             " + comboBox1.Text + "\r\n" +
                                     "(Порт занят или прибор не включен)");
                 }
+
             }
             else
             {
@@ -225,11 +268,11 @@ namespace mozgocolco
 
         private void button5_Click(object sender, EventArgs e)
         {
-            gameForm1.sound_answ_path = "sounds/" + Convert.ToString(comboBox5.SelectedItem);
-            gameForm1.sound_fals_path = "sounds/" + Convert.ToString(comboBox6.SelectedItem);
-            gameForm1.sound_stop_path = "sounds/" + Convert.ToString(comboBox8.SelectedItem);
-            gameForm1.sound_strt_path = "sounds/" + Convert.ToString(comboBox9.SelectedItem);
-            gameForm1.sound_time_path = "sounds/" + Convert.ToString(comboBox7.SelectedItem);
+            gameForm1.sound_answ_path = Convert.ToString(comboBox5.SelectedItem);
+            gameForm1.sound_fals_path = Convert.ToString(comboBox6.SelectedItem);
+            gameForm1.sound_stop_path = Convert.ToString(comboBox7.SelectedItem);
+            gameForm1.sound_strt_path = Convert.ToString(comboBox9.SelectedItem);
+            gameForm1.sound_time_path = Convert.ToString(comboBox8.SelectedItem);
         }
 
         private void label10_Click(object sender, EventArgs e)
@@ -252,6 +295,30 @@ namespace mozgocolco
             gameForm1.main_time = (int)numericUpDown1.Value;
             gameForm1.dop_time = (int)numericUpDown2.Value;
             gameForm1.mode = comboBox4.SelectedIndex;
+            gameForm1.num_of_comands = (byte)numericUpDown3.Value;
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            for (byte i = 0; i < 10; i++)
+            {
+                gameForm1.commands[i] = Convert.ToString(dataGridView1.Rows[i].Cells[0].Value);
+            }
+            for (byte i = 10; i < 20; i++)
+            {
+                gameForm1.commands[i] = Convert.ToString(dataGridView1.Rows[i - 10].Cells[1].Value);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (gameForm1.send_to_port < 255)
+            {
+                if (serialPort1.IsOpen)
+                {
+                    serialPort1.Write(Convert.ToString(gameForm1.send_to_port)); //отправляем команду в порт
+                }
+            }
         }
     }
 }

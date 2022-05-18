@@ -7,7 +7,7 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
   1 .data         0000000c  00800060  0000070a  0000079e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000019  0080006c  0080006c  000007aa  2**0
+  2 .bss          0000004d  0080006c  0080006c  000007aa  2**0
                   ALLOC
   3 .comment      00000030  00000000  00000000  000007aa  2**0
                   CONTENTS, READONLY
@@ -15,19 +15,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000150  00000000  00000000  00000818  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000016ff  00000000  00000000  00000968  2**0
+  6 .debug_info   00001702  00000000  00000000  00000968  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000099d  00000000  00000000  00002067  2**0
+  7 .debug_abbrev 0000099d  00000000  00000000  0000206a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000bf5  00000000  00000000  00002a04  2**0
+  8 .debug_line   00000bf6  00000000  00000000  00002a07  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000370  00000000  00000000  000035fc  2**2
+  9 .debug_frame  00000370  00000000  00000000  00003600  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000055f  00000000  00000000  0000396c  2**0
+ 10 .debug_str    0000055f  00000000  00000000  00003970  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000d02  00000000  00000000  00003ecb  2**0
+ 11 .debug_loc    00000d02  00000000  00000000  00003ecf  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000110  00000000  00000000  00004bcd  2**0
+ 12 .debug_ranges 00000110  00000000  00000000  00004bd1  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -84,7 +84,7 @@ Disassembly of section .text:
   50:	1d 92       	st	X+, r1
 
 00000052 <.do_clear_bss_start>:
-  52:	a5 38       	cpi	r26, 0x85	; 133
+  52:	a9 3b       	cpi	r26, 0xB9	; 185
   54:	b2 07       	cpc	r27, r18
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	da d0       	rcall	.+436    	; 0x20e <main>
@@ -942,7 +942,7 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	_delay_us(150); //Задержка минимум 130 мкс
 	//Отправим данные в воздух
 	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);//отправка данных
- 462:	46 e0       	ldi	r20, 0x06	; 6
+ 462:	40 e2       	ldi	r20, 0x20	; 32
  464:	be 01       	movw	r22, r28
  466:	80 ea       	ldi	r24, 0xA0	; 160
  468:	c5 df       	rcall	.-118    	; 0x3f4 <NRF24_Transmit>
@@ -979,7 +979,7 @@ void nrf24l01_receive(void)
 		f_rx = 0;						//опускаем флаг приема		
  48e:	10 92 78 00 	sts	0x0078, r1	; 0x800078 <f_rx>
 		if (rx_buf[0] == RESET)			//если первый принятый байт - команда сброса
- 492:	80 91 7f 00 	lds	r24, 0x007F	; 0x80007f <rx_buf>
+ 492:	80 91 99 00 	lds	r24, 0x0099	; 0x800099 <rx_buf>
  496:	8f 3f       	cpi	r24, 0xFF	; 255
  498:	c1 f4       	brne	.+48     	; 0x4ca <nrf24l01_receive+0x46>
 		{
@@ -1004,8 +1004,8 @@ void nrf24l01_receive(void)
  4c8:	82 bb       	out	0x12, r24	; 18
 		}
 		if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
- 4ca:	80 91 7f 00 	lds	r24, 0x007F	; 0x80007f <rx_buf>
- 4ce:	87 30       	cpi	r24, 0x07	; 7
+ 4ca:	80 91 99 00 	lds	r24, 0x0099	; 0x800099 <rx_buf>
+ 4ce:	89 30       	cpi	r24, 0x09	; 9
  4d0:	09 f0       	breq	.+2      	; 0x4d4 <nrf24l01_receive+0x50>
  4d2:	48 c0       	rjmp	.+144    	; 0x564 <nrf24l01_receive+0xe0>
 		{
@@ -1017,7 +1017,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;	//записываем в первый байт адрес
  4dc:	e9 e7       	ldi	r30, 0x79	; 121
  4de:	f0 e0       	ldi	r31, 0x00	; 0
- 4e0:	87 e0       	ldi	r24, 0x07	; 7
+ 4e0:	89 e0       	ldi	r24, 0x09	; 9
  4e2:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
  4e4:	80 91 6e 00 	lds	r24, 0x006E	; 0x80006e <time_ms>
@@ -1048,7 +1048,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;
  514:	e9 e7       	ldi	r30, 0x79	; 121
  516:	f0 e0       	ldi	r31, 0x00	; 0
- 518:	87 e0       	ldi	r24, 0x07	; 7
+ 518:	89 e0       	ldi	r24, 0x09	; 9
  51a:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;//miliseconds;//
  51c:	8f ef       	ldi	r24, 0xFF	; 255
@@ -1073,19 +1073,19 @@ void nrf24l01_receive(void)
  53e:	80 df       	rcall	.-256    	; 0x440 <NRF24L01_Send>
 			}
 			if (rx_buf[1] == 0x01)
- 540:	80 91 80 00 	lds	r24, 0x0080	; 0x800080 <rx_buf+0x1>
+ 540:	80 91 9a 00 	lds	r24, 0x009A	; 0x80009a <rx_buf+0x1>
  544:	81 30       	cpi	r24, 0x01	; 1
  546:	71 f4       	brne	.+28     	; 0x564 <nrf24l01_receive+0xe0>
 			{
 				if(rx_buf[2] == 0x01) LED_ON();
- 548:	80 91 81 00 	lds	r24, 0x0081	; 0x800081 <rx_buf+0x2>
+ 548:	80 91 9b 00 	lds	r24, 0x009B	; 0x80009b <rx_buf+0x2>
  54c:	81 30       	cpi	r24, 0x01	; 1
  54e:	19 f4       	brne	.+6      	; 0x556 <nrf24l01_receive+0xd2>
  550:	82 b3       	in	r24, 0x12	; 18
  552:	80 64       	ori	r24, 0x40	; 64
  554:	82 bb       	out	0x12, r24	; 18
 				if(rx_buf[2] == 0x00) LED_OFF();
- 556:	80 91 81 00 	lds	r24, 0x0081	; 0x800081 <rx_buf+0x2>
+ 556:	80 91 9b 00 	lds	r24, 0x009B	; 0x80009b <rx_buf+0x2>
  55a:	81 11       	cpse	r24, r1
  55c:	03 c0       	rjmp	.+6      	; 0x564 <nrf24l01_receive+0xe0>
  55e:	82 b3       	in	r24, 0x12	; 18
@@ -1173,7 +1173,7 @@ void nrf24_init(void)
  5d2:	8b e0       	ldi	r24, 0x0B	; 11
  5d4:	a8 de       	rcall	.-688    	; 0x326 <NRF24_Write_Buf>
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
- 5d6:	66 e0       	ldi	r22, 0x06	; 6
+ 5d6:	60 e2       	ldi	r22, 0x20	; 32
  5d8:	81 e1       	ldi	r24, 0x11	; 17
  5da:	62 de       	rcall	.-828    	; 0x2a0 <NRF24_WriteReg>
 	//пока уходим в режим приёмника
@@ -1209,8 +1209,8 @@ void IRQ_Callback(void)
  5fc:	0b c0       	rjmp	.+22     	; 0x614 <IRQ_Callback+0x2e>
 	{
 		NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
- 5fe:	46 e0       	ldi	r20, 0x06	; 6
- 600:	6f e7       	ldi	r22, 0x7F	; 127
+ 5fe:	40 e2       	ldi	r20, 0x20	; 32
+ 600:	69 e9       	ldi	r22, 0x99	; 153
  602:	70 e0       	ldi	r23, 0x00	; 0
  604:	81 e6       	ldi	r24, 0x61	; 97
  606:	69 de       	rcall	.-814    	; 0x2da <NRF24_Read_Buf>

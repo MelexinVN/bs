@@ -39,6 +39,7 @@ char str[64] = {0};																//строка для вывода данных в порт
 uint8_t tx_buf[3]={0};														//буфер для отправки (попробовать 5 байт)
 extern uint8_t rx_buf[];													//приемный буфер
 extern volatile char rx_str[UART_RX_BUFFER_SIZE];	//приемная строка уарта
+extern uint8_t rx_buf[TX_PLOAD_WIDTH];						//приемный буфер
 uint8_t buf[5]={0};																//буфер для чтения адресов модуля
 uint8_t dt_reg = 0;																//переменная для чтения значения регистра
 uint8_t led_stat[NUM_OF_BUTS] = {0x00};						//массив текущих состояний светодиодов кнопок
@@ -55,7 +56,9 @@ uint32_t min_time = MAX_TIME;											//переменная для поиска минимального зна
 extern volatile uint8_t f_uart_rec;								//флаг приема по уарту
 uint8_t f_first_push = 0;													//флаг первого нажатия
 uint8_t j_min = 0;																//индекс минимального значения в массиве
-/* USER CODE END PV */
+uint8_t f_rec_proc = 0;														//
+	
+	/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -221,7 +224,7 @@ int main(void)
   while (1)
   {
 		nrf24l01_receive();			//процедура приема данных радиомодуля
-
+		
 		//обработка команды сброса
 		if ((f_push_rst) || (rec_cmnd == 255)) 		
 		{//если нажата кнопка сброса или пршла команда сброса
@@ -232,8 +235,8 @@ int main(void)
 			tx_buf[0] = but_addrs[but_counter];	//адреса текущей кнопки
 			tx_buf[1] = but_cmnds[but_counter];	//команды
 			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
+			LL_mDelay(1);
 			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
-			//LL_mDelay(1);
 			but_counter++;											//переход к следующей кнопке
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
 		}

@@ -1,8 +1,6 @@
 #include "nrf24.h"
 #include "main.h"
 //------------------------------------------------
-#define TX_ADR_WIDTH 3						//размер адреса передачи
-#define TX_PLOAD_WIDTH 6					//размер полезной нагрузки
 
 #define BAS							//выбор устройства: BAZ - база, BUT - кнопка
 
@@ -22,6 +20,7 @@ extern char str[];												//строка для вывода данных
 extern uint8_t f_receive;
 extern uint32_t but_times[NUM_OF_BUTS];
 extern uint8_t but_addrs[];
+extern uint8_t f_rec_proc;														//
 //самодельная функция микросекундной задержки
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
@@ -294,10 +293,10 @@ void IRQ_Callback(void)
 	
   if(status & TX_DS) //данные успешно отправлены
   {
-    //USART_TX((uint8_t*)"tx ok\r\n",7);
 		NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
     NRF24L01_RX_Mode();						//переход в режим приема
   }
+	
   /*В СЛУЧАЕ ВКЛЮЧЕННОГО АА
 	else if(status & MAX_RT)//превышение количества попыток отправки
   {

@@ -17,12 +17,17 @@ namespace mozgocolco
         public long time_clock = 0;
         public long time_ms = 0;
         public bool visiblity = true;
+        public bool is_serial_port_open = false;
         public string input_string = " ";
         public string sound_answ_path = "sounds/answer.wav";
         public string sound_fals_path = "sounds/falstart.wav";
         public string sound_stop_path = "sounds/stop.wav";
         public string sound_strt_path = "sounds/start.wav";
         public string sound_time_path = "sounds/time.wav";
+        public byte num_of_comands = 20;
+        public byte send_to_port = 255;
+
+        public string[] commands = new string[20];
 
         public int main_time = 60;
         public int dop_time = 20;
@@ -50,8 +55,6 @@ namespace mozgocolco
 
         private void gameForm_Load(object sender, EventArgs e)
         {
-            byte i = 0;
-
             answ_p.SoundLocation = sound_answ_path;
             fals_p.SoundLocation = sound_fals_path;
             stop_p.SoundLocation = sound_stop_path;
@@ -85,19 +88,6 @@ namespace mozgocolco
             label19.Text = " ";
             label20.Text = " ";
 
-            while (i < 10)
-            {
-                dataGridView1.Rows.Add();
-                i++;
-            }
-
-            i = 1;
-            while (i <= 10)
-            {
-                dataGridView1.Rows[i - 1].Cells[0].Value = i;
-                dataGridView1.Rows[i - 1].Cells[1].Value = i + 10;
-                i++;
-            }
             timer2.Enabled = true;
         }
 
@@ -161,143 +151,142 @@ namespace mozgocolco
                     if (input_string[i] == '0')
                     {
                         label01.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[0].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[0].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[0] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[0] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
-                    
                     if (input_string[i] == '1')
                     {
                         label02.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[1].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[1].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n"; 
+                        if (timer1.Enabled) textBox1.Text += commands[1] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[1] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n"; 
                         count++;
                     }
                     if (input_string[i] == '2')
                     {
                         label03.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[2].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[2].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[2] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[2] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '3')
                     {
                         label04.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[3].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[3].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[3] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[3] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '4')
                     {
                         label05.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[4].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[4].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[4] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[4] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '5')
                     {
                         label06.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[5].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[5].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[5] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[5] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '6')
                     {
                         label07.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[6].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[6].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[6] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[6] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '7')
                     {
                         label08.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[7].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[7].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[7] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[7] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '8')
                     {
                         label09.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[8].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[8].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[8] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[8] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == '9')
                     {
                         label10.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[9].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[9].Cells[0].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[9] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[9] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'a')
                     {
                         label11.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[0].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[0].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[10] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[10] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
 
                     if (input_string[i] == 'b')
                     {
                         label12.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[1].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[1].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[11] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[11] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'c')
                     {
                         label13.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[2].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[2].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[12] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[12] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'd')
                     {
                         label14.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[3].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[3].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[13] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[13] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'e')
                     {
                         label15.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[4].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[4].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[14] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[14] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'f')
                     {
                         label16.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[5].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[5].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[15] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[15] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'g')
                     {
                         label17.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[6].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[6].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[16] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[16] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'h')
                     {
                         label18.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[7].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[7].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[17] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[17] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'i')
                     {
                         label19.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[8].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[8].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[18] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[18] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                     if (input_string[i] == 'j')
                     {
                         label20.Text = Convert.ToString(count);
-                        if (timer1.Enabled) textBox1.Text += Convert.ToString(dataGridView1.Rows[9].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
-                        else textBox1.Text += "ФС\t" + Convert.ToString(dataGridView1.Rows[9].Cells[1].Value) + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        if (timer1.Enabled) textBox1.Text += commands[19] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
+                        else textBox1.Text += "ФС\t" + commands[19] + "\t" + Convert.ToString(time_ms) + " мс" + "\r\n";
                         count++;
                     }
                 }
@@ -309,11 +298,6 @@ namespace mozgocolco
         {
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -363,11 +347,19 @@ namespace mozgocolco
             time_ms = 0;
             label1.Text = "00:00";
             count = 0;
+            if (is_serial_port_open)
+            {
+                send_to_port = 11;
+            }
+            textBox1.Clear();
         }
 
         private void next_procedure()
         {
-
+            if (is_serial_port_open)
+            {
+                send_to_port = 12;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)

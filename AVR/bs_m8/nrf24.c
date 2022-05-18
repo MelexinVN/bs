@@ -4,9 +4,6 @@
 
 #define BUT									//выбор устройства: BAZ - база, BUT - кнопка
 
-#define TX_ADR_WIDTH 3						//размер адреса передачи
-#define TX_PLOAD_WIDTH 6					//размер полезной нагрузки
-
 #ifdef BAS	//если база
 uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 0
 uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 1

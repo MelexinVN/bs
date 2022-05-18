@@ -30,8 +30,10 @@ namespace mozgocolco
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button4 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -51,8 +53,8 @@ namespace mozgocolco
             this.label14 = new System.Windows.Forms.Label();
             this.comboBox9 = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.comboBox8 = new System.Windows.Forms.ComboBox();
+            this.comboBox7 = new System.Windows.Forms.ComboBox();
             this.label13 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.comboBox6 = new System.Windows.Forms.ComboBox();
@@ -68,15 +70,25 @@ namespace mozgocolco
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.button3 = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button6 = new System.Windows.Forms.Button();
+            this.label15 = new System.Windows.Forms.Label();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.button4);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.textBox2);
             this.groupBox1.Controls.Add(this.label5);
@@ -99,19 +111,9 @@ namespace mozgocolco
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры порта";
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(187, 156);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(109, 20);
-            this.button4.TabIndex = 123;
-            this.button4.Text = "звук";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(184, 328);
+            this.button1.Location = new System.Drawing.Point(184, 330);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(120, 20);
             this.button1.TabIndex = 112;
@@ -124,18 +126,18 @@ namespace mozgocolco
             this.textBox2.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
             this.textBox2.BackColor = System.Drawing.SystemColors.Window;
             this.textBox2.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.Location = new System.Drawing.Point(6, 197);
+            this.textBox2.Location = new System.Drawing.Point(6, 156);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox2.Size = new System.Drawing.Size(298, 125);
+            this.textBox2.Size = new System.Drawing.Size(298, 168);
             this.textBox2.TabIndex = 111;
             this.textBox2.TextChanged += new System.EventHandler(this.Scroll_text);
             // 
             // label5
             // 
-            this.label5.Location = new System.Drawing.Point(9, 172);
+            this.label5.Location = new System.Drawing.Point(17, 128);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(102, 22);
             this.label5.TabIndex = 110;
@@ -279,8 +281,8 @@ namespace mozgocolco
             this.groupBox2.Controls.Add(this.label14);
             this.groupBox2.Controls.Add(this.comboBox9);
             this.groupBox2.Controls.Add(this.label12);
-            this.groupBox2.Controls.Add(this.comboBox7);
             this.groupBox2.Controls.Add(this.comboBox8);
+            this.groupBox2.Controls.Add(this.comboBox7);
             this.groupBox2.Controls.Add(this.label13);
             this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.comboBox6);
@@ -289,7 +291,7 @@ namespace mozgocolco
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Location = new System.Drawing.Point(319, 1);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(298, 194);
+            this.groupBox2.Size = new System.Drawing.Size(298, 187);
             this.groupBox2.TabIndex = 124;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Звуки";
@@ -307,10 +309,6 @@ namespace mozgocolco
             // comboBox9
             // 
             this.comboBox9.FormattingEnabled = true;
-            this.comboBox9.Items.AddRange(new object[] {
-            "start.wav",
-            "start_1.wav",
-            "start_2.wav"});
             this.comboBox9.Location = new System.Drawing.Point(80, 127);
             this.comboBox9.MaxDropDownItems = 4;
             this.comboBox9.Name = "comboBox9";
@@ -327,31 +325,23 @@ namespace mozgocolco
             this.label12.Text = "Доп вр.";
             this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // comboBox7
-            // 
-            this.comboBox7.FormattingEnabled = true;
-            this.comboBox7.Items.AddRange(new object[] {
-            "time.wav",
-            "time_1.wav",
-            "time_2.wav"});
-            this.comboBox7.Location = new System.Drawing.Point(80, 100);
-            this.comboBox7.MaxDropDownItems = 4;
-            this.comboBox7.Name = "comboBox7";
-            this.comboBox7.Size = new System.Drawing.Size(210, 21);
-            this.comboBox7.TabIndex = 130;
-            // 
             // comboBox8
             // 
             this.comboBox8.FormattingEnabled = true;
-            this.comboBox8.Items.AddRange(new object[] {
-            "stop.wav",
-            "stop_1.wav",
-            "stop_2.wav"});
-            this.comboBox8.Location = new System.Drawing.Point(80, 73);
+            this.comboBox8.Location = new System.Drawing.Point(80, 100);
             this.comboBox8.MaxDropDownItems = 4;
             this.comboBox8.Name = "comboBox8";
             this.comboBox8.Size = new System.Drawing.Size(210, 21);
-            this.comboBox8.TabIndex = 129;
+            this.comboBox8.TabIndex = 130;
+            // 
+            // comboBox7
+            // 
+            this.comboBox7.FormattingEnabled = true;
+            this.comboBox7.Location = new System.Drawing.Point(80, 73);
+            this.comboBox7.MaxDropDownItems = 4;
+            this.comboBox7.Name = "comboBox7";
+            this.comboBox7.Size = new System.Drawing.Size(210, 21);
+            this.comboBox7.TabIndex = 129;
             // 
             // label13
             // 
@@ -377,10 +367,6 @@ namespace mozgocolco
             // comboBox6
             // 
             this.comboBox6.FormattingEnabled = true;
-            this.comboBox6.Items.AddRange(new object[] {
-            "falstart.wav",
-            "falstart_1.wav",
-            "falstart_2.wav"});
             this.comboBox6.Location = new System.Drawing.Point(80, 46);
             this.comboBox6.MaxDropDownItems = 4;
             this.comboBox6.Name = "comboBox6";
@@ -400,13 +386,7 @@ namespace mozgocolco
             // 
             // comboBox5
             // 
-            this.comboBox5.AutoCompleteCustomSource.AddRange(new string[] {
-            "answer.vaw"});
             this.comboBox5.FormattingEnabled = true;
-            this.comboBox5.Items.AddRange(new object[] {
-            "answer.wav",
-            "answer_1.wav",
-            "answer_2.wav"});
             this.comboBox5.Location = new System.Drawing.Point(80, 20);
             this.comboBox5.MaxDropDownItems = 4;
             this.comboBox5.Name = "comboBox5";
@@ -426,7 +406,7 @@ namespace mozgocolco
             // 
             // numericUpDown2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(497, 256);
+            this.numericUpDown2.Location = new System.Drawing.Point(170, 78);
             this.numericUpDown2.Name = "numericUpDown2";
             this.numericUpDown2.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown2.TabIndex = 122;
@@ -438,7 +418,7 @@ namespace mozgocolco
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(497, 229);
+            this.numericUpDown1.Location = new System.Drawing.Point(170, 52);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
             this.numericUpDown1.TabIndex = 121;
@@ -450,25 +430,25 @@ namespace mozgocolco
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(327, 256);
+            this.label9.Location = new System.Drawing.Point(9, 75);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(164, 22);
+            this.label9.Size = new System.Drawing.Size(155, 22);
             this.label9.TabIndex = 120;
             this.label9.Text = "Дополнительное время, с";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label8
             // 
-            this.label8.Location = new System.Drawing.Point(327, 227);
+            this.label8.Location = new System.Drawing.Point(47, 49);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(164, 22);
+            this.label8.Size = new System.Drawing.Size(117, 22);
             this.label8.TabIndex = 119;
             this.label8.Text = "Основное время, с";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label6
             // 
-            this.label6.Location = new System.Drawing.Point(319, 200);
+            this.label6.Location = new System.Drawing.Point(6, 21);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(50, 22);
             this.label6.TabIndex = 115;
@@ -482,9 +462,9 @@ namespace mozgocolco
             "Брейн-ринг",
             "Брейн-хип",
             "Буденновский к"});
-            this.comboBox4.Location = new System.Drawing.Point(375, 200);
+            this.comboBox4.Location = new System.Drawing.Point(62, 20);
             this.comboBox4.Name = "comboBox4";
-            this.comboBox4.Size = new System.Drawing.Size(242, 21);
+            this.comboBox4.Size = new System.Drawing.Size(228, 21);
             this.comboBox4.TabIndex = 5;
             // 
             // checkBox1
@@ -492,7 +472,7 @@ namespace mozgocolco
             this.checkBox1.AutoSize = true;
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(319, 332);
+            this.checkBox1.Location = new System.Drawing.Point(623, 329);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(73, 17);
             this.checkBox1.TabIndex = 113;
@@ -506,29 +486,135 @@ namespace mozgocolco
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(497, 292);
+            this.button3.Location = new System.Drawing.Point(172, 137);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(109, 20);
+            this.button3.Size = new System.Drawing.Size(120, 20);
             this.button3.TabIndex = 134;
             this.button3.Text = "Загрузить";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.numericUpDown3);
+            this.groupBox3.Controls.Add(this.label15);
+            this.groupBox3.Controls.Add(this.comboBox4);
+            this.groupBox3.Controls.Add(this.button3);
+            this.groupBox3.Controls.Add(this.label6);
+            this.groupBox3.Controls.Add(this.label8);
+            this.groupBox3.Controls.Add(this.numericUpDown1);
+            this.groupBox3.Controls.Add(this.numericUpDown2);
+            this.groupBox3.Controls.Add(this.label9);
+            this.groupBox3.Location = new System.Drawing.Point(319, 194);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(298, 163);
+            this.groupBox3.TabIndex = 135;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Настройки";
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewCellStyle13.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle13.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle13.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle13.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle13.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle13.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            this.dataGridView1.ColumnHeadersHeight = 4;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column2,
+            this.Column1});
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle14.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle14;
+            this.dataGridView1.Location = new System.Drawing.Point(623, 10);
+            this.dataGridView1.MultiSelect = false;
+            this.dataGridView1.Name = "dataGridView1";
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle15.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.RowHeadersDefaultCellStyle = dataGridViewCellStyle15;
+            this.dataGridView1.RowHeadersVisible = false;
+            this.dataGridView1.RowHeadersWidth = 40;
+            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.dataGridView1.RowTemplate.Height = 30;
+            this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dataGridView1.Size = new System.Drawing.Size(367, 313);
+            this.dataGridView1.TabIndex = 136;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Column2";
+            this.Column2.Name = "Column2";
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(870, 331);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(120, 20);
+            this.button6.TabIndex = 135;
+            this.button6.Text = "Загрузить";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // label15
+            // 
+            this.label15.Location = new System.Drawing.Point(9, 104);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(155, 22);
+            this.label15.TabIndex = 135;
+            this.label15.Text = "Количество кнопок";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(170, 107);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(120, 20);
+            this.numericUpDown3.TabIndex = 136;
+            this.numericUpDown3.Value = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(621, 357);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(995, 357);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.checkBox1);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.numericUpDown2);
-            this.Controls.Add(this.label8);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.comboBox4);
-            this.Controls.Add(this.label6);
             this.Name = "MainForm";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.Form1_Load_1);
@@ -537,6 +623,9 @@ namespace mozgocolco
             this.groupBox2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            this.groupBox3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -570,7 +659,6 @@ namespace mozgocolco
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Label label10;
@@ -578,10 +666,18 @@ namespace mozgocolco
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox comboBox9;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.ComboBox comboBox7;
         private System.Windows.Forms.ComboBox comboBox8;
+        private System.Windows.Forms.ComboBox comboBox7;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.NumericUpDown numericUpDown3;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

@@ -43,6 +43,10 @@
 //------------------------------------------------
 #define W_REGISTER 		0x20 //запись в регистр
 //------------------------------------------------
+#define TX_ADR_WIDTH 3						//размер адреса передачи
+#define TX_PLOAD_WIDTH 32					//размер полезной нагрузки
+//максимальное число байт, чтобы при добавлении новых функций не переделывать задержки
+
 void nrf24_init(void);
 uint8_t NRF24_ReadReg(uint8_t addr);
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
