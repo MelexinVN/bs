@@ -148,23 +148,26 @@ namespace mozgocolco
                 gameForm1.commands[i] = Convert.ToString(dataGridView1.Rows[i - 10].Cells[1].Value);
             }
 
-            string[] soundfiles = Directory.GetFiles("sounds");
-
-            foreach (string filename in soundfiles)
+            if (Directory.Exists("sounds"))
             {
-                comboBox5.Items.Add(filename);
-                comboBox6.Items.Add(filename);
-                comboBox7.Items.Add(filename);
-                comboBox8.Items.Add(filename);
-                comboBox9.Items.Add(filename);
-            }            
+                string[] soundfiles = Directory.GetFiles("sounds");
 
-            comboBox4.SelectedIndex = 1;
-            comboBox5.SelectedIndex = 0;
-            comboBox6.SelectedIndex = 1;
-            comboBox7.SelectedIndex = 2;
-            comboBox8.SelectedIndex = 3;
-            comboBox9.SelectedIndex = 4;
+                foreach (string filename in soundfiles)
+                {
+                    comboBox5.Items.Add(filename);
+                    comboBox6.Items.Add(filename);
+                    comboBox7.Items.Add(filename);
+                    comboBox8.Items.Add(filename);
+                    comboBox9.Items.Add(filename);
+                }
+
+                comboBox4.SelectedIndex = 1;
+                comboBox5.SelectedIndex = 0;
+                comboBox6.SelectedIndex = 1;
+                comboBox7.SelectedIndex = 2;
+                comboBox8.SelectedIndex = 3;
+                comboBox9.SelectedIndex = 4;
+            }
         }
 
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
@@ -318,6 +321,28 @@ namespace mozgocolco
                 {
                     serialPort1.Write(Convert.ToString(gameForm1.send_to_port)); //отправляем команду в порт
                 }
+            }
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            if (Directory.Exists("sounds"))
+            {
+                string[] soundfiles = Directory.GetFiles("sounds");
+
+                foreach (string filename in soundfiles)
+                {
+                    comboBox5.Items.Add(filename);
+                    comboBox6.Items.Add(filename);
+                    comboBox7.Items.Add(filename);
+                    comboBox8.Items.Add(filename);
+                    comboBox9.Items.Add(filename);
+                }
+                comboBox5.SelectedIndex = 0;
+                comboBox6.SelectedIndex = 1;
+                comboBox7.SelectedIndex = 2;
+                comboBox8.SelectedIndex = 3;
+                comboBox9.SelectedIndex = 4;
             }
         }
     }

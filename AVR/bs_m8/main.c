@@ -131,6 +131,10 @@ ISR(TIMER1_COMPA_vect)
 	if (!(miliseconds % 100)) 
 	{
 		adc_res = read_adc(6);
+		/* для расчета процентов заряда для LiPo аккумуляторов
+		if (adc_res >= 170) adc_res = (adc_res - 170)*100/40 //расчет в процентах для LiPo
+		else adc_res = 0;
+		*/
 	}
 }
 

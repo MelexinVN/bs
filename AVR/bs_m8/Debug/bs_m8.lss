@@ -163,7 +163,7 @@ void adc_init(void)
 	// ADC Clock frequency: 62,500 kHz
 	// ADC Voltage Reference: AVCC pin
 	ADMUX=ADC_VREF_TYPE;
-  8e:	80 e6       	ldi	r24, 0x60	; 96
+  8e:	80 ee       	ldi	r24, 0xE0	; 224
   90:	87 b9       	out	0x07, r24	; 7
 	ADCSRA=(1<<ADEN) | (0<<ADSC) | (0<<ADFR) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
   92:	87 e8       	ldi	r24, 0x87	; 135
@@ -201,7 +201,7 @@ void adc_init(void)
 unsigned char read_adc(unsigned char adc_input)
 {
 	ADMUX=adc_input | ADC_VREF_TYPE;
-  ae:	80 66       	ori	r24, 0x60	; 96
+  ae:	80 6e       	ori	r24, 0xE0	; 224
   b0:	87 b9       	out	0x07, r24	; 7
 	#else
 		//round up by default
@@ -1005,7 +1005,7 @@ void nrf24l01_receive(void)
 		}
 		if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
  4ca:	80 91 99 00 	lds	r24, 0x0099	; 0x800099 <rx_buf>
- 4ce:	89 30       	cpi	r24, 0x09	; 9
+ 4ce:	88 30       	cpi	r24, 0x08	; 8
  4d0:	09 f0       	breq	.+2      	; 0x4d4 <nrf24l01_receive+0x50>
  4d2:	48 c0       	rjmp	.+144    	; 0x564 <nrf24l01_receive+0xe0>
 		{
@@ -1017,7 +1017,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;	//записываем в первый байт адрес
  4dc:	e9 e7       	ldi	r30, 0x79	; 121
  4de:	f0 e0       	ldi	r31, 0x00	; 0
- 4e0:	89 e0       	ldi	r24, 0x09	; 9
+ 4e0:	88 e0       	ldi	r24, 0x08	; 8
  4e2:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
  4e4:	80 91 6e 00 	lds	r24, 0x006E	; 0x80006e <time_ms>
@@ -1048,7 +1048,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;
  514:	e9 e7       	ldi	r30, 0x79	; 121
  516:	f0 e0       	ldi	r31, 0x00	; 0
- 518:	89 e0       	ldi	r24, 0x09	; 9
+ 518:	88 e0       	ldi	r24, 0x08	; 8
  51a:	80 83       	st	Z, r24
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;//miliseconds;//
  51c:	8f ef       	ldi	r24, 0xFF	; 255
