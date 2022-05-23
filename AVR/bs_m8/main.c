@@ -185,7 +185,7 @@ int main(void)
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля
-		if (!f_reset) wdt_reset();
+		//if (!f_reset) wdt_reset();
     }
 }
 

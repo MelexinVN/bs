@@ -194,7 +194,9 @@ void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
 //------------------------------------------------
 uint8_t NRF24L01_Send(uint8_t *pBuf)
 {//отправка данных в эфир
-  uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
+	NVIC_DisableIRQ(EXTI4_IRQn);
+	NVIC_DisableIRQ(EXTI9_5_IRQn);
+	uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
 	NRF24L01_TX_Mode(pBuf);
 	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
 	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
@@ -207,7 +209,9 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	CE_SET();
 	DelayMicro(15); //minimum 10us high pulse (Page 21)
 	CE_RESET();
-	//LED_TGL;			
+	//LED_TGL;		
+	NVIC_EnableIRQ(EXTI4_IRQn);
+	NVIC_EnableIRQ(EXTI9_5_IRQn);
 	return 0;
 }
 //------------------------------------------------

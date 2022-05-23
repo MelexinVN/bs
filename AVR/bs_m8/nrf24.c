@@ -168,7 +168,10 @@ void nrf24l01_receive(void)
 {
 	if(f_rx == 1)						//если флаг приема поднят
 	{
+		if (!f_reset) wdt_reset();
 
+		char stektemp = SREG;// сохраним значение стека
+		cli(); //запрещаем прерывания
 		f_rx = 0;						//опускаем флаг приема		
 		if (rx_buf[0] == RESET)			//если первый принятый байт - команда сброса
 		{
@@ -185,7 +188,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;	//записываем в первый байт адрес
 				(*(unsigned long*)&tx_buf[1]) = time_ms;	//во второй, предварительно преобразованный в тип unsigned long, записываем значение времени
 				tx_buf[5] = adc_res;
-				_delay_us(3000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				//_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);	//			
 			}
 			else
@@ -193,7 +196,7 @@ void nrf24l01_receive(void)
 				tx_buf[0] = BUT_ADDR;
 				(*(unsigned long*)&tx_buf[1]) = NOT_PUSHED;//miliseconds;//
 				tx_buf[5] = adc_res;
-				_delay_us(3000);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
+				//_delay_us(100);		//ПОДОБРАНО ЭКСПЕРИМЕНТАЛЬНО!
 				NRF24L01_Send(tx_buf);
 			}
 			if (rx_buf[1] == 0x01)
@@ -202,6 +205,7 @@ void nrf24l01_receive(void)
 				if(rx_buf[2] == 0x00) LED_OFF();
 			}
 		}
+		SREG = stektemp;// вернем значение стека
 	}
 }
 
@@ -233,9 +237,10 @@ void nrf24_init(void)
 //--------------------------------------------------
 void IRQ_Callback(void)
 {
+	
 	//LED_ON();
 	uint8_t status=0x01;	//переменная статус
-	_delay_us(100);			//_delay_us(10);
+	_delay_us(10);			//_delay_us(10);
 	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
 	if(status & RX_DR)				//если есть данные на прием
 	{

@@ -105,7 +105,7 @@ void reset_button_pushed(void)
 	tx_buf[1] = 0x01;		//значение по умолчанию
 	tx_buf[2] = 0x00;		//значение по умолчанию
 	NRF24L01_Send(tx_buf);	//отправка в эфир посылки
-	LL_mDelay(1);
+	//LL_mDelay(1);
 	for (uint8_t i = 0; i < NUM_OF_BUTS; i++)	
 	{//установка значений по умолчанию в массивы
 		but_cmnds[i] = 0x01;		//команд
@@ -235,7 +235,7 @@ int main(void)
 			tx_buf[0] = but_addrs[but_counter];	//адреса текущей кнопки
 			tx_buf[1] = but_cmnds[but_counter];	//команды
 			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
-			LL_mDelay(1);
+			//LL_mDelay(1);
 			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
 			but_counter++;											//переход к следующей кнопке
 			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
