@@ -1,0 +1,26 @@
+--cpu Cortex-M3
+"rx_433_315_hal\startup_stm32f103xb.o"
+"rx_433_315_hal\rx_433_stm32_hal.o"
+"rx_433_315_hal\main.o"
+"rx_433_315_hal\stm32f1xx_it.o"
+"rx_433_315_hal\stm32f1xx_hal_msp.o"
+"rx_433_315_hal\stm32f1xx_hal_gpio_ex.o"
+"rx_433_315_hal\stm32f1xx_hal_iwdg.o"
+"rx_433_315_hal\stm32f1xx_hal.o"
+"rx_433_315_hal\stm32f1xx_hal_rcc.o"
+"rx_433_315_hal\stm32f1xx_hal_rcc_ex.o"
+"rx_433_315_hal\stm32f1xx_hal_gpio.o"
+"rx_433_315_hal\stm32f1xx_hal_dma.o"
+"rx_433_315_hal\stm32f1xx_hal_cortex.o"
+"rx_433_315_hal\stm32f1xx_hal_pwr.o"
+"rx_433_315_hal\stm32f1xx_hal_flash.o"
+"rx_433_315_hal\stm32f1xx_hal_flash_ex.o"
+"rx_433_315_hal\stm32f1xx_hal_exti.o"
+"rx_433_315_hal\stm32f1xx_hal_tim.o"
+"rx_433_315_hal\stm32f1xx_hal_tim_ex.o"
+"rx_433_315_hal\stm32f1xx_hal_uart.o"
+"rx_433_315_hal\system_stm32f1xx.o"
+--strict --scatter "RX_433_315_HAL\RX_433_315_HAL.sct"
+--summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
+--info sizes --info totals --info unused --info veneers
+--list "RX_433_315_HAL.map" -o RX_433_315_HAL\RX_433_315_HAL.axf
