@@ -14,7 +14,7 @@
 #define SIGNAL_PORT	    GPIOA          	// RF порт
 #define SIGNAL_PIN  		GPIO_PIN_15    	// RF пин
 
-#define DURATION          500
+#define DURATION          2000
 
 //запуск счетчика тактов МК
 __STATIC_INLINE void DWT_Init(void)

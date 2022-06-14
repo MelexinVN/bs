@@ -101,7 +101,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  //MX_IWDG_Init();
+  MX_IWDG_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
   DWT_Init();
@@ -115,7 +115,7 @@ int main(void)
 	  //////////////////////////////// ЧТЕНИЕ ДАННЫХ ////////////////////////////////
 	  if(listening == 1) // пришёл пакет
 	  {
-		  snprintf(str, 64, "addr: 0x%X, \r\n tx_addr: 0x%X, \r\n command: 0x%X\r\n, crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
+		  snprintf(str, 64, "addr: 0x%X, \t tx_addr: 0x%X, \t command: 0x%X, \t crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
 		  HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
 
 		  memset(bit_array, 0x00, SIZE_ARRAY);
@@ -133,7 +133,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		//HAL_IWDG_Refresh(&hiwdg);
+		HAL_IWDG_Refresh(&hiwdg);
   }
   /* USER CODE END 3 */
 }

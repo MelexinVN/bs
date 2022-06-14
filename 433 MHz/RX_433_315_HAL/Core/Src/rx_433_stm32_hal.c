@@ -32,11 +32,14 @@ void RX433_Int()
 	uint32_t pulse_duration = cur_timestamp - last_change;						//определение длительности прошедшего импульса
 	last_change = cur_timestamp;																			//сохраняем значение времени
 
+					//snprintf(str, 64, "%d \t %d\r\n", pulse_duration,cur_status);
+					//HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
+	
 	  if(preamble_count < PREAM_NUM_IMP)															//если преамбулы еще не было
 	  {
 	    if(cur_status == 1)																						//если текущее состояние вывода - 1, прошедший импульс был 0
 	    {
-	      if(((200 < pulse_duration) && (pulse_duration < 400)) || preamble_count == 0)
+	      if(((800 < pulse_duration) && (pulse_duration < 1200)) || preamble_count == 0)
 					{}	//если длительность между 200 и 400 мкс или импульсов преамбулы еще не было, падаем дальше
 	      else//иначе
 	      {
@@ -46,7 +49,7 @@ void RX433_Int()
 	    }	
 	    else		//если прошедший импульс был 1
 	    {
-	      if((200 < pulse_duration) && (pulse_duration < 400))				//если длительность от 200 до 400 мкс
+	      if((800 < pulse_duration) && (pulse_duration < 1200))				//если длительность от 200 до 400 мкс
 	      {																														//пришел первый импульс преамбулы
 	        preamble_count++;																					//считаем импульс преамбулы
 
@@ -70,7 +73,7 @@ void RX433_Int()
 			//HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
 	    if(cur_status == 1)//если предыдущий интервал был 0
 	    {
- 	      if(((200 < pulse_duration) && (pulse_duration < 300)) || bit_counter == 0)  
+ 	      if(((800 < pulse_duration) && (pulse_duration < 1200)) || bit_counter == 0)  
 					{}//если нулевой импульс от 200 до 300 мкс или еще не было информационных битов, падаем дальше
 	      else
 	      {//если импульс вне пределов 
@@ -80,46 +83,46 @@ void RX433_Int()
 	    }
 	    else	//если предыдущий импульс был 1
 	    {
-	      if((200 < pulse_duration) && (pulse_duration < 800))	//если импульс от 200 до 800
+	      if((800 < pulse_duration) && (pulse_duration < 3200))	//если импульс от 200 до 800
 	      {
 					bit_array[bit_counter] = (pulse_duration < DURATION) ? 0 : 1;  //если импульс короткий, записываем в массив 0, если длинный - 1
 	        
 					bit_counter++;		//считаем импульс
 					
-					snprintf(str, 64, "bit = %d\r\n", bit_counter);
-					HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
+					//snprintf(str, 64, "bit = %d\r\n", bit_counter);
+					//HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
 					
-					if (bit_counter == SIZE_ARRAY + 1)	//если приняты все байты
+					if (bit_counter == SIZE_ARRAY)	//если приняты все байты
 					{
 						//сохранение адреса устройства
 						for(uint8_t i = 0; i < 8; i++)		//8 раз
 						{
-							dev_addr = (dev_addr << 1) + bit_array[i]; //сдвигаем значение влево и прибавляем текущее значение бита
+							dev_addr = (dev_addr << 1) + bit_array[7 - i]; //сдвигаем значение влево и прибавляем текущее значение бита
 						}
 						//сохранение адреса передатчика
-						for(uint8_t i = 9; i < 16; i++)
+						for(uint8_t i = 8; i < 16; i++)
 						{
-							tx_addr = (tx_addr << 1) + bit_array[i];
+							tx_addr = (tx_addr << 1) + bit_array[15 - i + 8];
 						}
 						//сохранение команды
-						for(uint8_t i = 17; i < 24; i++)
+						for(uint8_t i = 16; i < 24; i++)
 						{
-							command = (command << 1) + bit_array[i];
+							command = (command << 1) + bit_array[23 - i + 16];
 						}
 						//
-						for(uint8_t i = 25; i < 32; i++)
+						for(uint8_t i = 24; i < 32; i++)
 						{
-							crc = (crc << 1) + bit_array[i];
+							crc = (crc << 1) + bit_array[31 - i + 24];
 						}
 						
 						uint8_t crc_calc = 0;
 						crc_calc = (uint8_t)(dev_addr + tx_addr + command);
 						crc_calc = ~crc_calc + 1;
 						preamble_count = 0;
-						snprintf(str, 64, "crc = 0x%X \t crc_calc = 0x%X\r\n", crc,crc_calc);
-						HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
-						snprintf(str, 64, "addr: 0x%X \r\n tx_addr: 0x%X \r\n command: 0x%X\r\n crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
-						HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
+						//snprintf(str, 64, "crc = 0x%X \t crc_calc = 0x%X\r\n", crc,crc_calc);
+						//HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
+						//snprintf(str, 64, "addr: 0x%X \r\n tx_addr: 0x%X \r\n command: 0x%X\r\n crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
+						//HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
 
 						if (crc == crc_calc) listening = 1;
 						
