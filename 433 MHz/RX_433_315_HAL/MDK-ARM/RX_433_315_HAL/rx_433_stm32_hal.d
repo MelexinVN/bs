@@ -25,9 +25,14 @@ rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
+rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_i2c.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 rx_433_315_hal\rx_433_stm32_hal.o: ../Core/Inc/rx_433_stm32_hal.h
 rx_433_315_hal\rx_433_stm32_hal.o: D:\Keil\ARM\ARMCC\Bin\..\include\string.h
 rx_433_315_hal\rx_433_stm32_hal.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdio.h
+rx_433_315_hal\rx_433_stm32_hal.o: ../Core/Inc/ssd1306.h
+rx_433_315_hal\rx_433_stm32_hal.o: ../Core/Inc/ssd1306_conf_template.h
+rx_433_315_hal\rx_433_stm32_hal.o: ../Core/Inc/ssd1306_fonts.h
+rx_433_315_hal\rx_433_stm32_hal.o: ../Core/Inc/ssd1306_tests.h

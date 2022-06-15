@@ -34,6 +34,9 @@ extern "C" {
 #include "rx_433_stm32_hal.h"
 #include "string.h"
 #include "stdio.h"
+#include "ssd1306.h"
+#include "ssd1306_conf_template.h"
+#include "ssd1306_tests.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

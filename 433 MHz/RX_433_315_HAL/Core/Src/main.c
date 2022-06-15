@@ -39,6 +39,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+I2C_HandleTypeDef hi2c1;
+
 IWDG_HandleTypeDef hiwdg;
 
 UART_HandleTypeDef huart1;
@@ -58,6 +60,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_IWDG_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_I2C1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -103,9 +106,13 @@ int main(void)
   MX_GPIO_Init();
   MX_IWDG_Init();
   MX_USART1_UART_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   DWT_Init();
 	HAL_UART_Transmit(&huart1,(uint8_t*)"START\r\n",strlen("START\r\n"),0x1000);
+	ssd1306_Init();
+	ssd1306_WriteString("MHXC", Font_16x26, White);	
+	ssd1306_UpdateScreen();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -115,9 +122,24 @@ int main(void)
 	  //////////////////////////////// ЧТЕНИЕ ДАННЫХ ////////////////////////////////
 	  if(listening == 1) // пришёл пакет
 	  {
-		  snprintf(str, 64, "addr: 0x%X, \t tx_addr: 0x%X, \t command: 0x%X, \t crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
+			ssd1306_Fill(Black);		  
+			snprintf(str, 64, "addr: 0x%X, \t tx_addr: 0x%X, \t command: 0x%X, \t crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
 		  HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
-
+			
+			ssd1306_SetCursor(0, 0);
+			sprintf(str, "device: %0x", dev_addr);
+			ssd1306_WriteString(str, Font_7x10, White);
+			
+			ssd1306_SetCursor(0, 11);
+			sprintf(str, "transmitter: %0x", tx_addr);
+			ssd1306_WriteString(str, Font_7x10, White);
+			
+			ssd1306_SetCursor(0, 22);
+			sprintf(str, "command: %0x", command);
+			ssd1306_WriteString(str, Font_7x10, White);
+			
+			ssd1306_UpdateScreen();
+			
 		  memset(bit_array, 0x00, SIZE_ARRAY);
 		  dev_addr = 0;
 		  tx_addr = 0;
@@ -130,6 +152,10 @@ int main(void)
 		  NVIC_ClearPendingIRQ(EXTI15_10_IRQn); // очищаем бит NVIC_ICPRx
 		  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);   // включаем прерывания 433
 		}
+		
+
+		
+		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -175,6 +201,40 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief I2C1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C1_Init(void)
+{
+
+  /* USER CODE BEGIN I2C1_Init 0 */
+
+  /* USER CODE END I2C1_Init 0 */
+
+  /* USER CODE BEGIN I2C1_Init 1 */
+
+  /* USER CODE END I2C1_Init 1 */
+  hi2c1.Instance = I2C1;
+  hi2c1.Init.ClockSpeed = 400000;
+  hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
+  hi2c1.Init.OwnAddress1 = 0;
+  hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c1.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c1.Init.OwnAddress2 = 0;
+  hi2c1.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c1.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C1_Init 2 */
+
+  /* USER CODE END I2C1_Init 2 */
+
 }
 
 /**
@@ -251,6 +311,7 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
