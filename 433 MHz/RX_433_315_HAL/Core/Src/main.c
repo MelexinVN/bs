@@ -1,18 +1,11 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
+ * Программа демонстрации приема данных с радиопульта дистанционного управления
+ * Микроконтроллер - STM32F103CBT6 (Blue Pill)
+ * Завершено 15.06.2022
+ * Автор: MelexinVN / Мелехин Владимир Николаевич 
+ * МНХС
   ******************************************************************************
   */
 /* USER CODE END Header */
@@ -46,13 +39,13 @@ IWDG_HandleTypeDef hiwdg;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-volatile uint8_t listening = 0;
-extern uint8_t bit_array[SIZE_ARRAY];
-extern uint8_t dev_addr;
-extern uint8_t tx_addr;
-extern uint8_t command;
-extern uint8_t crc;
-char str[64] = {0,};
+volatile uint8_t f_received = 0;			//флаг прихода послыки
+extern uint8_t bit_array[SIZE_ARRAY];	//массив принятых битов
+extern uint8_t dev_addr;							//адрес устройства
+extern uint8_t tx_addr;								//адрес передатчика
+extern uint8_t command;								//команда
+extern uint8_t crc;										//контрольная сумма
+char str[64] = {0};										//строка для отображения данных
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,11 +60,12 @@ static void MX_I2C1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+//процедура обработки внешнего прерывания
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(GPIO_Pin == SIGNAL_PIN)
+	if(GPIO_Pin == SIGNAL_PIN)//если изменение произошло на сигнальном пине
 	{
-		RX433_Int();
+		RX433_Int();	//запуск процедуры приема посылки
 	}
 }
 /* USER CODE END 0 */
@@ -108,10 +102,15 @@ int main(void)
   MX_USART1_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+	//инициализация счетчмодуля DWT 
   DWT_Init();
+	//отправка в порт стартовой строки
 	HAL_UART_Transmit(&huart1,(uint8_t*)"START\r\n",strlen("START\r\n"),0x1000);
+	//инициализация дисплея
 	ssd1306_Init();
+	//вывод на дисплей строки
 	ssd1306_WriteString("MHXC", Font_16x26, White);	
+	//обновление экрана
 	ssd1306_UpdateScreen();
   /* USER CODE END 2 */
 
@@ -119,47 +118,55 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  //////////////////////////////// ЧТЕНИЕ ДАННЫХ ////////////////////////////////
-	  if(listening == 1) // пришёл пакет
+	
+	  if(f_received == 1) //если пришёл пакет
 	  {
-			ssd1306_Fill(Black);		  
+			ssd1306_Fill(Black);				//очищаем экран дисплея
+			//формируем строку для отправки в порт принятых адресов, команды, контрольной суммы
 			snprintf(str, 64, "addr: 0x%X, \t tx_addr: 0x%X, \t command: 0x%X, \t crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
-		  HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
-			
+		  //отправка данных в порт
+			HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
+			//установка курсора дисплея в начало
 			ssd1306_SetCursor(0, 0);
+			//формирование строки для вывода на дисплей адреса устройства
 			sprintf(str, "device: %0x", dev_addr);
+			//отправка строки на дисплей
 			ssd1306_WriteString(str, Font_7x10, White);
 			
+			//установка курсора в начало второй строки
 			ssd1306_SetCursor(0, 11);
+			//формирование строки для вывода на дисплей адреса передатчика
 			sprintf(str, "transmitter: %0x", tx_addr);
+			//отправка строки на дисплей
 			ssd1306_WriteString(str, Font_7x10, White);
 			
+			//установка курсора в начало третьей строки
 			ssd1306_SetCursor(0, 22);
+			//формирование строки для вывода на дисплей команды
 			sprintf(str, "command: %0x", command);
+			//отправка строки на дисплей
 			ssd1306_WriteString(str, Font_7x10, White);
 			
-			ssd1306_UpdateScreen();
-			
+			ssd1306_UpdateScreen();	//обновление экрана
+						
+			//сброс значений переменных и массива битов
 		  memset(bit_array, 0x00, SIZE_ARRAY);
 		  dev_addr = 0;
 		  tx_addr = 0;
 		  command = 0;
 			crc = 0;
-			
-		  listening = 0;
+			//опускаем флаг приема
+		  f_received = 0;
 
 		  __HAL_GPIO_EXTI_CLEAR_IT(SIGNAL_PIN);  // очищаем бит EXTI_PR
 		  NVIC_ClearPendingIRQ(EXTI15_10_IRQn); // очищаем бит NVIC_ICPRx
 		  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);   // включаем прерывания 433
 		}
 		
-
-		
-		
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		HAL_IWDG_Refresh(&hiwdg);
+		HAL_IWDG_Refresh(&hiwdg);	//сброс сторожевого таймера
   }
   /* USER CODE END 3 */
 }
