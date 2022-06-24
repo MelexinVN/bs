@@ -1,0 +1,10 @@
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.csproj.AssemblyReference.cache
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.Properties.Resources.resources
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.csproj.GenerateResource.cache
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.csproj.CoreCompileInputs.cache
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\bin\Debug\uart_nrf_firm_loader.exe.config
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\bin\Debug\uart_nrf_firm_loader.exe
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\bin\Debug\uart_nrf_firm_loader.pdb
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.exe
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\uart_nrf_firm_loader.pdb
+f:\melexin\GitHub\bs\visual\uart_nrf_firm_loader\obj\Debug\WindowsFormsApp1.Form1.resources

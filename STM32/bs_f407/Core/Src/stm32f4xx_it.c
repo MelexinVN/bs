@@ -49,6 +49,7 @@ volatile uint8_t byte_counter = 0;
 //extern char str[32];
 char rx_str[UART_RX_BUFFER_SIZE] = {0};
 volatile uint8_t f_uart_rec = 0;
+volatile uint8_t f_update_rec;	
 volatile int command = 0;
 volatile int led_st = 0;
 volatile int rec_cmnd = 0;
@@ -261,6 +262,29 @@ void USART1_IRQHandler(void)
 	  {
 			LL_USART_DisableIT_RXNE(USART1);
 			char in_char = LL_USART_ReceiveData8(USART1);	
+			
+			
+			
+			if (in_char == ':') 									//если начало строки
+			{
+				rx_counter = 0;											//обнуляем счетчик 
+			}
+			
+			else 
+			{
+				rx_str[rx_counter] = in_char;
+				rx_counter++;		
+			}
+			
+			if (in_char == ';')
+			{
+				rx_str[rx_counter] = 0x00;
+				rx_counter = 0;
+				f_update_rec = 1;
+			}
+			
+			
+			
 			if (in_char == '#') 									//если начало посылки
 			{
 				byte_counter = 0;										//обнуляем счетчик байтов

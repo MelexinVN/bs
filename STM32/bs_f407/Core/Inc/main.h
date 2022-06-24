@@ -109,7 +109,7 @@ void USART_TX (uint8_t* dt, uint16_t sz);
 
 #define STR_SIZE 							64					//размер строки
 #define NUM_OF_BUTS 					20				//количество кнопок
-#define UART_RX_BUFFER_SIZE   32					//размер приемного буфера
+#define UART_RX_BUFFER_SIZE   64					//размер приемного буфера
 #define MAX_TIME 							4294967295	//максимальное значение времени
 #define NOT_PUSH_CMD					0xFFFFFFFF	//посылка от ненажатой кнопки
 

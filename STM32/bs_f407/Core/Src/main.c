@@ -54,10 +54,13 @@ uint8_t but_counter = 0;													//переменная для перебора кнопок
 uint8_t f_push_rst = 0;														//флаг нажатия кнопки сброса
 uint32_t min_time = MAX_TIME;											//переменная для поиска минимального значения времени 
 extern volatile uint8_t f_uart_rec;								//флаг приема по уарту
+extern volatile uint8_t f_update_rec;							//флаг приема по уарту
 uint8_t f_first_push = 0;													//флаг первого нажатия
 uint8_t j_min = 0;																//индекс минимального значения в массиве
 uint8_t f_rec_proc = 0;														//
-	
+uint8_t firm_update = 0;
+uint16_t string_counter = 0;
+uint8_t ready_to_update = 0;
 	/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,6 +85,37 @@ void USART_TX (uint8_t* dt, uint16_t sz)					//
     LL_USART_TransmitData8(USART1,*(uint8_t*)(dt+ind));
     ind++;
   }
+}
+
+void update_receive(void)
+{
+	if (f_update_rec)					
+	{					
+		LL_mDelay(10);		
+		if (firm_update)
+		{
+			string_counter++;
+			sprintf(str,"ZNS%05u\r\n",string_counter);		//отправляем запрос очередной строки
+			USART_TX((uint8_t*)str,strlen(str));
+		}	
+		else if (ready_to_update)
+		{
+			if (rx_str[0] == '!')	
+			{
+				firm_update = 1;
+				sprintf(str,"ZNS%05u\r\n",string_counter);		//отправляем запрос очередной строки
+				USART_TX((uint8_t*)str,strlen(str));
+			}
+		}
+		else if (rx_str[0] == '!')	
+		{
+			sprintf(str,"RTL\r\n");	
+			USART_TX((uint8_t*)str,strlen(str));
+			ready_to_update = 1;
+		}
+		LL_mDelay(10);	
+		f_update_rec = 0;
+	}
 }
 
 //Процедура приема данных по уарту
@@ -224,7 +258,7 @@ int main(void)
   while (1)
   {
 		nrf24l01_receive();			//процедура приема данных радиомодуля
-		
+		update_receive();
 		//обработка команды сброса
 		if ((f_push_rst) || (rec_cmnd == 255)) 		
 		{//если нажата кнопка сброса или пршла команда сброса
