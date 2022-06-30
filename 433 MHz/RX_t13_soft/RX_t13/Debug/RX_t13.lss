@@ -1,0 +1,648 @@
+
+RX_t13.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         00000334  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000003a8  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000028  00800060  00800060  000003a8  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000003a8  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000003d8  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000058  00000000  00000000  00000414  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   000007cc  00000000  00000000  0000046c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000053d  00000000  00000000  00000c38  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   000004b9  00000000  00000000  00001175  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000000f4  00000000  00000000  00001630  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    00000366  00000000  00000000  00001724  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000003c7  00000000  00000000  00001a8a  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000038  00000000  00000000  00001e51  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	16 c0       	rjmp	.+44     	; 0x30 <__bad_interrupt>
+   4:	16 c0       	rjmp	.+44     	; 0x32 <__vector_2>
+   6:	14 c0       	rjmp	.+40     	; 0x30 <__bad_interrupt>
+   8:	13 c0       	rjmp	.+38     	; 0x30 <__bad_interrupt>
+   a:	12 c0       	rjmp	.+36     	; 0x30 <__bad_interrupt>
+   c:	35 c0       	rjmp	.+106    	; 0x78 <__vector_6>
+   e:	10 c0       	rjmp	.+32     	; 0x30 <__bad_interrupt>
+  10:	0f c0       	rjmp	.+30     	; 0x30 <__bad_interrupt>
+  12:	0e c0       	rjmp	.+28     	; 0x30 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+
+0000001c <__do_clear_bss>:
+  1c:	20 e0       	ldi	r18, 0x00	; 0
+  1e:	a0 e6       	ldi	r26, 0x60	; 96
+  20:	b0 e0       	ldi	r27, 0x00	; 0
+  22:	01 c0       	rjmp	.+2      	; 0x26 <.do_clear_bss_start>
+
+00000024 <.do_clear_bss_loop>:
+  24:	1d 92       	st	X+, r1
+
+00000026 <.do_clear_bss_start>:
+  26:	a8 38       	cpi	r26, 0x88	; 136
+  28:	b2 07       	cpc	r27, r18
+  2a:	e1 f7       	brne	.-8      	; 0x24 <.do_clear_bss_loop>
+  2c:	56 d0       	rcall	.+172    	; 0xda <main>
+  2e:	80 c1       	rjmp	.+768    	; 0x330 <_exit>
+
+00000030 <__bad_interrupt>:
+  30:	e7 cf       	rjmp	.-50     	; 0x0 <__vectors>
+
+00000032 <__vector_2>:
+extern uint8_t crc;							//контрольная сумма
+volatile uint32_t ten_micros = 0;							//
+
+
+ISR(PCINT0_vect)
+{
+  32:	1f 92       	push	r1
+  34:	0f 92       	push	r0
+  36:	0f b6       	in	r0, 0x3f	; 63
+  38:	0f 92       	push	r0
+  3a:	11 24       	eor	r1, r1
+  3c:	2f 93       	push	r18
+  3e:	3f 93       	push	r19
+  40:	4f 93       	push	r20
+  42:	5f 93       	push	r21
+  44:	6f 93       	push	r22
+  46:	7f 93       	push	r23
+  48:	8f 93       	push	r24
+  4a:	9f 93       	push	r25
+  4c:	af 93       	push	r26
+  4e:	bf 93       	push	r27
+  50:	ef 93       	push	r30
+  52:	ff 93       	push	r31
+	RX_Input();
+  54:	9e d0       	rcall	.+316    	; 0x192 <RX_Input>
+}
+  56:	ff 91       	pop	r31
+  58:	ef 91       	pop	r30
+  5a:	bf 91       	pop	r27
+  5c:	af 91       	pop	r26
+  5e:	9f 91       	pop	r25
+  60:	8f 91       	pop	r24
+  62:	7f 91       	pop	r23
+  64:	6f 91       	pop	r22
+  66:	5f 91       	pop	r21
+  68:	4f 91       	pop	r20
+  6a:	3f 91       	pop	r19
+  6c:	2f 91       	pop	r18
+  6e:	0f 90       	pop	r0
+  70:	0f be       	out	0x3f, r0	; 63
+  72:	0f 90       	pop	r0
+  74:	1f 90       	pop	r1
+  76:	18 95       	reti
+
+00000078 <__vector_6>:
+
+ISR(TIM0_COMPA_vect)
+{
+  78:	1f 92       	push	r1
+  7a:	0f 92       	push	r0
+  7c:	0f b6       	in	r0, 0x3f	; 63
+  7e:	0f 92       	push	r0
+  80:	11 24       	eor	r1, r1
+  82:	8f 93       	push	r24
+  84:	9f 93       	push	r25
+  86:	af 93       	push	r26
+  88:	bf 93       	push	r27
+	ten_micros++;
+  8a:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+  8e:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <_edata+0x1>
+  92:	a0 91 62 00 	lds	r26, 0x0062	; 0x800062 <_edata+0x2>
+  96:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <_edata+0x3>
+  9a:	01 96       	adiw	r24, 0x01	; 1
+  9c:	a1 1d       	adc	r26, r1
+  9e:	b1 1d       	adc	r27, r1
+  a0:	80 93 60 00 	sts	0x0060, r24	; 0x800060 <_edata>
+  a4:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <_edata+0x1>
+  a8:	a0 93 62 00 	sts	0x0062, r26	; 0x800062 <_edata+0x2>
+  ac:	b0 93 63 00 	sts	0x0063, r27	; 0x800063 <_edata+0x3>
+}
+  b0:	bf 91       	pop	r27
+  b2:	af 91       	pop	r26
+  b4:	9f 91       	pop	r25
+  b6:	8f 91       	pop	r24
+  b8:	0f 90       	pop	r0
+  ba:	0f be       	out	0x3f, r0	; 63
+  bc:	0f 90       	pop	r0
+  be:	1f 90       	pop	r1
+  c0:	18 95       	reti
+
+000000c2 <react>:
+
+void react(void)
+{
+	LED_ON();
+  c2:	c4 9a       	sbi	0x18, 4	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  c4:	2f ef       	ldi	r18, 0xFF	; 255
+  c6:	8d ee       	ldi	r24, 0xED	; 237
+  c8:	92 e0       	ldi	r25, 0x02	; 2
+  ca:	21 50       	subi	r18, 0x01	; 1
+  cc:	80 40       	sbci	r24, 0x00	; 0
+  ce:	90 40       	sbci	r25, 0x00	; 0
+  d0:	e1 f7       	brne	.-8      	; 0xca <react+0x8>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <react+0x12>
+  d4:	00 00       	nop
+	_delay_ms(100);
+	LED_OFF();
+  d6:	c4 98       	cbi	0x18, 4	; 24
+  d8:	08 95       	ret
+
+000000da <main>:
+int main(void)
+{
+	// Input/Output Ports initialization
+	// Port B initialization
+	// Function: Bit5=In Bit4=Out Bit3=In Bit2=In Bit1=In Bit0=In
+	DDRB=(0<<DDB5) | (1<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
+  da:	80 e1       	ldi	r24, 0x10	; 16
+  dc:	87 bb       	out	0x17, r24	; 23
+	// State: Bit5=T Bit4=0 Bit3=T Bit2=T Bit1=T Bit0=T
+	PORTB=(0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
+  de:	18 ba       	out	0x18, r1	; 24
+	// Clock value: 9600,000 kHz
+	// Mode: CTC top=OCR0A
+	// OC0A output: Disconnected
+	// OC0B output: Disconnected
+	// Timer Period: 10 us
+	TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (1<<WGM01) | (0<<WGM00);
+  e0:	82 e0       	ldi	r24, 0x02	; 2
+  e2:	8f bd       	out	0x2f, r24	; 47
+	TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (1<<CS00);
+  e4:	81 e0       	ldi	r24, 0x01	; 1
+  e6:	83 bf       	out	0x33, r24	; 51
+	TCNT0=0x00;
+  e8:	12 be       	out	0x32, r1	; 50
+	OCR0A=0x5F;
+  ea:	8f e5       	ldi	r24, 0x5F	; 95
+  ec:	86 bf       	out	0x36, r24	; 54
+	OCR0B=0x00;
+  ee:	19 bc       	out	0x29, r1	; 41
+
+	// Timer/Counter 0 Interrupt(s) initialization
+	TIMSK0=(0<<OCIE0B) | (1<<OCIE0A) | (0<<TOIE0);
+  f0:	84 e0       	ldi	r24, 0x04	; 4
+  f2:	89 bf       	out	0x39, r24	; 57
+
+	// External Interrupt(s) initialization
+	// INT0: Off
+	// Interrupt on any change on pins PCINT0-5: On
+	GIMSK=(0<<INT0) | (1<<PCIE);
+  f4:	80 e2       	ldi	r24, 0x20	; 32
+  f6:	8b bf       	out	0x3b, r24	; 59
+	MCUCR=(0<<ISC01) | (0<<ISC00);
+  f8:	15 be       	out	0x35, r1	; 53
+	PCMSK=(0<<PCINT5) | (0<<PCINT4) | (1<<PCINT3) | (0<<PCINT2) | (0<<PCINT1) | (0<<PCINT0);
+  fa:	98 e0       	ldi	r25, 0x08	; 8
+  fc:	95 bb       	out	0x15, r25	; 21
+	GIFR=(0<<INTF0) | (1<<PCIF);
+  fe:	8a bf       	out	0x3a, r24	; 58
+__attribute__ ((__always_inline__))
+void wdt_enable (const uint8_t value)
+{
+	if (_SFR_IO_REG_P (_WD_CONTROL_REG))
+	{
+		__asm__ __volatile__ (
+ 100:	99 e2       	ldi	r25, 0x29	; 41
+ 102:	88 e1       	ldi	r24, 0x18	; 24
+ 104:	0f b6       	in	r0, 0x3f	; 63
+ 106:	f8 94       	cli
+ 108:	a8 95       	wdr
+ 10a:	81 bd       	out	0x21, r24	; 33
+ 10c:	0f be       	out	0x3f, r0	; 63
+ 10e:	91 bd       	out	0x21, r25	; 33
+
+	wdt_enable(WDTO_8S);
+	react();
+ 110:	d8 df       	rcall	.-80     	; 0xc2 <react>
+ 112:	2f ef       	ldi	r18, 0xFF	; 255
+ 114:	86 e7       	ldi	r24, 0x76	; 118
+ 116:	91 e0       	ldi	r25, 0x01	; 1
+ 118:	21 50       	subi	r18, 0x01	; 1
+ 11a:	80 40       	sbci	r24, 0x00	; 0
+ 11c:	90 40       	sbci	r25, 0x00	; 0
+ 11e:	e1 f7       	brne	.-8      	; 0x118 <main+0x3e>
+ 120:	00 c0       	rjmp	.+0      	; 0x122 <main+0x48>
+ 122:	00 00       	nop
+	_delay_ms(50);
+	react();
+ 124:	ce df       	rcall	.-100    	; 0xc2 <react>
+ 126:	af ef       	ldi	r26, 0xFF	; 255
+ 128:	b6 e7       	ldi	r27, 0x76	; 118
+ 12a:	21 e0       	ldi	r18, 0x01	; 1
+ 12c:	a1 50       	subi	r26, 0x01	; 1
+ 12e:	b0 40       	sbci	r27, 0x00	; 0
+ 130:	20 40       	sbci	r18, 0x00	; 0
+ 132:	e1 f7       	brne	.-8      	; 0x12c <main+0x52>
+ 134:	00 c0       	rjmp	.+0      	; 0x136 <main+0x5c>
+ 136:	00 00       	nop
+	_delay_ms(50);
+	react();
+ 138:	c4 df       	rcall	.-120    	; 0xc2 <react>
+ 13a:	8f ef       	ldi	r24, 0xFF	; 255
+ 13c:	96 e7       	ldi	r25, 0x76	; 118
+ 13e:	a1 e0       	ldi	r26, 0x01	; 1
+ 140:	81 50       	subi	r24, 0x01	; 1
+ 142:	90 40       	sbci	r25, 0x00	; 0
+ 144:	a0 40       	sbci	r26, 0x00	; 0
+ 146:	e1 f7       	brne	.-8      	; 0x140 <main+0x66>
+ 148:	00 c0       	rjmp	.+0      	; 0x14a <main+0x70>
+ 14a:	00 00       	nop
+	_delay_ms(50);
+
+	sei();
+ 14c:	78 94       	sei
+		{
+			LED_ON();	
+			//if ((dev_addr == 0xBB) && (tx_addr == 0xAA))	
+			//react();
+			//сброс значений переменных и массива битов
+			memset(bit_array, 0x00, SIZE_ARRAY);
+ 14e:	ef e6       	ldi	r30, 0x6F	; 111
+ 150:	f0 e0       	ldi	r31, 0x00	; 0
+ 152:	88 e1       	ldi	r24, 0x18	; 24
+
+	sei();
+
+    while (1) 
+    {
+		if(f_received == 1) //если пришёл пакет
+ 154:	90 91 64 00 	lds	r25, 0x0064	; 0x800064 <f_received>
+ 158:	91 30       	cpi	r25, 0x01	; 1
+ 15a:	c9 f4       	brne	.+50     	; 0x18e <main+0xb4>
+		{
+			LED_ON();	
+ 15c:	c4 9a       	sbi	0x18, 4	; 24
+			//if ((dev_addr == 0xBB) && (tx_addr == 0xAA))	
+			//react();
+			//сброс значений переменных и массива битов
+			memset(bit_array, 0x00, SIZE_ARRAY);
+ 15e:	df 01       	movw	r26, r30
+ 160:	28 2f       	mov	r18, r24
+ 162:	1d 92       	st	X+, r1
+ 164:	2a 95       	dec	r18
+ 166:	e9 f7       	brne	.-6      	; 0x162 <main+0x88>
+			dev_addr = 0;
+ 168:	10 92 6e 00 	sts	0x006E, r1	; 0x80006e <dev_addr>
+			tx_addr = 0;
+ 16c:	10 92 6d 00 	sts	0x006D, r1	; 0x80006d <tx_addr>
+			command = 0;
+ 170:	10 92 6c 00 	sts	0x006C, r1	; 0x80006c <command>
+			crc = 0;
+ 174:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <crc>
+			ten_micros = 0;
+ 178:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+ 17c:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <_edata+0x1>
+ 180:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <_edata+0x2>
+ 184:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <_edata+0x3>
+			//опускаем флаг приема
+			f_received = 0;
+ 188:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <f_received>
+			sei();   // включаем прерывания 
+ 18c:	78 94       	sei
+		LED_ON();
+		_delay_ms(50);
+		LED_OFF();
+		_delay_ms(50);
+		*/
+		wdt_reset();
+ 18e:	a8 95       	wdr
+
+    }
+ 190:	e1 cf       	rjmp	.-62     	; 0x154 <main+0x7a>
+
+00000192 <RX_Input>:
+uint8_t bit_counter = 0;							//счетчик битов
+extern uint32_t ten_micros;
+
+//процедура приема посылки (запускается по внешнему прерыванию)
+void RX_Input()
+{
+ 192:	cf 92       	push	r12
+ 194:	df 92       	push	r13
+ 196:	ef 92       	push	r14
+ 198:	ff 92       	push	r15
+
+	wdt_reset();
+ 19a:	a8 95       	wdr
+	//получаем текущее значение микросекунд
+	uint32_t cur_timestamp = ten_micros;
+ 19c:	c0 90 60 00 	lds	r12, 0x0060	; 0x800060 <_edata>
+ 1a0:	d0 90 61 00 	lds	r13, 0x0061	; 0x800061 <_edata+0x1>
+ 1a4:	e0 90 62 00 	lds	r14, 0x0062	; 0x800062 <_edata+0x2>
+ 1a8:	f0 90 63 00 	lds	r15, 0x0063	; 0x800063 <_edata+0x3>
+	//определение текущего состояния входа
+	uint8_t  cur_status = (RF_PIN_Port & (1<<RF_IN_Pin));
+ 1ac:	86 b3       	in	r24, 0x16	; 22
+	//определение длительности прошедшего интервала
+	uint32_t pulse_duration = (cur_timestamp - last_change)*10;
+ 1ae:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <last_change>
+ 1b2:	90 91 67 00 	lds	r25, 0x0067	; 0x800067 <last_change+0x1>
+ 1b6:	a0 91 68 00 	lds	r26, 0x0068	; 0x800068 <last_change+0x2>
+ 1ba:	b0 91 69 00 	lds	r27, 0x0069	; 0x800069 <last_change+0x3>
+ 1be:	a7 01       	movw	r20, r14
+ 1c0:	96 01       	movw	r18, r12
+ 1c2:	28 1b       	sub	r18, r24
+ 1c4:	39 0b       	sbc	r19, r25
+ 1c6:	4a 0b       	sbc	r20, r26
+ 1c8:	5b 0b       	sbc	r21, r27
+ 1ca:	ca 01       	movw	r24, r20
+ 1cc:	b9 01       	movw	r22, r18
+ 1ce:	2a e0       	ldi	r18, 0x0A	; 10
+ 1d0:	30 e0       	ldi	r19, 0x00	; 0
+ 1d2:	40 e0       	ldi	r20, 0x00	; 0
+ 1d4:	50 e0       	ldi	r21, 0x00	; 0
+ 1d6:	93 d0       	rcall	.+294    	; 0x2fe <__mulsi3>
+	//сохраняем значение времени
+	last_change = cur_timestamp;
+ 1d8:	c0 92 66 00 	sts	0x0066, r12	; 0x800066 <last_change>
+ 1dc:	d0 92 67 00 	sts	0x0067, r13	; 0x800067 <last_change+0x1>
+ 1e0:	e0 92 68 00 	sts	0x0068, r14	; 0x800068 <last_change+0x2>
+ 1e4:	f0 92 69 00 	sts	0x0069, r15	; 0x800069 <last_change+0x3>
+	//если преамбулы еще не было
+	if(preamble_count < PREAM_NUM_IMP)
+ 1e8:	20 91 6a 00 	lds	r18, 0x006A	; 0x80006a <preamble_count>
+ 1ec:	28 30       	cpi	r18, 0x08	; 8
+ 1ee:	b8 f4       	brcc	.+46     	; 0x21e <RX_Input+0x8c>
+				return;								//выход из подпрограммы
+			}
+		}
+		else		//если прошедший импульс был 1
+		{//если длительность в нужных пределах
+			if((PREAM_IMP_DUR - INTERVAL < pulse_duration) && (pulse_duration < PREAM_IMP_DUR + INTERVAL))
+ 1f0:	6b 01       	movw	r12, r22
+ 1f2:	7c 01       	movw	r14, r24
+ 1f4:	35 ef       	ldi	r19, 0xF5	; 245
+ 1f6:	c3 1a       	sub	r12, r19
+ 1f8:	31 e0       	ldi	r19, 0x01	; 1
+ 1fa:	d3 0a       	sbc	r13, r19
+ 1fc:	e1 08       	sbc	r14, r1
+ 1fe:	f1 08       	sbc	r15, r1
+ 200:	47 ee       	ldi	r20, 0xE7	; 231
+ 202:	c4 16       	cp	r12, r20
+ 204:	43 e0       	ldi	r20, 0x03	; 3
+ 206:	d4 06       	cpc	r13, r20
+ 208:	e1 04       	cpc	r14, r1
+ 20a:	f1 04       	cpc	r15, r1
+ 20c:	e0 f4       	brcc	.+56     	; 0x246 <RX_Input+0xb4>
+			{//пришел первый импульс преамбулы
+				preamble_count++;																					//считаем импульс преамбулы
+ 20e:	2f 5f       	subi	r18, 0xFF	; 255
+ 210:	20 93 6a 00 	sts	0x006A, r18	; 0x80006a <preamble_count>
+
+				if(preamble_count == PREAM_NUM_IMP)												//если пришел последний импульс преамбулы
+ 214:	28 30       	cpi	r18, 0x08	; 8
+ 216:	19 f4       	brne	.+6      	; 0x21e <RX_Input+0x8c>
+				{
+					bit_counter = 0;				//обнуляем счетчик битов
+ 218:	10 92 65 00 	sts	0x0065, r1	; 0x800065 <bit_counter>
+					return;									//выход из подпрограммы
+ 21c:	6b c0       	rjmp	.+214    	; 0x2f4 <RX_Input+0x162>
+				return;										//выход из подпрограммы
+			}
+		}
+	}
+
+	if(preamble_count == PREAM_NUM_IMP)		//если приамбула принята полностью
+ 21e:	20 91 6a 00 	lds	r18, 0x006A	; 0x80006a <preamble_count>
+ 222:	28 30       	cpi	r18, 0x08	; 8
+ 224:	09 f0       	breq	.+2      	; 0x228 <RX_Input+0x96>
+ 226:	66 c0       	rjmp	.+204    	; 0x2f4 <RX_Input+0x162>
+				return;								//выход из подпрограммы
+			}
+		}
+		else	//если предыдущий импульс был 1
+		{			//если импульс в диапазоне
+			if((ZERO_DUR - INTERVAL < pulse_duration) && (pulse_duration < ONE_DUR + INTERVAL))
+ 228:	6b 01       	movw	r12, r22
+ 22a:	7c 01       	movw	r14, r24
+ 22c:	55 ef       	ldi	r21, 0xF5	; 245
+ 22e:	c5 1a       	sub	r12, r21
+ 230:	51 e0       	ldi	r21, 0x01	; 1
+ 232:	d5 0a       	sbc	r13, r21
+ 234:	e1 08       	sbc	r14, r1
+ 236:	f1 08       	sbc	r15, r1
+ 238:	27 eb       	ldi	r18, 0xB7	; 183
+ 23a:	c2 16       	cp	r12, r18
+ 23c:	2b e0       	ldi	r18, 0x0B	; 11
+ 23e:	d2 06       	cpc	r13, r18
+ 240:	e1 04       	cpc	r14, r1
+ 242:	f1 04       	cpc	r15, r1
+ 244:	18 f0       	brcs	.+6      	; 0x24c <RX_Input+0xba>
+					return;									//выход из подпрограммы
+				}
+			}
+			else												//если пришедший импульс выбивается из диапазона
+			{
+				preamble_count = 0;				//обнуляем счетчик импульсов преамбулы
+ 246:	10 92 6a 00 	sts	0x006A, r1	; 0x80006a <preamble_count>
+				return;										//выход из подпрограммы
+ 24a:	54 c0       	rjmp	.+168    	; 0x2f4 <RX_Input+0x162>
+		else	//если предыдущий импульс был 1
+		{			//если импульс в диапазоне
+			if((ZERO_DUR - INTERVAL < pulse_duration) && (pulse_duration < ONE_DUR + INTERVAL))
+			{	//если импульс короткий, записываем в массив 0, если длинный - 1
+				
+				bit_array[SIZE_ARRAY - bit_counter - 1] = (pulse_duration < DURATION) ? 0 : 1;
+ 24c:	20 91 65 00 	lds	r18, 0x0065	; 0x800065 <bit_counter>
+ 250:	e7 e1       	ldi	r30, 0x17	; 23
+ 252:	f0 e0       	ldi	r31, 0x00	; 0
+ 254:	e2 1b       	sub	r30, r18
+ 256:	f1 09       	sbc	r31, r1
+ 258:	31 e0       	ldi	r19, 0x01	; 1
+ 25a:	60 3d       	cpi	r22, 0xD0	; 208
+ 25c:	77 40       	sbci	r23, 0x07	; 7
+ 25e:	81 05       	cpc	r24, r1
+ 260:	91 05       	cpc	r25, r1
+ 262:	08 f4       	brcc	.+2      	; 0x266 <RX_Input+0xd4>
+ 264:	30 e0       	ldi	r19, 0x00	; 0
+ 266:	e1 59       	subi	r30, 0x91	; 145
+ 268:	ff 4f       	sbci	r31, 0xFF	; 255
+ 26a:	30 83       	st	Z, r19
+
+				if (bit_counter >= 7) LED_ON();
+ 26c:	27 30       	cpi	r18, 0x07	; 7
+ 26e:	08 f0       	brcs	.+2      	; 0x272 <RX_Input+0xe0>
+ 270:	c4 9a       	sbi	0x18, 4	; 24
+
+				bit_counter++;		//считаем импульс
+ 272:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <bit_counter>
+ 276:	8f 5f       	subi	r24, 0xFF	; 255
+ 278:	80 93 65 00 	sts	0x0065, r24	; 0x800065 <bit_counter>
+				
+
+
+				if (bit_counter == SIZE_ARRAY)	//если приняты все байты
+ 27c:	88 31       	cpi	r24, 0x18	; 24
+ 27e:	d1 f5       	brne	.+116    	; 0x2f4 <RX_Input+0x162>
+ 280:	40 91 6b 00 	lds	r20, 0x006B	; 0x80006b <crc>
+ 284:	80 e0       	ldi	r24, 0x00	; 0
+ 286:	90 e0       	ldi	r25, 0x00	; 0
+				{
+					//сохранение адреса устройства
+					for(uint8_t i = 0; i < 8; i++)		//8 раз
+					{//сдвигаем значение влево и прибавляем текущее значение бита
+						crc = (crc << 1) + bit_array[i];
+ 288:	fc 01       	movw	r30, r24
+ 28a:	e1 59       	subi	r30, 0x91	; 145
+ 28c:	ff 4f       	sbci	r31, 0xFF	; 255
+ 28e:	20 81       	ld	r18, Z
+ 290:	44 0f       	add	r20, r20
+ 292:	42 0f       	add	r20, r18
+ 294:	01 96       	adiw	r24, 0x01	; 1
+
+
+				if (bit_counter == SIZE_ARRAY)	//если приняты все байты
+				{
+					//сохранение адреса устройства
+					for(uint8_t i = 0; i < 8; i++)		//8 раз
+ 296:	88 30       	cpi	r24, 0x08	; 8
+ 298:	91 05       	cpc	r25, r1
+ 29a:	b1 f7       	brne	.-20     	; 0x288 <RX_Input+0xf6>
+ 29c:	40 93 6b 00 	sts	0x006B, r20	; 0x80006b <crc>
+ 2a0:	50 91 6c 00 	lds	r21, 0x006C	; 0x80006c <command>
+					}
+					
+					//сохранение адреса передатчика
+					for(uint8_t i = 8; i < 16; i++)
+					{//сдвигаем значение влево и прибавляем текущее значение бита
+						command = (command << 1) + bit_array[i];
+ 2a4:	fc 01       	movw	r30, r24
+ 2a6:	e1 59       	subi	r30, 0x91	; 145
+ 2a8:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2aa:	30 81       	ld	r19, Z
+ 2ac:	25 2f       	mov	r18, r21
+ 2ae:	22 0f       	add	r18, r18
+ 2b0:	52 2f       	mov	r21, r18
+ 2b2:	53 0f       	add	r21, r19
+ 2b4:	01 96       	adiw	r24, 0x01	; 1
+					{//сдвигаем значение влево и прибавляем текущее значение бита
+						crc = (crc << 1) + bit_array[i];
+					}
+					
+					//сохранение адреса передатчика
+					for(uint8_t i = 8; i < 16; i++)
+ 2b6:	80 31       	cpi	r24, 0x10	; 16
+ 2b8:	91 05       	cpc	r25, r1
+ 2ba:	a1 f7       	brne	.-24     	; 0x2a4 <RX_Input+0x112>
+ 2bc:	50 93 6c 00 	sts	0x006C, r21	; 0x80006c <command>
+ 2c0:	20 91 6e 00 	lds	r18, 0x006E	; 0x80006e <dev_addr>
+					}*/
+					
+					//for(uint8_t i = 24; i < 32; i++)
+					for(uint8_t i = 16; i < 24; i++)
+					{//сдвигаем значение влево и прибавляем текущее значение бита
+						dev_addr = (dev_addr << 1) + bit_array[i];
+ 2c4:	fc 01       	movw	r30, r24
+ 2c6:	e1 59       	subi	r30, 0x91	; 145
+ 2c8:	ff 4f       	sbci	r31, 0xFF	; 255
+ 2ca:	60 81       	ld	r22, Z
+ 2cc:	32 2f       	mov	r19, r18
+ 2ce:	33 0f       	add	r19, r19
+ 2d0:	23 2f       	mov	r18, r19
+ 2d2:	26 0f       	add	r18, r22
+ 2d4:	01 96       	adiw	r24, 0x01	; 1
+					{//сдвигаем значение влево и прибавляем текущее значение бита
+						tx_addr = (tx_addr << 1) + bit_array[i];
+					}*/
+					
+					//for(uint8_t i = 24; i < 32; i++)
+					for(uint8_t i = 16; i < 24; i++)
+ 2d6:	88 31       	cpi	r24, 0x18	; 24
+ 2d8:	91 05       	cpc	r25, r1
+ 2da:	a1 f7       	brne	.-24     	; 0x2c4 <RX_Input+0x132>
+ 2dc:	20 93 6e 00 	sts	0x006E, r18	; 0x80006e <dev_addr>
+					}
+					
+					uint8_t crc_calc = 0;		//переменная для расчета контрольной суммы
+					//расчет контрольной суммы
+					//crc_calc = (uint8_t)(dev_addr + tx_addr + command);
+					crc_calc = (uint8_t)(dev_addr + command);
+ 2e0:	25 0f       	add	r18, r21
+					crc_calc = ~crc_calc + 1;
+					preamble_count = 0;//обнуляем счетчик преамбулы
+ 2e2:	10 92 6a 00 	sts	0x006A, r1	; 0x80006a <preamble_count>
+					//сравниваем принятую и рассчитанную контрольные суммы
+					if (crc == crc_calc) f_received = 1;	//поднимаем флаг приема
+ 2e6:	21 95       	neg	r18
+ 2e8:	42 13       	cpse	r20, r18
+ 2ea:	03 c0       	rjmp	.+6      	; 0x2f2 <RX_Input+0x160>
+ 2ec:	81 e0       	ldi	r24, 0x01	; 1
+ 2ee:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <f_received>
+
+					cli(); 	// отключаем прерывания 
+ 2f2:	f8 94       	cli
+				preamble_count = 0;	//обнуляем счетчик преамбулы
+				return;							//выход из подпрограммы
+			}
+		}
+	}
+}
+ 2f4:	ff 90       	pop	r15
+ 2f6:	ef 90       	pop	r14
+ 2f8:	df 90       	pop	r13
+ 2fa:	cf 90       	pop	r12
+ 2fc:	08 95       	ret
+
+000002fe <__mulsi3>:
+ 2fe:	ee 27       	eor	r30, r30
+ 300:	ff 27       	eor	r31, r31
+
+00000302 <__mulsi3_helper>:
+ 302:	aa 27       	eor	r26, r26
+ 304:	bb 27       	eor	r27, r27
+ 306:	08 c0       	rjmp	.+16     	; 0x318 <__mulsi3_helper+0x16>
+ 308:	a2 0f       	add	r26, r18
+ 30a:	b3 1f       	adc	r27, r19
+ 30c:	e4 1f       	adc	r30, r20
+ 30e:	f5 1f       	adc	r31, r21
+ 310:	22 0f       	add	r18, r18
+ 312:	33 1f       	adc	r19, r19
+ 314:	44 1f       	adc	r20, r20
+ 316:	55 1f       	adc	r21, r21
+ 318:	96 95       	lsr	r25
+ 31a:	87 95       	ror	r24
+ 31c:	77 95       	ror	r23
+ 31e:	67 95       	ror	r22
+ 320:	98 f3       	brcs	.-26     	; 0x308 <__mulsi3_helper+0x6>
+ 322:	70 40       	sbci	r23, 0x00	; 0
+ 324:	a9 f7       	brne	.-22     	; 0x310 <__mulsi3_helper+0xe>
+ 326:	00 97       	sbiw	r24, 0x00	; 0
+ 328:	99 f7       	brne	.-26     	; 0x310 <__mulsi3_helper+0xe>
+ 32a:	bd 01       	movw	r22, r26
+ 32c:	cf 01       	movw	r24, r30
+ 32e:	08 95       	ret
+
+00000330 <_exit>:
+ 330:	f8 94       	cli
+
+00000332 <__stop_program>:
+ 332:	ff cf       	rjmp	.-2      	; 0x332 <__stop_program>

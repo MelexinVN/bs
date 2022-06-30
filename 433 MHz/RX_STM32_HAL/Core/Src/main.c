@@ -65,7 +65,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == SIGNAL_PIN)//если изменение произошло на сигнальном пине
 	{
-		RX433_Int();	//запуск процедуры приема посылки
+		RX_Input();	//запуск процедуры приема посылки
 	}
 }
 /* USER CODE END 0 */
@@ -107,11 +107,11 @@ int main(void)
 	//отправка в порт стартовой строки
 	HAL_UART_Transmit(&huart1,(uint8_t*)"START\r\n",strlen("START\r\n"),0x1000);
 	//инициализация дисплея
-	ssd1306_Init();
+	//ssd1306_Init();
 	//вывод на дисплей строки
-	ssd1306_WriteString("MHXC", Font_16x26, White);	
+	//ssd1306_WriteString("MHXC", Font_16x26, White);	
 	//обновление экрана
-	ssd1306_UpdateScreen();
+	//ssd1306_UpdateScreen();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -121,33 +121,33 @@ int main(void)
 	
 	  if(f_received == 1) //если пришёл пакет
 	  {
-			ssd1306_Fill(Black);				//очищаем экран дисплея
+			//ssd1306_Fill(Black);				//очищаем экран дисплея
 			//формируем строку для отправки в порт принятых адресов, команды, контрольной суммы
 			snprintf(str, 64, "addr: 0x%X, \t tx_addr: 0x%X, \t command: 0x%X, \t crc = 0x%X\r\n", dev_addr, tx_addr, command, crc);
 		  //отправка данных в порт
 			HAL_UART_Transmit(&huart1,(uint8_t*)str,strlen(str),0x1000);
 			//установка курсора дисплея в начало
-			ssd1306_SetCursor(0, 0);
+			//ssd1306_SetCursor(0, 0);
 			//формирование строки для вывода на дисплей адреса устройства
-			sprintf(str, "device: %0x", dev_addr);
+			//sprintf(str, "device: %0x", dev_addr);
 			//отправка строки на дисплей
-			ssd1306_WriteString(str, Font_7x10, White);
+			//ssd1306_WriteString(str, Font_7x10, White);
 			
 			//установка курсора в начало второй строки
-			ssd1306_SetCursor(0, 11);
+			//ssd1306_SetCursor(0, 11);
 			//формирование строки для вывода на дисплей адреса передатчика
-			sprintf(str, "transmitter: %0x", tx_addr);
+			//sprintf(str, "transmitter: %0x", tx_addr);
 			//отправка строки на дисплей
-			ssd1306_WriteString(str, Font_7x10, White);
+			//ssd1306_WriteString(str, Font_7x10, White);
 			
 			//установка курсора в начало третьей строки
-			ssd1306_SetCursor(0, 22);
+			//ssd1306_SetCursor(0, 22);
 			//формирование строки для вывода на дисплей команды
-			sprintf(str, "command: %0x", command);
+			//sprintf(str, "command: %0x", command);
 			//отправка строки на дисплей
-			ssd1306_WriteString(str, Font_7x10, White);
+			//ssd1306_WriteString(str, Font_7x10, White);
 			
-			ssd1306_UpdateScreen();	//обновление экрана
+			//ssd1306_UpdateScreen();	//обновление экрана
 						
 			//сброс значений переменных и массива битов
 		  memset(bit_array, 0x00, SIZE_ARRAY);
@@ -161,6 +161,7 @@ int main(void)
 		  __HAL_GPIO_EXTI_CLEAR_IT(SIGNAL_PIN);  // очищаем бит EXTI_PR
 		  NVIC_ClearPendingIRQ(EXTI15_10_IRQn); // очищаем бит NVIC_ICPRx
 		  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);   // включаем прерывания 433
+			HAL_IWDG_Refresh(&hiwdg);	//сброс сторожевого таймера
 		}
 		
     /* USER CODE END WHILE */

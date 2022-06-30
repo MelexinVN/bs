@@ -3,7 +3,7 @@
 <title>Static Call Graph - [bs_f407\bs_f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image bs_f407\bs_f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Fri Jun 24 16:00:12 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Jun 28 14:35:11 2022
 <BR><P>
 <H3>Maximum Stack Usage =        208 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -560,9 +560,9 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_sputc
 <LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_char_common
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[86]"></a>_printf_pre_padding</STRONG> (Thumb, 44 bytes, Stack size 16 bytes, _printf_pad.o(.text))
@@ -615,12 +615,12 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART1_IRQHandler
 </UL>
 
-<P><STRONG><a name="[cd]"></a>strlen</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, strlen.o(.text))
+<P><STRONG><a name="[cc]"></a>strlen</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, strlen.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[a8]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text))
@@ -752,11 +752,15 @@ Global Symbols
 
 <P><STRONG><a name="[106]"></a>__use_no_semihosting_swi</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, use_no_semi.o(.text), UNUSED)
 
+<P><STRONG><a name="[d3]"></a>Ascii_To_Hex</STRONG> (Thumb, 42 bytes, Stack size 0 bytes, main.o(i.Ascii_To_Hex))
+<BR><BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+</UL>
+
+<P><STRONG><a name="[107]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, indicate_semi.o(.text), UNUSED)
+
 <P><STRONG><a name="[7]"></a>BusFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.BusFault_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[107]"></a>__semihosting_library_function</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, indicate_semi.o(.text), UNUSED)
-
 <P><STRONG><a name="[a]"></a>DebugMon_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.DebugMon_Handler))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
@@ -849,11 +853,10 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
 
-<P><STRONG><a name="[d3]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
+<P><STRONG><a name="[d2]"></a>LL_mDelay</STRONG> (Thumb, 40 bytes, Stack size 8 bytes, stm32f4xx_ll_utils.o(i.LL_mDelay))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = LL_mDelay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
-<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[6]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.MemManage_Handler))
@@ -890,7 +893,7 @@ Global Symbols
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_GPIO_ResetOutputPin
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMicro
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
+<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -1092,12 +1095,12 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f407xx.o(RESET)
 </UL>
-<P><STRONG><a name="[ce]"></a>USART_TX</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, main.o(i.USART_TX))
+<P><STRONG><a name="[cd]"></a>USART_TX</STRONG> (Thumb, 42 bytes, Stack size 8 bytes, main.o(i.USART_TX))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = USART_TX
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 </UL>
 
 <P><STRONG><a name="[8]"></a>UsageFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f4xx_it.o(i.UsageFault_Handler))
@@ -1107,54 +1110,53 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__printf
 </UL>
 
-<P><STRONG><a name="[d2]"></a>first_push_finding</STRONG> (Thumb, 102 bytes, Stack size 8 bytes, main.o(i.first_push_finding))
+<P><STRONG><a name="[d1]"></a>first_push_finding</STRONG> (Thumb, 102 bytes, Stack size 8 bytes, main.o(i.first_push_finding))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = first_push_finding
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[77]"></a>main</STRONG> (Thumb, 612 bytes, Stack size 8 bytes, main.o(i.main))
+<P><STRONG><a name="[77]"></a>main</STRONG> (Thumb, 594 bytes, Stack size 8 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208 + Unknown Stack Size
 <LI>Call Chain = main &rArr; MX_USART1_UART_Init &rArr; LL_USART_Init &rArr; LL_USART_SetBaudRate &rArr; __aeabi_uldivmod
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
-<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
-<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
-<LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;first_push_finding
+<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;reset_button_pushed
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;first_push_finding
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SystemClock_Config
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_SetPriority
 <LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_GetPriorityGrouping
 <LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_EncodePriority
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_SPI1_Init
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_IWDG_Init
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_GPIO_Init
 <LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_USART_Enable
 <LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_APB2_GRP1_EnableClock
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 <LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_init
 <LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_Read_Buf
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24_ReadReg
 <LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24L01_Send
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__rt_entry_main
 </UL>
 
-<P><STRONG><a name="[cf]"></a>nrf24l01_receive</STRONG> (Thumb, 240 bytes, Stack size 16 bytes, nrf24.o(i.nrf24l01_receive))
+<P><STRONG><a name="[ce]"></a>nrf24l01_receive</STRONG> (Thumb, 240 bytes, Stack size 16 bytes, nrf24.o(i.nrf24l01_receive))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = nrf24l01_receive &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<BR>[Calls]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d1]"></a>reset_button_pushed</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, main.o(i.reset_button_pushed))
+<P><STRONG><a name="[d0]"></a>reset_button_pushed</STRONG> (Thumb, 78 bytes, Stack size 8 bytes, main.o(i.reset_button_pushed))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = reset_button_pushed &rArr; NRF24L01_Send &rArr; NRF24L01_TX_Mode &rArr; NRF24_Write_Buf &rArr; DelayMicro
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24L01_Send
@@ -1162,13 +1164,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d0]"></a>update_receive</STRONG> (Thumb, 164 bytes, Stack size 8 bytes, main.o(i.update_receive))
-<BR><BR>[Stack]<UL><LI>Max Depth = 144 + Unknown Stack Size
+<P><STRONG><a name="[cf]"></a>update_receive</STRONG> (Thumb, 834 bytes, Stack size 16 bytes, main.o(i.update_receive))
+<BR><BR>[Stack]<UL><LI>Max Depth = 152 + Unknown Stack Size
 <LI>Call Chain = update_receive &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
+<BR>[Calls]<UL><LI><a href="#[d3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascii_To_Hex
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
+<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1338,10 +1340,6 @@ Local Symbols
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 </UL>
 <BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-</UL>
-
-<P><STRONG><a name="[cc]"></a>MX_IWDG_Init</STRONG> (Thumb, 74 bytes, Stack size 0 bytes, main.o(i.MX_IWDG_Init))
-<BR><BR>[Called By]<UL><LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[b3]"></a>MX_SPI1_Init</STRONG> (Thumb, 130 bytes, Stack size 72 bytes, main.o(i.MX_SPI1_Init))

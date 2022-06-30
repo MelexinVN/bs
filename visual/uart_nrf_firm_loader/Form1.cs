@@ -142,9 +142,11 @@ namespace WindowsFormsApp1
                 s_input += Convert.ToChar(temp_input[i]);
             }
             rec_string += s_input;
-            if ((rec_string.Length <= 12) && (rec_string[rec_string.Length - 1] == '\n'))
+            if (rec_string.Length >= 10) rec_string = "";
+
+            if (((rec_string.Length > 1)) && (rec_string[rec_string.Length - 1] == '!'))
             {
-                textBox3.Text += rec_string;
+                textBox3.Text += rec_string + "\r\n";
                 if (try_to_load)            
                 {//если получен запрос новой прошивки
                     if ((rec_string.Length >= 3) && ((rec_string[0] == 0x52) && (rec_string[1] == 0x54) && (rec_string[2] == 0x4C))) //если получено "RTL" ready to load
@@ -165,6 +167,17 @@ namespace WindowsFormsApp1
                         {
                             serialPort1.Write(string_buf[string_number] + ";");           //отправка запрошенной строки
                             label14.Text = string_buf[string_number] + ";";
+                            textBox1.Text += string_buf[string_number] + ";" + "\r\n";
+                        }
+                        if (string_number > string_counter)
+                        {
+                            try_to_load = false;
+                            ready_to_load = false;
+                            button14.Text = "Перезагрузка МК";
+                            label22.ForeColor = Color.Black;
+                            label22.Text = "   ";
+                            label21.Text = "   ";
+                            MessageBox.Show("       Загрузка ПО завершена");
                         }
                     }
                     if ((rec_string[0] == 0x41) && (rec_string[1] == 0x4F) && (rec_string[2] == 0x4B)) //если получено "AOK" all OK
@@ -180,6 +193,7 @@ namespace WindowsFormsApp1
                 }
                 rec_string = "";
             }
+            
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -278,6 +292,7 @@ namespace WindowsFormsApp1
                 {
                     serialPort1.Write(":!!!;");
                     label14.Text = ":!!!;";
+                    textBox1.Text += ":!!!;\r\n";
                 }
             }
         }
@@ -285,6 +300,8 @@ namespace WindowsFormsApp1
         private void button11_Click(object sender, EventArgs e)
         {
             textBox3.Clear();
+            textBox1.Clear();
+            label14.Text = "  ";
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -295,6 +312,7 @@ namespace WindowsFormsApp1
                 {
                     serialPort1.Write(":!;");
                     label14.Text = ":!;";
+                    textBox1.Text += ":!;\r\n";
                 }
                 try_to_load = true;     //поднимаем флаг попытки загрузить прошивку
                 button14.Text = "Отмена загрузки";
@@ -311,6 +329,12 @@ namespace WindowsFormsApp1
         {
             textBox3.SelectionStart = textBox3.Text.Length;
             textBox3.ScrollToCaret();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            textBox1.SelectionStart = textBox1.Text.Length;
+            textBox1.ScrollToCaret();
         }
     }
 }

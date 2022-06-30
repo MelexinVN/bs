@@ -1,0 +1,796 @@
+
+tx_t10.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000003c0  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800040  00800040  00000434  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000001  00800040  00800040  00000434  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  00000434  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000464  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000050  00000000  00000000  000004a0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00000e1e  00000000  00000000  000004f0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000435  00000000  00000000  0000130e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   0000066f  00000000  00000000  00001743  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000000c0  00000000  00000000  00001db4  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000002ef  00000000  00000000  00001e74  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    0000092f  00000000  00000000  00002163  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000040  00000000  00000000  00002a92  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0a c0       	rjmp	.+20     	; 0x16 <__ctors_end>
+   2:	19 c0       	rjmp	.+50     	; 0x36 <__bad_interrupt>
+   4:	96 c1       	rjmp	.+812    	; 0x332 <__vector_2>
+   6:	17 c0       	rjmp	.+46     	; 0x36 <__bad_interrupt>
+   8:	16 c0       	rjmp	.+44     	; 0x36 <__bad_interrupt>
+   a:	15 c0       	rjmp	.+42     	; 0x36 <__bad_interrupt>
+   c:	14 c0       	rjmp	.+40     	; 0x36 <__bad_interrupt>
+   e:	13 c0       	rjmp	.+38     	; 0x36 <__bad_interrupt>
+  10:	12 c0       	rjmp	.+36     	; 0x36 <__bad_interrupt>
+  12:	11 c0       	rjmp	.+34     	; 0x36 <__bad_interrupt>
+  14:	10 c0       	rjmp	.+32     	; 0x36 <__bad_interrupt>
+
+00000016 <__ctors_end>:
+  16:	11 27       	eor	r17, r17
+  18:	1f bf       	out	0x3f, r17	; 63
+  1a:	cf e5       	ldi	r28, 0x5F	; 95
+  1c:	d0 e0       	ldi	r29, 0x00	; 0
+  1e:	de bf       	out	0x3e, r29	; 62
+  20:	cd bf       	out	0x3d, r28	; 61
+
+00000022 <__do_clear_bss>:
+  22:	20 e0       	ldi	r18, 0x00	; 0
+  24:	a0 e4       	ldi	r26, 0x40	; 64
+  26:	b0 e0       	ldi	r27, 0x00	; 0
+  28:	01 c0       	rjmp	.+2      	; 0x2c <.do_clear_bss_start>
+
+0000002a <.do_clear_bss_loop>:
+  2a:	1d 93       	st	X+, r17
+
+0000002c <.do_clear_bss_start>:
+  2c:	a1 34       	cpi	r26, 0x41	; 65
+  2e:	b2 07       	cpc	r27, r18
+  30:	e1 f7       	brne	.-8      	; 0x2a <.do_clear_bss_loop>
+  32:	ad d1       	rcall	.+858    	; 0x38e <main>
+  34:	c3 c1       	rjmp	.+902    	; 0x3bc <_exit>
+
+00000036 <__bad_interrupt>:
+  36:	e4 cf       	rjmp	.-56     	; 0x0 <__vectors>
+
+00000038 <preamble>:
+volatile uint8_t sleep_m = 0;			//флаг режима энергосбережения
+//volatile uint8_t data[66] = {1,1,0,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,0,1,1,1,0,1,1,0,0,1,1,0,1,1,0,0,0,0,1,0,0,1,0,1,0,0,1,1,1,1,0,1,0,0,0,0,1,1,1,0,1,1,0,1,1,0,0};			
+
+void preamble(void)
+{
+	RF_HIGH();
+  38:	42 b1       	in	r20, 0x02	; 2
+  3a:	44 60       	ori	r20, 0x04	; 4
+  3c:	42 b9       	out	0x02, r20	; 2
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  3e:	4b eb       	ldi	r20, 0xBB	; 187
+  40:	52 e0       	ldi	r21, 0x02	; 2
+  42:	41 50       	subi	r20, 0x01	; 1
+  44:	50 40       	sbci	r21, 0x00	; 0
+  46:	e9 f7       	brne	.-6      	; 0x42 <__SREG__+0x3>
+  48:	00 c0       	rjmp	.+0      	; 0x4a <__SREG__+0xb>
+  4a:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+  4c:	42 b1       	in	r20, 0x02	; 2
+  4e:	4b 7f       	andi	r20, 0xFB	; 251
+  50:	42 b9       	out	0x02, r20	; 2
+  52:	4f e1       	ldi	r20, 0x1F	; 31
+  54:	53 e0       	ldi	r21, 0x03	; 3
+  56:	41 50       	subi	r20, 0x01	; 1
+  58:	50 40       	sbci	r21, 0x00	; 0
+  5a:	e9 f7       	brne	.-6      	; 0x56 <__SREG__+0x17>
+  5c:	00 c0       	rjmp	.+0      	; 0x5e <__SREG__+0x1f>
+  5e:	00 00       	nop
+	_delay_us(400);
+
+	RF_HIGH();
+  60:	42 b1       	in	r20, 0x02	; 2
+  62:	44 60       	ori	r20, 0x04	; 4
+  64:	42 b9       	out	0x02, r20	; 2
+  66:	4b eb       	ldi	r20, 0xBB	; 187
+  68:	52 e0       	ldi	r21, 0x02	; 2
+  6a:	41 50       	subi	r20, 0x01	; 1
+  6c:	50 40       	sbci	r21, 0x00	; 0
+  6e:	e9 f7       	brne	.-6      	; 0x6a <__stack+0xb>
+  70:	00 c0       	rjmp	.+0      	; 0x72 <__stack+0x13>
+  72:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+  74:	42 b1       	in	r20, 0x02	; 2
+  76:	4b 7f       	andi	r20, 0xFB	; 251
+  78:	42 b9       	out	0x02, r20	; 2
+  7a:	4f e1       	ldi	r20, 0x1F	; 31
+  7c:	53 e0       	ldi	r21, 0x03	; 3
+  7e:	41 50       	subi	r20, 0x01	; 1
+  80:	50 40       	sbci	r21, 0x00	; 0
+  82:	e9 f7       	brne	.-6      	; 0x7e <__stack+0x1f>
+  84:	00 c0       	rjmp	.+0      	; 0x86 <__stack+0x27>
+  86:	00 00       	nop
+	_delay_us(400);
+
+	RF_HIGH();
+  88:	42 b1       	in	r20, 0x02	; 2
+  8a:	44 60       	ori	r20, 0x04	; 4
+  8c:	42 b9       	out	0x02, r20	; 2
+  8e:	4b eb       	ldi	r20, 0xBB	; 187
+  90:	52 e0       	ldi	r21, 0x02	; 2
+  92:	41 50       	subi	r20, 0x01	; 1
+  94:	50 40       	sbci	r21, 0x00	; 0
+  96:	e9 f7       	brne	.-6      	; 0x92 <__stack+0x33>
+  98:	00 c0       	rjmp	.+0      	; 0x9a <__stack+0x3b>
+  9a:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+  9c:	42 b1       	in	r20, 0x02	; 2
+  9e:	4b 7f       	andi	r20, 0xFB	; 251
+  a0:	42 b9       	out	0x02, r20	; 2
+  a2:	4f e1       	ldi	r20, 0x1F	; 31
+  a4:	53 e0       	ldi	r21, 0x03	; 3
+  a6:	41 50       	subi	r20, 0x01	; 1
+  a8:	50 40       	sbci	r21, 0x00	; 0
+  aa:	e9 f7       	brne	.-6      	; 0xa6 <__stack+0x47>
+  ac:	00 c0       	rjmp	.+0      	; 0xae <__stack+0x4f>
+  ae:	00 00       	nop
+	_delay_us(400);
+
+	RF_HIGH();
+  b0:	42 b1       	in	r20, 0x02	; 2
+  b2:	44 60       	ori	r20, 0x04	; 4
+  b4:	42 b9       	out	0x02, r20	; 2
+  b6:	4b eb       	ldi	r20, 0xBB	; 187
+  b8:	52 e0       	ldi	r21, 0x02	; 2
+  ba:	41 50       	subi	r20, 0x01	; 1
+  bc:	50 40       	sbci	r21, 0x00	; 0
+  be:	e9 f7       	brne	.-6      	; 0xba <__stack+0x5b>
+  c0:	00 c0       	rjmp	.+0      	; 0xc2 <__stack+0x63>
+  c2:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+  c4:	42 b1       	in	r20, 0x02	; 2
+  c6:	4b 7f       	andi	r20, 0xFB	; 251
+  c8:	42 b9       	out	0x02, r20	; 2
+  ca:	4f e1       	ldi	r20, 0x1F	; 31
+  cc:	53 e0       	ldi	r21, 0x03	; 3
+  ce:	41 50       	subi	r20, 0x01	; 1
+  d0:	50 40       	sbci	r21, 0x00	; 0
+  d2:	e9 f7       	brne	.-6      	; 0xce <__stack+0x6f>
+  d4:	00 c0       	rjmp	.+0      	; 0xd6 <__stack+0x77>
+  d6:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+  d8:	42 b1       	in	r20, 0x02	; 2
+  da:	44 60       	ori	r20, 0x04	; 4
+  dc:	42 b9       	out	0x02, r20	; 2
+  de:	4b eb       	ldi	r20, 0xBB	; 187
+  e0:	52 e0       	ldi	r21, 0x02	; 2
+  e2:	41 50       	subi	r20, 0x01	; 1
+  e4:	50 40       	sbci	r21, 0x00	; 0
+  e6:	e9 f7       	brne	.-6      	; 0xe2 <__stack+0x83>
+  e8:	00 c0       	rjmp	.+0      	; 0xea <__stack+0x8b>
+  ea:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+  ec:	42 b1       	in	r20, 0x02	; 2
+  ee:	4b 7f       	andi	r20, 0xFB	; 251
+  f0:	42 b9       	out	0x02, r20	; 2
+  f2:	4f e1       	ldi	r20, 0x1F	; 31
+  f4:	53 e0       	ldi	r21, 0x03	; 3
+  f6:	41 50       	subi	r20, 0x01	; 1
+  f8:	50 40       	sbci	r21, 0x00	; 0
+  fa:	e9 f7       	brne	.-6      	; 0xf6 <__stack+0x97>
+  fc:	00 c0       	rjmp	.+0      	; 0xfe <__stack+0x9f>
+  fe:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 100:	42 b1       	in	r20, 0x02	; 2
+ 102:	44 60       	ori	r20, 0x04	; 4
+ 104:	42 b9       	out	0x02, r20	; 2
+ 106:	4b eb       	ldi	r20, 0xBB	; 187
+ 108:	52 e0       	ldi	r21, 0x02	; 2
+ 10a:	41 50       	subi	r20, 0x01	; 1
+ 10c:	50 40       	sbci	r21, 0x00	; 0
+ 10e:	e9 f7       	brne	.-6      	; 0x10a <__stack+0xab>
+ 110:	00 c0       	rjmp	.+0      	; 0x112 <__stack+0xb3>
+ 112:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 114:	42 b1       	in	r20, 0x02	; 2
+ 116:	4b 7f       	andi	r20, 0xFB	; 251
+ 118:	42 b9       	out	0x02, r20	; 2
+ 11a:	4f e1       	ldi	r20, 0x1F	; 31
+ 11c:	53 e0       	ldi	r21, 0x03	; 3
+ 11e:	41 50       	subi	r20, 0x01	; 1
+ 120:	50 40       	sbci	r21, 0x00	; 0
+ 122:	e9 f7       	brne	.-6      	; 0x11e <__stack+0xbf>
+ 124:	00 c0       	rjmp	.+0      	; 0x126 <__stack+0xc7>
+ 126:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 128:	42 b1       	in	r20, 0x02	; 2
+ 12a:	44 60       	ori	r20, 0x04	; 4
+ 12c:	42 b9       	out	0x02, r20	; 2
+ 12e:	4b eb       	ldi	r20, 0xBB	; 187
+ 130:	52 e0       	ldi	r21, 0x02	; 2
+ 132:	41 50       	subi	r20, 0x01	; 1
+ 134:	50 40       	sbci	r21, 0x00	; 0
+ 136:	e9 f7       	brne	.-6      	; 0x132 <__stack+0xd3>
+ 138:	00 c0       	rjmp	.+0      	; 0x13a <__stack+0xdb>
+ 13a:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 13c:	42 b1       	in	r20, 0x02	; 2
+ 13e:	4b 7f       	andi	r20, 0xFB	; 251
+ 140:	42 b9       	out	0x02, r20	; 2
+ 142:	4f e1       	ldi	r20, 0x1F	; 31
+ 144:	53 e0       	ldi	r21, 0x03	; 3
+ 146:	41 50       	subi	r20, 0x01	; 1
+ 148:	50 40       	sbci	r21, 0x00	; 0
+ 14a:	e9 f7       	brne	.-6      	; 0x146 <__stack+0xe7>
+ 14c:	00 c0       	rjmp	.+0      	; 0x14e <__stack+0xef>
+ 14e:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 150:	42 b1       	in	r20, 0x02	; 2
+ 152:	44 60       	ori	r20, 0x04	; 4
+ 154:	42 b9       	out	0x02, r20	; 2
+ 156:	4b eb       	ldi	r20, 0xBB	; 187
+ 158:	52 e0       	ldi	r21, 0x02	; 2
+ 15a:	41 50       	subi	r20, 0x01	; 1
+ 15c:	50 40       	sbci	r21, 0x00	; 0
+ 15e:	e9 f7       	brne	.-6      	; 0x15a <__stack+0xfb>
+ 160:	00 c0       	rjmp	.+0      	; 0x162 <__stack+0x103>
+ 162:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 164:	42 b1       	in	r20, 0x02	; 2
+ 166:	4b 7f       	andi	r20, 0xFB	; 251
+ 168:	42 b9       	out	0x02, r20	; 2
+ 16a:	4f e1       	ldi	r20, 0x1F	; 31
+ 16c:	53 e0       	ldi	r21, 0x03	; 3
+ 16e:	41 50       	subi	r20, 0x01	; 1
+ 170:	50 40       	sbci	r21, 0x00	; 0
+ 172:	e9 f7       	brne	.-6      	; 0x16e <__stack+0x10f>
+ 174:	00 c0       	rjmp	.+0      	; 0x176 <__stack+0x117>
+ 176:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 178:	42 b1       	in	r20, 0x02	; 2
+ 17a:	44 60       	ori	r20, 0x04	; 4
+ 17c:	42 b9       	out	0x02, r20	; 2
+ 17e:	4b eb       	ldi	r20, 0xBB	; 187
+ 180:	52 e0       	ldi	r21, 0x02	; 2
+ 182:	41 50       	subi	r20, 0x01	; 1
+ 184:	50 40       	sbci	r21, 0x00	; 0
+ 186:	e9 f7       	brne	.-6      	; 0x182 <__stack+0x123>
+ 188:	00 c0       	rjmp	.+0      	; 0x18a <__stack+0x12b>
+ 18a:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 18c:	42 b1       	in	r20, 0x02	; 2
+ 18e:	4b 7f       	andi	r20, 0xFB	; 251
+ 190:	42 b9       	out	0x02, r20	; 2
+ 192:	4f e1       	ldi	r20, 0x1F	; 31
+ 194:	53 e0       	ldi	r21, 0x03	; 3
+ 196:	41 50       	subi	r20, 0x01	; 1
+ 198:	50 40       	sbci	r21, 0x00	; 0
+ 19a:	e9 f7       	brne	.-6      	; 0x196 <__stack+0x137>
+ 19c:	00 c0       	rjmp	.+0      	; 0x19e <__stack+0x13f>
+ 19e:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 1a0:	42 b1       	in	r20, 0x02	; 2
+ 1a2:	44 60       	ori	r20, 0x04	; 4
+ 1a4:	42 b9       	out	0x02, r20	; 2
+ 1a6:	4b eb       	ldi	r20, 0xBB	; 187
+ 1a8:	52 e0       	ldi	r21, 0x02	; 2
+ 1aa:	41 50       	subi	r20, 0x01	; 1
+ 1ac:	50 40       	sbci	r21, 0x00	; 0
+ 1ae:	e9 f7       	brne	.-6      	; 0x1aa <__stack+0x14b>
+ 1b0:	00 c0       	rjmp	.+0      	; 0x1b2 <__stack+0x153>
+ 1b2:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 1b4:	42 b1       	in	r20, 0x02	; 2
+ 1b6:	4b 7f       	andi	r20, 0xFB	; 251
+ 1b8:	42 b9       	out	0x02, r20	; 2
+ 1ba:	4f e1       	ldi	r20, 0x1F	; 31
+ 1bc:	53 e0       	ldi	r21, 0x03	; 3
+ 1be:	41 50       	subi	r20, 0x01	; 1
+ 1c0:	50 40       	sbci	r21, 0x00	; 0
+ 1c2:	e9 f7       	brne	.-6      	; 0x1be <__stack+0x15f>
+ 1c4:	00 c0       	rjmp	.+0      	; 0x1c6 <__stack+0x167>
+ 1c6:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 1c8:	42 b1       	in	r20, 0x02	; 2
+ 1ca:	44 60       	ori	r20, 0x04	; 4
+ 1cc:	42 b9       	out	0x02, r20	; 2
+ 1ce:	4b eb       	ldi	r20, 0xBB	; 187
+ 1d0:	52 e0       	ldi	r21, 0x02	; 2
+ 1d2:	41 50       	subi	r20, 0x01	; 1
+ 1d4:	50 40       	sbci	r21, 0x00	; 0
+ 1d6:	e9 f7       	brne	.-6      	; 0x1d2 <__stack+0x173>
+ 1d8:	00 c0       	rjmp	.+0      	; 0x1da <__stack+0x17b>
+ 1da:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 1dc:	42 b1       	in	r20, 0x02	; 2
+ 1de:	4b 7f       	andi	r20, 0xFB	; 251
+ 1e0:	42 b9       	out	0x02, r20	; 2
+ 1e2:	4f e1       	ldi	r20, 0x1F	; 31
+ 1e4:	53 e0       	ldi	r21, 0x03	; 3
+ 1e6:	41 50       	subi	r20, 0x01	; 1
+ 1e8:	50 40       	sbci	r21, 0x00	; 0
+ 1ea:	e9 f7       	brne	.-6      	; 0x1e6 <__stack+0x187>
+ 1ec:	00 c0       	rjmp	.+0      	; 0x1ee <__stack+0x18f>
+ 1ee:	00 00       	nop
+	_delay_us(400);
+	
+	RF_HIGH();
+ 1f0:	42 b1       	in	r20, 0x02	; 2
+ 1f2:	44 60       	ori	r20, 0x04	; 4
+ 1f4:	42 b9       	out	0x02, r20	; 2
+ 1f6:	4b eb       	ldi	r20, 0xBB	; 187
+ 1f8:	52 e0       	ldi	r21, 0x02	; 2
+ 1fa:	41 50       	subi	r20, 0x01	; 1
+ 1fc:	50 40       	sbci	r21, 0x00	; 0
+ 1fe:	e9 f7       	brne	.-6      	; 0x1fa <__stack+0x19b>
+ 200:	00 c0       	rjmp	.+0      	; 0x202 <__stack+0x1a3>
+ 202:	00 00       	nop
+	_delay_us(350);
+	RF_LOW();
+ 204:	42 b1       	in	r20, 0x02	; 2
+ 206:	4b 7f       	andi	r20, 0xFB	; 251
+ 208:	42 b9       	out	0x02, r20	; 2
+ 20a:	4f e1       	ldi	r20, 0x1F	; 31
+ 20c:	53 e0       	ldi	r21, 0x03	; 3
+ 20e:	41 50       	subi	r20, 0x01	; 1
+ 210:	50 40       	sbci	r21, 0x00	; 0
+ 212:	e9 f7       	brne	.-6      	; 0x20e <__stack+0x1af>
+ 214:	00 c0       	rjmp	.+0      	; 0x216 <__stack+0x1b7>
+ 216:	00 00       	nop
+ 218:	08 95       	ret
+
+0000021a <send_one>:
+}
+
+//процедура отправки единицы
+void send_one(void)
+{
+	RF_HIGH();			//поднимаем ногу
+ 21a:	42 b1       	in	r20, 0x02	; 2
+ 21c:	44 60       	ori	r20, 0x04	; 4
+ 21e:	42 b9       	out	0x02, r20	; 2
+ 220:	4b ed       	ldi	r20, 0xDB	; 219
+ 222:	55 e0       	ldi	r21, 0x05	; 5
+ 224:	41 50       	subi	r20, 0x01	; 1
+ 226:	50 40       	sbci	r21, 0x00	; 0
+ 228:	e9 f7       	brne	.-6      	; 0x224 <send_one+0xa>
+ 22a:	00 c0       	rjmp	.+0      	; 0x22c <send_one+0x12>
+ 22c:	00 00       	nop
+	_delay_us(750);	//ждем
+	RF_LOW();			//опускаем ногу
+ 22e:	42 b1       	in	r20, 0x02	; 2
+ 230:	4b 7f       	andi	r20, 0xFB	; 251
+ 232:	42 b9       	out	0x02, r20	; 2
+ 234:	4f e1       	ldi	r20, 0x1F	; 31
+ 236:	53 e0       	ldi	r21, 0x03	; 3
+ 238:	41 50       	subi	r20, 0x01	; 1
+ 23a:	50 40       	sbci	r21, 0x00	; 0
+ 23c:	e9 f7       	brne	.-6      	; 0x238 <send_one+0x1e>
+ 23e:	00 c0       	rjmp	.+0      	; 0x240 <send_one+0x26>
+ 240:	00 00       	nop
+ 242:	08 95       	ret
+
+00000244 <send_zero>:
+	_delay_us(400);//ждем
+}
+//процедура отправки нуля (аналогично единице)
+void send_zero(void)
+{
+	RF_HIGH();
+ 244:	42 b1       	in	r20, 0x02	; 2
+ 246:	44 60       	ori	r20, 0x04	; 4
+ 248:	42 b9       	out	0x02, r20	; 2
+ 24a:	4f e1       	ldi	r20, 0x1F	; 31
+ 24c:	53 e0       	ldi	r21, 0x03	; 3
+ 24e:	41 50       	subi	r20, 0x01	; 1
+ 250:	50 40       	sbci	r21, 0x00	; 0
+ 252:	e9 f7       	brne	.-6      	; 0x24e <send_zero+0xa>
+ 254:	00 c0       	rjmp	.+0      	; 0x256 <send_zero+0x12>
+ 256:	00 00       	nop
+	_delay_us(400);
+	RF_LOW();
+ 258:	42 b1       	in	r20, 0x02	; 2
+ 25a:	4b 7f       	andi	r20, 0xFB	; 251
+ 25c:	42 b9       	out	0x02, r20	; 2
+ 25e:	4f e3       	ldi	r20, 0x3F	; 63
+ 260:	56 e0       	ldi	r21, 0x06	; 6
+ 262:	41 50       	subi	r20, 0x01	; 1
+ 264:	50 40       	sbci	r21, 0x00	; 0
+ 266:	e9 f7       	brne	.-6      	; 0x262 <send_zero+0x1e>
+ 268:	00 c0       	rjmp	.+0      	; 0x26a <send_zero+0x26>
+ 26a:	00 00       	nop
+ 26c:	08 95       	ret
+
+0000026e <send_rf>:
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 26e:	4f e1       	ldi	r20, 0x1F	; 31
+ 270:	5e e4       	ldi	r21, 0x4E	; 78
+ 272:	41 50       	subi	r20, 0x01	; 1
+ 274:	50 40       	sbci	r21, 0x00	; 0
+ 276:	e9 f7       	brne	.-6      	; 0x272 <send_rf+0x4>
+ 278:	00 c0       	rjmp	.+0      	; 0x27a <send_rf+0xc>
+ 27a:	00 00       	nop
+
+ void send_rf(void)
+ {
+	_delay_ms(10);	//пауза
+	//преамбула
+	preamble();
+ 27c:	dd de       	rcall	.-582    	; 0x38 <preamble>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 27e:	4f e1       	ldi	r20, 0x1F	; 31
+ 280:	5c e1       	ldi	r21, 0x1C	; 28
+ 282:	41 50       	subi	r20, 0x01	; 1
+ 284:	50 40       	sbci	r21, 0x00	; 0
+ 286:	e9 f7       	brne	.-6      	; 0x282 <send_rf+0x14>
+ 288:	00 c0       	rjmp	.+0      	; 0x28a <send_rf+0x1c>
+ 28a:	00 00       	nop
+	_delay_us(3600);	//пауза
+	//данные
+
+		send_one();		
+ 28c:	c6 df       	rcall	.-116    	; 0x21a <send_one>
+		send_one();			
+ 28e:	c5 df       	rcall	.-118    	; 0x21a <send_one>
+		send_zero();
+ 290:	d9 df       	rcall	.-78     	; 0x244 <send_zero>
+		send_one();
+ 292:	c3 df       	rcall	.-122    	; 0x21a <send_one>
+		send_one();
+ 294:	c2 df       	rcall	.-124    	; 0x21a <send_one>
+		send_one();
+ 296:	c1 df       	rcall	.-126    	; 0x21a <send_one>
+		send_one();
+ 298:	c0 df       	rcall	.-128    	; 0x21a <send_one>
+		send_one();
+ 29a:	bf df       	rcall	.-130    	; 0x21a <send_one>
+		send_one();
+ 29c:	be df       	rcall	.-132    	; 0x21a <send_one>
+		send_one();	
+ 29e:	bd df       	rcall	.-134    	; 0x21a <send_one>
+		send_zero();
+ 2a0:	d1 df       	rcall	.-94     	; 0x244 <send_zero>
+		send_one();
+ 2a2:	bb df       	rcall	.-138    	; 0x21a <send_one>
+		send_one();
+ 2a4:	ba df       	rcall	.-140    	; 0x21a <send_one>
+		send_zero();
+ 2a6:	ce df       	rcall	.-100    	; 0x244 <send_zero>
+		send_one();
+ 2a8:	b8 df       	rcall	.-144    	; 0x21a <send_one>
+		send_one();
+ 2aa:	b7 df       	rcall	.-146    	; 0x21a <send_one>
+		send_one();
+ 2ac:	b6 df       	rcall	.-148    	; 0x21a <send_one>
+		send_one();
+ 2ae:	b5 df       	rcall	.-150    	; 0x21a <send_one>
+		send_zero();
+ 2b0:	c9 df       	rcall	.-110    	; 0x244 <send_zero>
+		send_zero();
+ 2b2:	c8 df       	rcall	.-112    	; 0x244 <send_zero>
+		send_one();
+ 2b4:	b2 df       	rcall	.-156    	; 0x21a <send_one>
+		send_one();
+ 2b6:	b1 df       	rcall	.-158    	; 0x21a <send_one>
+		send_one();
+ 2b8:	b0 df       	rcall	.-160    	; 0x21a <send_one>
+		send_zero();
+ 2ba:	c4 df       	rcall	.-120    	; 0x244 <send_zero>
+		send_one();
+ 2bc:	ae df       	rcall	.-164    	; 0x21a <send_one>
+		send_one();
+ 2be:	ad df       	rcall	.-166    	; 0x21a <send_one>
+		send_zero();
+ 2c0:	c1 df       	rcall	.-126    	; 0x244 <send_zero>
+		send_zero();
+ 2c2:	c0 df       	rcall	.-128    	; 0x244 <send_zero>
+		send_one();
+ 2c4:	aa df       	rcall	.-172    	; 0x21a <send_one>
+		send_one();
+ 2c6:	a9 df       	rcall	.-174    	; 0x21a <send_one>
+		send_zero();
+ 2c8:	bd df       	rcall	.-134    	; 0x244 <send_zero>
+		send_one();	
+ 2ca:	a7 df       	rcall	.-178    	; 0x21a <send_one>
+		send_one();	
+ 2cc:	a6 df       	rcall	.-180    	; 0x21a <send_one>
+		send_zero();
+ 2ce:	ba df       	rcall	.-140    	; 0x244 <send_zero>
+		send_zero();
+ 2d0:	b9 df       	rcall	.-142    	; 0x244 <send_zero>
+		send_zero();
+ 2d2:	b8 df       	rcall	.-144    	; 0x244 <send_zero>
+		send_zero();
+ 2d4:	b7 df       	rcall	.-146    	; 0x244 <send_zero>
+		send_one();	
+ 2d6:	a1 df       	rcall	.-190    	; 0x21a <send_one>
+		send_zero();
+ 2d8:	b5 df       	rcall	.-150    	; 0x244 <send_zero>
+		send_zero();
+ 2da:	b4 df       	rcall	.-152    	; 0x244 <send_zero>
+		send_one();
+ 2dc:	9e df       	rcall	.-196    	; 0x21a <send_one>
+		send_zero();
+ 2de:	b2 df       	rcall	.-156    	; 0x244 <send_zero>
+		send_one();
+ 2e0:	9c df       	rcall	.-200    	; 0x21a <send_one>
+		send_zero();
+ 2e2:	b0 df       	rcall	.-160    	; 0x244 <send_zero>
+		send_zero();
+ 2e4:	af df       	rcall	.-162    	; 0x244 <send_zero>
+		send_one();
+ 2e6:	99 df       	rcall	.-206    	; 0x21a <send_one>
+		send_one();
+ 2e8:	98 df       	rcall	.-208    	; 0x21a <send_one>
+		send_one();
+ 2ea:	97 df       	rcall	.-210    	; 0x21a <send_one>
+		send_one();	
+ 2ec:	96 df       	rcall	.-212    	; 0x21a <send_one>
+		send_zero();
+ 2ee:	aa df       	rcall	.-172    	; 0x244 <send_zero>
+		send_one();
+ 2f0:	94 df       	rcall	.-216    	; 0x21a <send_one>
+		send_zero();
+ 2f2:	a8 df       	rcall	.-176    	; 0x244 <send_zero>
+		send_zero();
+ 2f4:	a7 df       	rcall	.-178    	; 0x244 <send_zero>
+		send_zero();
+ 2f6:	a6 df       	rcall	.-180    	; 0x244 <send_zero>
+		send_zero();
+ 2f8:	a5 df       	rcall	.-182    	; 0x244 <send_zero>
+		send_one();
+ 2fa:	8f df       	rcall	.-226    	; 0x21a <send_one>
+		send_one();
+ 2fc:	8e df       	rcall	.-228    	; 0x21a <send_one>
+		send_one();
+ 2fe:	8d df       	rcall	.-230    	; 0x21a <send_one>
+		send_zero();
+ 300:	a1 df       	rcall	.-190    	; 0x244 <send_zero>
+		send_one();
+ 302:	8b df       	rcall	.-234    	; 0x21a <send_one>
+		send_one();
+ 304:	8a df       	rcall	.-236    	; 0x21a <send_one>
+		send_zero();
+ 306:	9e df       	rcall	.-196    	; 0x244 <send_zero>
+		send_one();
+ 308:	88 df       	rcall	.-240    	; 0x21a <send_one>
+		send_one();
+ 30a:	87 df       	rcall	.-242    	; 0x21a <send_one>
+		send_zero();
+ 30c:	9b df       	rcall	.-202    	; 0x244 <send_zero>
+		send_zero();
+ 30e:	9a df       	rcall	.-204    	; 0x244 <send_zero>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 310:	4f e1       	ldi	r20, 0x1F	; 31
+ 312:	5e e4       	ldi	r21, 0x4E	; 78
+ 314:	41 50       	subi	r20, 0x01	; 1
+ 316:	50 40       	sbci	r21, 0x00	; 0
+ 318:	e9 f7       	brne	.-6      	; 0x314 <send_rf+0xa6>
+ 31a:	00 c0       	rjmp	.+0      	; 0x31c <send_rf+0xae>
+ 31c:	00 00       	nop
+ 31e:	08 95       	ret
+
+00000320 <go_sleep>:
+ }
+
+ //процедура входа в режим энергосбережения
+ void go_sleep(void)
+ {
+	 set_sleep_mode(SLEEP_MODE_PWR_DOWN);	//установка режима энергосбережения
+ 320:	4a b7       	in	r20, 0x3a	; 58
+ 322:	41 7f       	andi	r20, 0xF1	; 241
+ 324:	44 60       	ori	r20, 0x04	; 4
+ 326:	4a bf       	out	0x3a, r20	; 58
+	 sleep_enable();						//разрешение режима энергосбережения
+ 328:	4a b7       	in	r20, 0x3a	; 58
+ 32a:	41 60       	ori	r20, 0x01	; 1
+ 32c:	4a bf       	out	0x3a, r20	; 58
+	 sleep_cpu();							//включение режима энергосбережения
+ 32e:	88 95       	sleep
+ 330:	08 95       	ret
+
+00000332 <__vector_2>:
+ }
+
+ //процедура обработки прерывания по нажатию кнопок
+ ISR(PCINT0_vect)
+ {
+ 332:	1f 93       	push	r17
+ 334:	0f 93       	push	r16
+ 336:	0f b7       	in	r16, 0x3f	; 63
+ 338:	0f 93       	push	r16
+ 33a:	10 e0       	ldi	r17, 0x00	; 0
+ 33c:	4f 93       	push	r20
+ 33e:	5f 93       	push	r21
+ 340:	6f 93       	push	r22
+ 342:	7f 93       	push	r23
+ 344:	8f 93       	push	r24
+ 346:	9f 93       	push	r25
+ 348:	af 93       	push	r26
+ 34a:	bf 93       	push	r27
+ 34c:	ef 93       	push	r30
+ 34e:	ff 93       	push	r31
+	 if (!(PINB & (1<<BUT_Pin))) //если нажата кнопка 2
+ 350:	00 99       	sbic	0x00, 0	; 0
+ 352:	09 c0       	rjmp	.+18     	; 0x366 <__vector_2+0x34>
+	 {
+		 LED_ON();						//включаем отдельный светодиод
+ 354:	42 b1       	in	r20, 0x02	; 2
+ 356:	42 60       	ori	r20, 0x02	; 2
+ 358:	42 b9       	out	0x02, r20	; 2
+		 sleep_m = 0;					//опускаем флаг режима энергосбережения
+ 35a:	10 a9       	sts	0x40, r17	; 0x800040 <_edata>
+		 while(!(PINB & (1<<BUT_Pin)))	//пока кнопка остается нажатой
+ 35c:	01 c0       	rjmp	.+2      	; 0x360 <__vector_2+0x2e>
+		 {//отсылаем по адресу выбранного устройства команду 2
+			 send_rf();
+ 35e:	87 df       	rcall	.-242    	; 0x26e <send_rf>
+ {
+	 if (!(PINB & (1<<BUT_Pin))) //если нажата кнопка 2
+	 {
+		 LED_ON();						//включаем отдельный светодиод
+		 sleep_m = 0;					//опускаем флаг режима энергосбережения
+		 while(!(PINB & (1<<BUT_Pin)))	//пока кнопка остается нажатой
+ 360:	00 9b       	sbis	0x00, 0	; 0
+ 362:	fd cf       	rjmp	.-6      	; 0x35e <__vector_2+0x2c>
+ 364:	05 c0       	rjmp	.+10     	; 0x370 <__vector_2+0x3e>
+			 send_rf();
+		 }
+	 }
+	 else //как только кнопка отжата
+	 {
+		 LED_OFF();		//отключаем светодиод
+ 366:	42 b1       	in	r20, 0x02	; 2
+ 368:	4d 7f       	andi	r20, 0xFD	; 253
+ 36a:	42 b9       	out	0x02, r20	; 2
+		 sleep_m = 1;	//поднимаем флаг энергосбережения
+ 36c:	41 e0       	ldi	r20, 0x01	; 1
+ 36e:	40 a9       	sts	0x40, r20	; 0x800040 <_edata>
+	 }
+ }
+ 370:	ff 91       	pop	r31
+ 372:	ef 91       	pop	r30
+ 374:	bf 91       	pop	r27
+ 376:	af 91       	pop	r26
+ 378:	9f 91       	pop	r25
+ 37a:	8f 91       	pop	r24
+ 37c:	7f 91       	pop	r23
+ 37e:	6f 91       	pop	r22
+ 380:	5f 91       	pop	r21
+ 382:	4f 91       	pop	r20
+ 384:	0f 91       	pop	r16
+ 386:	0f bf       	out	0x3f, r16	; 63
+ 388:	0f 91       	pop	r16
+ 38a:	1f 91       	pop	r17
+ 38c:	18 95       	reti
+
+0000038e <main>:
+
+
+int main(void)
+{
+    // Main Clock source: Calibrated Internal 8 MHz Osc.
+    CCP=0xd8;
+ 38e:	48 ed       	ldi	r20, 0xD8	; 216
+ 390:	4c bf       	out	0x3c, r20	; 60
+    CLKMSR=(0<<CLKMS1) | (0<<CLKMS0);
+ 392:	17 bf       	out	0x37, r17	; 55
+    // Clock Prescaler division factor: 1
+    CCP=0xd8;
+ 394:	4c bf       	out	0x3c, r20	; 60
+    CLKPSR=(0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
+ 396:	16 bf       	out	0x36, r17	; 54
+
+	// Input/Output Ports initialization
+	// Port B initialization
+	// Pull-up initialization:
+	// Bit3=Off Bit2=Off Bit1=Off Bit0=On
+	PUEB=(0<<PUEB3) | (0<<PUEB2) | (0<<PUEB1) | (1<<PUEB0);
+ 398:	41 e0       	ldi	r20, 0x01	; 1
+ 39a:	43 b9       	out	0x03, r20	; 3
+	// Function: Bit3=In Bit2=Out Bit1=Out Bit0=In
+	DDRB=(0<<DDB3) | (1<<DDB2) | (1<<DDB1) | (0<<DDB0);
+ 39c:	56 e0       	ldi	r21, 0x06	; 6
+ 39e:	51 b9       	out	0x01, r21	; 1
+	// State: Bit3=T Bit2=0 Bit1=0 Bit0=P
+	PORTB=(0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (1<<PORTB0);
+ 3a0:	42 b9       	out	0x02, r20	; 2
+
+	// External Interrupt(s) initialization
+	// INT0: Off
+	// Interrupt on any change on pins PCINT0-3: On
+	EICRA=(0<<ISC01) | (0<<ISC00);
+ 3a2:	15 bb       	out	0x15, r17	; 21
+	EIMSK=(0<<INT0);
+ 3a4:	13 bb       	out	0x13, r17	; 19
+	PCMSK=(0<<PCINT3) | (0<<PCINT2) | (0<<PCINT1) | (1<<PCINT0);
+ 3a6:	40 bb       	out	0x10, r20	; 16
+	PCICR=(1<<PCIE0);
+ 3a8:	42 bb       	out	0x12, r20	; 18
+	PCIFR=(1<<PCIF0);
+ 3aa:	41 bb       	out	0x11, r20	; 17
+
+	sei();		//глобальное включение всех прерываний
+ 3ac:	78 94       	sei
+		
+	go_sleep();	//уходим в режим энергосбережения
+ 3ae:	b8 df       	rcall	.-144    	; 0x320 <go_sleep>
+
+    while (1) 
+    {
+		if (sleep_m)		//если поднят флаг энергосбережения
+ 3b0:	40 a1       	lds	r20, 0x40	; 0x800040 <_edata>
+ 3b2:	44 23       	and	r20, r20
+ 3b4:	e9 f3       	breq	.-6      	; 0x3b0 <main+0x22>
+		{
+			go_sleep();		//уходим в режим энергосбережения
+ 3b6:	b4 df       	rcall	.-152    	; 0x320 <go_sleep>
+			sleep_m = 0;	//опускаем флаг энергосбережения
+ 3b8:	10 a9       	sts	0x40, r17	; 0x800040 <_edata>
+ 3ba:	fa cf       	rjmp	.-12     	; 0x3b0 <main+0x22>
+
+000003bc <_exit>:
+ 3bc:	f8 94       	cli
+
+000003be <__stop_program>:
+ 3be:	ff cf       	rjmp	.-2      	; 0x3be <__stop_program>

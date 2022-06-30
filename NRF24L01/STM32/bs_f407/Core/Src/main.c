@@ -61,7 +61,14 @@ uint8_t f_rec_proc = 0;														//
 uint8_t firm_update = 0;
 uint16_t string_counter = 0;
 uint8_t ready_to_update = 0;
-	/* USER CODE END PV */
+	
+uint8_t buff[8];													//буфер 
+uint8_t size_data, type_data, check_sum;	//размер, тип данных и чек сумма
+uint16_t address_data;										//младшие 16 бит адреса
+uint8_t calculation_check_sum = 0;				//чек-сумма
+uint32_t extented_linear_adress = 0;			//дополнительный адрес
+	
+/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
@@ -87,33 +94,163 @@ void USART_TX (uint8_t* dt, uint16_t sz)					//
   }
 }
 
+/*функция преобразует ascii в hex*/
+void Ascii_To_Hex(uint8_t *buff, uint8_t count)
+{
+	uint8_t i;
+	
+	for(i=0; i<count;i++)
+	{
+		if(buff[i] <= '9' && buff[i] >= '0' )
+		{
+			buff[i] -= 0x30;
+		}
+		else
+		{
+			buff[i] = buff[i] - 0x41 + 10;
+		}	
+	}	
+}
+
 void update_receive(void)
 {
 	if (f_update_rec)					
 	{					
-		LL_mDelay(10);		
 		if (firm_update)
 		{
-			string_counter++;
-			sprintf(str,"ZNS%05u\r\n",string_counter);		//отправляем запрос очередной строки
-			USART_TX((uint8_t*)str,strlen(str));
-		}	
+			uint8_t index = 0;			//переменная индекса строки
+			/*читаем 8 симовлов с метаданными*/
+			for (uint8_t i = 0; i < 8; i++)
+			{
+				buff[i] = rx_str[i];	//сохраняем символ
+				index++;							//следующий индекс
+			}
+			
+			Ascii_To_Hex(buff, 8);//переводим символы в хекс
+			
+			size_data = 2*(buff[1] + 16*buff[0]);//находим размер данных
+			address_data = buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2];//адрес
+			type_data = buff[7] + 16*buff[6];//и тип
+			//промежуточное значение контрольной суммы
+			calculation_check_sum = size_data/2 + (uint8_t)address_data + (uint8_t)(address_data>>8) + type_data;//считаем чек сумму
+			
+			if(type_data == 0x00)	//если пришли данные для записи
+			{
+				uint8_t count = 1; 					//счетчик слов
+				uint32_t program_data = 0;	//слово которое пишется во флеш
+				while(size_data > 0)
+				{
+					/*читаем 8 симовлов*/
+					for (uint8_t i = index; i < (8*count + 8); i++)
+					{
+						buff[i - 8*count] = rx_str[i];
+						index++;							//следующий индекс
+					}
+					
+					Ascii_To_Hex(buff, 8);//переводим их в хекс
+				
+					for(uint8_t i=0; i<8;i=i+2)//формируем 32-битное слово для записи
+					{
+						buff[i] <<= 4;
+						buff[i] = buff[i] | buff[i+1];
+						program_data |= buff[i] <<(i*4);
+					}
+					//отправка доп адреса, осн адреса, слова
+					//FLASHStatus = FLASH_Program_Word(extented_linear_adress + address_data, program_data);
+					calculation_check_sum +=  (uint8_t)program_data + (uint8_t)(program_data>>8) + (uint8_t)(program_data>>16) + (uint8_t)(program_data>>24);	
+					size_data -=8;
+					address_data +=4;
+					count++;
+					program_data = 0;	
+				}
+				
+				calculation_check_sum =  ~(calculation_check_sum) + 1;
+				
+				/*читаем 2 байта*/
+				buff[0] = rx_str[index];
+				buff[1] = rx_str[index + 1];
+				
+				Ascii_To_Hex(buff,2);
+				check_sum = buff[1] + 16*buff[0];		
+
+				if(calculation_check_sum != check_sum )
+				{
+					string_counter--;
+				}				
+				calculation_check_sum = 0;//обнуляем чек сумму
+				string_counter++;		
+				index = 0;
+			}
+			
+			else if(type_data == 0x04)//если пришел дополнительный адрес
+			{
+				/*читаем 4 байта*/
+				for (uint8_t i = index; i < 12; i++)
+				{
+					buff[i - 8] = rx_str[i];
+					index++;
+				}
+				
+				Ascii_To_Hex(buff, 4);//переводим их в хекс				
+				
+				extented_linear_adress = (uint32_t)(buff[0]<<28 | buff[1]<<24 | buff[2]<<20 | buff[3]<<16 );//считаем адрес
+				
+				calculation_check_sum +=  buff[0] + buff[1]+ buff[3] + buff[3];	
+				calculation_check_sum =  ~(calculation_check_sum) + 1;
+						
+				/*читаем 2 байта*/
+				for (uint8_t i = index; i < 14; i++)
+				{
+					buff[i - 12] = rx_str[i];
+					index++;
+				}
+				
+				Ascii_To_Hex(buff,2);
+				check_sum = buff[1] + 16*buff[0];		
+				
+				if(calculation_check_sum != check_sum )
+				{
+					//тут можно вывести сообщение типо "Ошибка чек суммы"
+					string_counter--;
+				}	
+				calculation_check_sum = 0;//обнуляем чек сумму	
+				string_counter++;
+				index = 0;
+			}
+			
+			else if(type_data == 0x05) 
+			{
+				string_counter++;
+			}
+				
+			else if(type_data == 0x01)//конец файла
+			{
+				sprintf(str,"AOK");	
+				USART_TX((uint8_t*)str,strlen(str));
+				f_update_rec = 0;
+			}
+			
+			if(f_update_rec)
+			{
+				sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
+				USART_TX((uint8_t*)str,strlen(str));
+			}
+		}
 		else if (ready_to_update)
 		{
 			if (rx_str[0] == '!')	
 			{
 				firm_update = 1;
-				sprintf(str,"ZNS%05u\r\n",string_counter);		//отправляем запрос очередной строки
+				sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
 				USART_TX((uint8_t*)str,strlen(str));
 			}
 		}
 		else if (rx_str[0] == '!')	
 		{
-			sprintf(str,"RTL\r\n");	
+			sprintf(str,"RTL!");	
 			USART_TX((uint8_t*)str,strlen(str));
 			ready_to_update = 1;
 		}
-		LL_mDelay(10);	
 		f_update_rec = 0;
 	}
 }
@@ -215,7 +352,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_IWDG_Init();
+  //MX_IWDG_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
@@ -281,7 +418,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-		LL_IWDG_ReloadCounter(IWDG);
+		//LL_IWDG_ReloadCounter(IWDG);
   }
   /* USER CODE END 3 */
 }

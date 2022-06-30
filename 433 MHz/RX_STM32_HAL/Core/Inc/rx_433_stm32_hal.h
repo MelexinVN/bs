@@ -28,7 +28,7 @@
 //длительность импульса единицы
 #define ONE_DUR 				3000		
 //средняя длительность для определения значения входящего бита
-#define DURATION        (ONE_DUR - ZERO_DUR)/2 
+#define DURATION        (ONE_DUR + ZERO_DUR)/2 
 //интервал времени - допуск при определении информационных битов и импульсов преамбулы
 #define INTERVAL        200
 
@@ -45,6 +45,6 @@ __STATIC_INLINE uint32_t micros(void)
 	return  DWT->CYCCNT / (SystemCoreClock / 1000000U);
 }
 //процедура приема посылки
-void RX433_Int(void);
+void RX_Input(void);
 
 #endif /* RX_433_STM32_HAL_H */

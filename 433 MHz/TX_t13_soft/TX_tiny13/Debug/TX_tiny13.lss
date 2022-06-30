@@ -1,0 +1,355 @@
+
+TX_tiny13.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000017a  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000001ce  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  000001ce  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000200  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000050  00000000  00000000  0000023c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000754  00000000  00000000  0000028c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 0000044d  00000000  00000000  000009e0  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003d2  00000000  00000000  00000e2d  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000078  00000000  00000000  00001200  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000002bb  00000000  00000000  00001278  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000003be  00000000  00000000  00001533  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000030  00000000  00000000  000018f1  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	0e c0       	rjmp	.+28     	; 0x20 <__bad_interrupt>
+   4:	0d c0       	rjmp	.+26     	; 0x20 <__bad_interrupt>
+   6:	0c c0       	rjmp	.+24     	; 0x20 <__bad_interrupt>
+   8:	0b c0       	rjmp	.+22     	; 0x20 <__bad_interrupt>
+   a:	0a c0       	rjmp	.+20     	; 0x20 <__bad_interrupt>
+   c:	09 c0       	rjmp	.+18     	; 0x20 <__bad_interrupt>
+   e:	08 c0       	rjmp	.+16     	; 0x20 <__bad_interrupt>
+  10:	07 c0       	rjmp	.+14     	; 0x20 <__bad_interrupt>
+  12:	06 c0       	rjmp	.+12     	; 0x20 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+  1c:	02 d0       	rcall	.+4      	; 0x22 <main>
+  1e:	ab c0       	rjmp	.+342    	; 0x176 <_exit>
+
+00000020 <__bad_interrupt>:
+  20:	ef cf       	rjmp	.-34     	; 0x0 <__vectors>
+
+00000022 <main>:
+{
+
+// Input/Output Ports initialization
+// Port B initialization
+// Function: Bit5=In Bit4=In Bit3=Out Bit2=In Bit1=In Bit0=In
+DDRB=(0<<DDB5) | (0<<DDB4) | (1<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
+  22:	88 e0       	ldi	r24, 0x08	; 8
+  24:	87 bb       	out	0x17, r24	; 23
+// State: Bit5=T Bit4=T Bit3=0 Bit2=T Bit1=T Bit0=T
+PORTB=(0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
+  26:	18 ba       	out	0x18, r1	; 24
+
+    /* Replace with your application code */
+    while (1) 
+    {
+
+		send_rf(DEV_ADDR, CMND);
+  28:	6a ea       	ldi	r22, 0xAA	; 170
+  2a:	84 e4       	ldi	r24, 0x44	; 68
+  2c:	25 d0       	rcall	.+74     	; 0x78 <send_rf>
+  2e:	fc cf       	rjmp	.-8      	; 0x28 <main+0x6>
+
+00000030 <send_one>:
+#include "tx_433.h"
+
+//процедура отправки единицы
+void send_one(void)
+{
+	RF_HIGH();			//поднимаем ногу 
+  30:	88 b3       	in	r24, 0x18	; 24
+  32:	88 60       	ori	r24, 0x08	; 8
+  34:	88 bb       	out	0x18, r24	; 24
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  36:	80 e2       	ldi	r24, 0x20	; 32
+  38:	9c e1       	ldi	r25, 0x1C	; 28
+  3a:	01 97       	sbiw	r24, 0x01	; 1
+  3c:	f1 f7       	brne	.-4      	; 0x3a <send_one+0xa>
+	_delay_us(ONE_DUR);	//ждем
+	RF_LOW();			//опускаем ногу
+  3e:	88 b3       	in	r24, 0x18	; 24
+  40:	87 7f       	andi	r24, 0xF7	; 247
+  42:	88 bb       	out	0x18, r24	; 24
+  44:	8f e5       	ldi	r24, 0x5F	; 95
+  46:	99 e0       	ldi	r25, 0x09	; 9
+  48:	01 97       	sbiw	r24, 0x01	; 1
+  4a:	f1 f7       	brne	.-4      	; 0x48 <__DATA_REGION_LENGTH__+0x8>
+  4c:	00 c0       	rjmp	.+0      	; 0x4e <__DATA_REGION_LENGTH__+0xe>
+  4e:	00 00       	nop
+  50:	08 95       	ret
+
+00000052 <send_zero>:
+}
+
+//процедура отправки нуля (аналогично единице)
+void send_zero(void)
+{
+	RF_HIGH();
+  52:	88 b3       	in	r24, 0x18	; 24
+  54:	88 60       	ori	r24, 0x08	; 8
+  56:	88 bb       	out	0x18, r24	; 24
+  58:	8f e5       	ldi	r24, 0x5F	; 95
+  5a:	99 e0       	ldi	r25, 0x09	; 9
+  5c:	01 97       	sbiw	r24, 0x01	; 1
+  5e:	f1 f7       	brne	.-4      	; 0x5c <send_zero+0xa>
+  60:	00 c0       	rjmp	.+0      	; 0x62 <send_zero+0x10>
+  62:	00 00       	nop
+	_delay_us(ZERO_DUR);
+	RF_LOW();
+  64:	88 b3       	in	r24, 0x18	; 24
+  66:	87 7f       	andi	r24, 0xF7	; 247
+  68:	88 bb       	out	0x18, r24	; 24
+  6a:	8f e5       	ldi	r24, 0x5F	; 95
+  6c:	99 e0       	ldi	r25, 0x09	; 9
+  6e:	01 97       	sbiw	r24, 0x01	; 1
+  70:	f1 f7       	brne	.-4      	; 0x6e <send_zero+0x1c>
+  72:	00 c0       	rjmp	.+0      	; 0x74 <send_zero+0x22>
+  74:	00 00       	nop
+  76:	08 95       	ret
+
+00000078 <send_rf>:
+	_delay_us(ZERO_DUR);
+}
+
+//отправка мнформационной посылки в эфир
+void send_rf(uint8_t dev_adr, uint8_t command)
+{
+  78:	1f 93       	push	r17
+  7a:	cf 93       	push	r28
+  7c:	df 93       	push	r29
+  7e:	18 2f       	mov	r17, r24
+  80:	d6 2f       	mov	r29, r22
+	RF_LOW();			//низкий уровень на передатчик
+  82:	88 b3       	in	r24, 0x18	; 24
+  84:	87 7f       	andi	r24, 0xF7	; 247
+  86:	88 bb       	out	0x18, r24	; 24
+  88:	8f ed       	ldi	r24, 0xDF	; 223
+  8a:	9e e2       	ldi	r25, 0x2E	; 46
+  8c:	01 97       	sbiw	r24, 0x01	; 1
+  8e:	f1 f7       	brne	.-4      	; 0x8c <send_rf+0x14>
+  90:	00 c0       	rjmp	.+0      	; 0x92 <send_rf+0x1a>
+  92:	00 00       	nop
+	_delay_us(PAUSE);	//Стартовая пауза
+	//Отпрвка преамбулы
+	for (uint8_t i = 0; i < PREAMBLE; i++)	//цикл по числу импульсов преамбулы
+  94:	90 e0       	ldi	r25, 0x00	; 0
+  96:	13 c0       	rjmp	.+38     	; 0xbe <__stack+0x1f>
+	{
+		RF_HIGH();					//высокий уровень
+  98:	88 b3       	in	r24, 0x18	; 24
+  9a:	88 60       	ori	r24, 0x08	; 8
+  9c:	88 bb       	out	0x18, r24	; 24
+  9e:	ef e5       	ldi	r30, 0x5F	; 95
+  a0:	f9 e0       	ldi	r31, 0x09	; 9
+  a2:	31 97       	sbiw	r30, 0x01	; 1
+  a4:	f1 f7       	brne	.-4      	; 0xa2 <__stack+0x3>
+  a6:	00 c0       	rjmp	.+0      	; 0xa8 <__stack+0x9>
+  a8:	00 00       	nop
+		_delay_us(PREAM_IMP_DUR);	//пауза длительностью импульса преамбулы
+		RF_LOW();					//низкий уровень
+  aa:	88 b3       	in	r24, 0x18	; 24
+  ac:	87 7f       	andi	r24, 0xF7	; 247
+  ae:	88 bb       	out	0x18, r24	; 24
+  b0:	ef e5       	ldi	r30, 0x5F	; 95
+  b2:	f9 e0       	ldi	r31, 0x09	; 9
+  b4:	31 97       	sbiw	r30, 0x01	; 1
+  b6:	f1 f7       	brne	.-4      	; 0xb4 <__stack+0x15>
+  b8:	00 c0       	rjmp	.+0      	; 0xba <__stack+0x1b>
+  ba:	00 00       	nop
+void send_rf(uint8_t dev_adr, uint8_t command)
+{
+	RF_LOW();			//низкий уровень на передатчик
+	_delay_us(PAUSE);	//Стартовая пауза
+	//Отпрвка преамбулы
+	for (uint8_t i = 0; i < PREAMBLE; i++)	//цикл по числу импульсов преамбулы
+  bc:	9f 5f       	subi	r25, 0xFF	; 255
+  be:	98 30       	cpi	r25, 0x08	; 8
+  c0:	58 f3       	brcs	.-42     	; 0x98 <send_rf+0x20>
+  c2:	8f ed       	ldi	r24, 0xDF	; 223
+  c4:	9e e2       	ldi	r25, 0x2E	; 46
+  c6:	01 97       	sbiw	r24, 0x01	; 1
+  c8:	f1 f7       	brne	.-4      	; 0xc6 <__stack+0x27>
+  ca:	00 c0       	rjmp	.+0      	; 0xcc <__stack+0x2d>
+  cc:	00 00       	nop
+	}
+
+	_delay_us(PAUSE);	
+
+	//Отправка адреса устройства
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит 
+  ce:	c0 e0       	ldi	r28, 0x00	; 0
+  d0:	13 c0       	rjmp	.+38     	; 0xf8 <__stack+0x59>
+	{
+		if((dev_adr & (1<<i)) == 1<<i)	//если текущий байт адреса - единица 
+  d2:	21 e0       	ldi	r18, 0x01	; 1
+  d4:	30 e0       	ldi	r19, 0x00	; 0
+  d6:	0c 2e       	mov	r0, r28
+  d8:	02 c0       	rjmp	.+4      	; 0xde <__stack+0x3f>
+  da:	22 0f       	add	r18, r18
+  dc:	33 1f       	adc	r19, r19
+  de:	0a 94       	dec	r0
+  e0:	e2 f7       	brpl	.-8      	; 0xda <__stack+0x3b>
+  e2:	41 2f       	mov	r20, r17
+  e4:	50 e0       	ldi	r21, 0x00	; 0
+  e6:	42 23       	and	r20, r18
+  e8:	53 23       	and	r21, r19
+  ea:	24 17       	cp	r18, r20
+  ec:	35 07       	cpc	r19, r21
+  ee:	11 f4       	brne	.+4      	; 0xf4 <__stack+0x55>
+		send_one();						//посылаем 1
+  f0:	9f df       	rcall	.-194    	; 0x30 <send_one>
+  f2:	01 c0       	rjmp	.+2      	; 0xf6 <__stack+0x57>
+		else							//если ноль 
+		send_zero();					//посылаем 0
+  f4:	ae df       	rcall	.-164    	; 0x52 <send_zero>
+	}
+
+	_delay_us(PAUSE);	
+
+	//Отправка адреса устройства
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит 
+  f6:	cf 5f       	subi	r28, 0xFF	; 255
+  f8:	c8 30       	cpi	r28, 0x08	; 8
+  fa:	58 f3       	brcs	.-42     	; 0xd2 <__stack+0x33>
+  fc:	c0 e0       	ldi	r28, 0x00	; 0
+  fe:	13 c0       	rjmp	.+38     	; 0x126 <__stack+0x87>
+	}
+
+	//Отправка команды
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит аналогично
+	{
+		if((command & (1<<i)) == 1<<i)	//посылаем 1
+ 100:	21 e0       	ldi	r18, 0x01	; 1
+ 102:	30 e0       	ldi	r19, 0x00	; 0
+ 104:	0c 2e       	mov	r0, r28
+ 106:	02 c0       	rjmp	.+4      	; 0x10c <__stack+0x6d>
+ 108:	22 0f       	add	r18, r18
+ 10a:	33 1f       	adc	r19, r19
+ 10c:	0a 94       	dec	r0
+ 10e:	e2 f7       	brpl	.-8      	; 0x108 <__stack+0x69>
+ 110:	4d 2f       	mov	r20, r29
+ 112:	50 e0       	ldi	r21, 0x00	; 0
+ 114:	42 23       	and	r20, r18
+ 116:	53 23       	and	r21, r19
+ 118:	24 17       	cp	r18, r20
+ 11a:	35 07       	cpc	r19, r21
+ 11c:	11 f4       	brne	.+4      	; 0x122 <__stack+0x83>
+		send_one();
+ 11e:	88 df       	rcall	.-240    	; 0x30 <send_one>
+ 120:	01 c0       	rjmp	.+2      	; 0x124 <__stack+0x85>
+		else							//посылаем 0
+		send_zero();
+ 122:	97 df       	rcall	.-210    	; 0x52 <send_zero>
+		else							//если ноль 
+		send_zero();					//посылаем 0
+	}
+
+	//Отправка команды
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит аналогично
+ 124:	cf 5f       	subi	r28, 0xFF	; 255
+ 126:	c8 30       	cpi	r28, 0x08	; 8
+ 128:	58 f3       	brcs	.-42     	; 0x100 <__stack+0x61>
+		send_zero();
+	}
+
+	uint8_t crc = 0;					//переменная контрольной суммы
+	//вычисление контрольной суммы
+	crc = (uint8_t)(dev_adr + command);	//складываем все байты, отбрасываем переполнение 
+ 12a:	d1 0f       	add	r29, r17
+	crc = ~crc + 1;									//инвертируем сумму и прибавляем 1
+ 12c:	d1 95       	neg	r29
+
+	//Отправка контрольной суммы
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит
+ 12e:	c0 e0       	ldi	r28, 0x00	; 0
+ 130:	13 c0       	rjmp	.+38     	; 0x158 <__stack+0xb9>
+	{
+		if((crc & (1<<i)) == 1<<i)	//посылаем 1
+ 132:	21 e0       	ldi	r18, 0x01	; 1
+ 134:	30 e0       	ldi	r19, 0x00	; 0
+ 136:	0c 2e       	mov	r0, r28
+ 138:	02 c0       	rjmp	.+4      	; 0x13e <__stack+0x9f>
+ 13a:	22 0f       	add	r18, r18
+ 13c:	33 1f       	adc	r19, r19
+ 13e:	0a 94       	dec	r0
+ 140:	e2 f7       	brpl	.-8      	; 0x13a <__stack+0x9b>
+ 142:	4d 2f       	mov	r20, r29
+ 144:	50 e0       	ldi	r21, 0x00	; 0
+ 146:	42 23       	and	r20, r18
+ 148:	53 23       	and	r21, r19
+ 14a:	24 17       	cp	r18, r20
+ 14c:	35 07       	cpc	r19, r21
+ 14e:	11 f4       	brne	.+4      	; 0x154 <__stack+0xb5>
+		send_one();
+ 150:	6f df       	rcall	.-290    	; 0x30 <send_one>
+ 152:	01 c0       	rjmp	.+2      	; 0x156 <__stack+0xb7>
+		else						//посылаем 0
+		send_zero();
+ 154:	7e df       	rcall	.-260    	; 0x52 <send_zero>
+	//вычисление контрольной суммы
+	crc = (uint8_t)(dev_adr + command);	//складываем все байты, отбрасываем переполнение 
+	crc = ~crc + 1;									//инвертируем сумму и прибавляем 1
+
+	//Отправка контрольной суммы
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит
+ 156:	cf 5f       	subi	r28, 0xFF	; 255
+ 158:	c8 30       	cpi	r28, 0x08	; 8
+ 15a:	58 f3       	brcs	.-42     	; 0x132 <__stack+0x93>
+		else						//посылаем 0
+		send_zero();
+	}
+
+	//конечная пауза
+	RF_LOW();						//низкий уровень на передатчик
+ 15c:	88 b3       	in	r24, 0x18	; 24
+ 15e:	87 7f       	andi	r24, 0xF7	; 247
+ 160:	88 bb       	out	0x18, r24	; 24
+ 162:	ef ed       	ldi	r30, 0xDF	; 223
+ 164:	fe e2       	ldi	r31, 0x2E	; 46
+ 166:	31 97       	sbiw	r30, 0x01	; 1
+ 168:	f1 f7       	brne	.-4      	; 0x166 <__stack+0xc7>
+ 16a:	00 c0       	rjmp	.+0      	; 0x16c <__stack+0xcd>
+ 16c:	00 00       	nop
+	_delay_us(PAUSE);				//пауза
+}
+ 16e:	df 91       	pop	r29
+ 170:	cf 91       	pop	r28
+ 172:	1f 91       	pop	r17
+ 174:	08 95       	ret
+
+00000176 <_exit>:
+ 176:	f8 94       	cli
+
+00000178 <__stop_program>:
+ 178:	ff cf       	rjmp	.-2      	; 0x178 <__stop_program>

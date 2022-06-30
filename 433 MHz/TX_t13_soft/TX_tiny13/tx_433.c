@@ -4,7 +4,7 @@
  * МНХС
  */
 
- #include "tx_433.h"
+#include "tx_433.h"
 
 //процедура отправки единицы
 void send_one(void)
@@ -25,6 +25,63 @@ void send_zero(void)
 }
 
 //отправка мнформационной посылки в эфир
+void send_rf(uint8_t dev_adr, uint8_t command)
+{
+	RF_LOW();			//низкий уровень на передатчик
+	_delay_us(PAUSE);	//Стартовая пауза
+	//Отпрвка преамбулы
+	for (uint8_t i = 0; i < PREAMBLE; i++)	//цикл по числу импульсов преамбулы
+	{
+		RF_HIGH();					//высокий уровень
+		_delay_us(PREAM_IMP_DUR);	//пауза длительностью импульса преамбулы
+		RF_LOW();					//низкий уровень
+		_delay_us(PREAM_IMP_DUR);	//пауза
+	}
+
+	_delay_us(PAUSE);	
+
+	//Отправка адреса устройства
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит 
+	{
+		if((dev_adr & (1<<i)) == 1<<i)	//если текущий байт адреса - единица 
+		send_one();						//посылаем 1
+		else							//если ноль 
+		send_zero();					//посылаем 0
+	}
+
+	//Отправка команды
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит аналогично
+	{
+		if((command & (1<<i)) == 1<<i)	//посылаем 1
+		send_one();
+		else							//посылаем 0
+		send_zero();
+	}
+
+	uint8_t crc = 0;					//переменная контрольной суммы
+	//вычисление контрольной суммы
+	crc = (uint8_t)(dev_adr + command);	//складываем все байты, отбрасываем переполнение 
+	crc = ~crc + 1;									//инвертируем сумму и прибавляем 1
+
+	//Отправка контрольной суммы
+	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит
+	{
+		if((crc & (1<<i)) == 1<<i)	//посылаем 1
+		send_one();
+		else						//посылаем 0
+		send_zero();
+	}
+
+	//конечная пауза
+	RF_LOW();						//низкий уровень на передатчик
+	_delay_us(PAUSE);				//пауза
+}
+
+
+
+/*
+
+//отправка мнформационной посылки в эфир
 void send_rf(uint8_t dev_adr, uint8_t our_addr, uint8_t command)
 {
 	RF_LOW();			//низкий уровень на передатчик
@@ -37,6 +94,8 @@ void send_rf(uint8_t dev_adr, uint8_t our_addr, uint8_t command)
 		RF_LOW();					//низкий уровень
 		_delay_us(PREAM_IMP_DUR);	//пауза
 	}
+
+	_delay_us(PAUSE);	
 
 	//Отправка адреса устройства
 	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит 
@@ -81,3 +140,4 @@ void send_rf(uint8_t dev_adr, uint8_t our_addr, uint8_t command)
 	RF_LOW();						//низкий уровень на передатчик
 	_delay_us(PAUSE);				//пауза
 }
+*/
