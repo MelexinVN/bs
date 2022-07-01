@@ -1,0 +1,358 @@
+
+RX_mega8_soft.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000001d8  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         000001fe  00800060  000001d8  0000024c  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000030  00000000  00000000  0000044a  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000047c  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000058  00000000  00000000  000004b8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000911  00000000  00000000  00000510  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000005d8  00000000  00000000  00000e21  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   000003b5  00000000  00000000  000013f9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  000000d0  00000000  00000000  000017b0  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    00000374  00000000  00000000  00001880  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    000002c3  00000000  00000000  00001bf4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000048  00000000  00000000  00001eb7  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	24 c0       	rjmp	.+72     	; 0x4c <__bad_interrupt>
+   4:	23 c0       	rjmp	.+70     	; 0x4c <__bad_interrupt>
+   6:	22 c0       	rjmp	.+68     	; 0x4c <__bad_interrupt>
+   8:	21 c0       	rjmp	.+66     	; 0x4c <__bad_interrupt>
+   a:	20 c0       	rjmp	.+64     	; 0x4c <__bad_interrupt>
+   c:	1f c0       	rjmp	.+62     	; 0x4c <__bad_interrupt>
+   e:	1e c0       	rjmp	.+60     	; 0x4c <__bad_interrupt>
+  10:	1d c0       	rjmp	.+58     	; 0x4c <__bad_interrupt>
+  12:	1c c0       	rjmp	.+56     	; 0x4c <__bad_interrupt>
+  14:	1b c0       	rjmp	.+54     	; 0x4c <__bad_interrupt>
+  16:	1a c0       	rjmp	.+52     	; 0x4c <__bad_interrupt>
+  18:	19 c0       	rjmp	.+50     	; 0x4c <__bad_interrupt>
+  1a:	18 c0       	rjmp	.+48     	; 0x4c <__bad_interrupt>
+  1c:	17 c0       	rjmp	.+46     	; 0x4c <__bad_interrupt>
+  1e:	16 c0       	rjmp	.+44     	; 0x4c <__bad_interrupt>
+  20:	15 c0       	rjmp	.+42     	; 0x4c <__bad_interrupt>
+  22:	14 c0       	rjmp	.+40     	; 0x4c <__bad_interrupt>
+  24:	13 c0       	rjmp	.+38     	; 0x4c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	12 e0       	ldi	r17, 0x02	; 2
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	e8 ed       	ldi	r30, 0xD8	; 216
+  3a:	f1 e0       	ldi	r31, 0x01	; 1
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <__SREG__+0x3>
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+  42:	ae 35       	cpi	r26, 0x5E	; 94
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <__SP_H__>
+  48:	aa d0       	rcall	.+340    	; 0x19e <main>
+  4a:	c4 c0       	rjmp	.+392    	; 0x1d4 <_exit>
+
+0000004c <__bad_interrupt>:
+  4c:	d9 cf       	rjmp	.-78     	; 0x0 <__vectors>
+
+0000004e <pcd8544_send>:
+{
+	while (*str)
+	{
+		pcd8544_send_char(*str++);
+	}
+}
+  4e:	81 30       	cpi	r24, 0x01	; 1
+  50:	21 f4       	brne	.+8      	; 0x5a <pcd8544_send+0xc>
+  52:	82 b3       	in	r24, 0x12	; 18
+  54:	80 68       	ori	r24, 0x80	; 128
+  56:	82 bb       	out	0x12, r24	; 18
+  58:	03 c0       	rjmp	.+6      	; 0x60 <pcd8544_send+0x12>
+  5a:	82 b3       	in	r24, 0x12	; 18
+  5c:	8f 77       	andi	r24, 0x7F	; 127
+  5e:	82 bb       	out	0x12, r24	; 18
+  60:	88 b3       	in	r24, 0x18	; 24
+  62:	8b 7f       	andi	r24, 0xFB	; 251
+  64:	88 bb       	out	0x18, r24	; 24
+  66:	6f b9       	out	0x0f, r22	; 15
+  68:	77 9b       	sbis	0x0e, 7	; 14
+  6a:	fe cf       	rjmp	.-4      	; 0x68 <pcd8544_send+0x1a>
+  6c:	88 b3       	in	r24, 0x18	; 24
+  6e:	84 60       	ori	r24, 0x04	; 4
+  70:	88 bb       	out	0x18, r24	; 24
+  72:	08 95       	ret
+
+00000074 <pcd8544_init>:
+  74:	81 b3       	in	r24, 0x11	; 17
+  76:	80 6c       	ori	r24, 0xC0	; 192
+  78:	81 bb       	out	0x11, r24	; 17
+  7a:	87 b3       	in	r24, 0x17	; 23
+  7c:	8c 62       	ori	r24, 0x2C	; 44
+  7e:	87 bb       	out	0x17, r24	; 23
+  80:	81 e5       	ldi	r24, 0x51	; 81
+  82:	8d b9       	out	0x0d, r24	; 13
+  84:	82 b3       	in	r24, 0x12	; 18
+  86:	8f 7b       	andi	r24, 0xBF	; 191
+  88:	82 bb       	out	0x12, r24	; 18
+  8a:	82 b3       	in	r24, 0x12	; 18
+  8c:	80 64       	ori	r24, 0x40	; 64
+  8e:	82 bb       	out	0x12, r24	; 18
+  90:	61 e2       	ldi	r22, 0x21	; 33
+  92:	80 e0       	ldi	r24, 0x00	; 0
+  94:	dc df       	rcall	.-72     	; 0x4e <pcd8544_send>
+  96:	6a eb       	ldi	r22, 0xBA	; 186
+  98:	80 e0       	ldi	r24, 0x00	; 0
+  9a:	d9 df       	rcall	.-78     	; 0x4e <pcd8544_send>
+  9c:	64 e0       	ldi	r22, 0x04	; 4
+  9e:	80 e0       	ldi	r24, 0x00	; 0
+  a0:	d6 df       	rcall	.-84     	; 0x4e <pcd8544_send>
+  a2:	64 e1       	ldi	r22, 0x14	; 20
+  a4:	80 e0       	ldi	r24, 0x00	; 0
+  a6:	d3 df       	rcall	.-90     	; 0x4e <pcd8544_send>
+  a8:	60 e2       	ldi	r22, 0x20	; 32
+  aa:	80 e0       	ldi	r24, 0x00	; 0
+  ac:	d0 df       	rcall	.-96     	; 0x4e <pcd8544_send>
+  ae:	6c e0       	ldi	r22, 0x0C	; 12
+  b0:	80 e0       	ldi	r24, 0x00	; 0
+  b2:	cd df       	rcall	.-102    	; 0x4e <pcd8544_send>
+  b4:	08 95       	ret
+
+000000b6 <pcd8544_send_char>:
+  b6:	1f 93       	push	r17
+  b8:	cf 93       	push	r28
+  ba:	df 93       	push	r29
+  bc:	90 ee       	ldi	r25, 0xE0	; 224
+  be:	98 0f       	add	r25, r24
+  c0:	91 36       	cpi	r25, 0x61	; 97
+  c2:	00 f5       	brcc	.+64     	; 0x104 <pcd8544_send_char+0x4e>
+  c4:	18 2f       	mov	r17, r24
+  c6:	60 e0       	ldi	r22, 0x00	; 0
+  c8:	81 e0       	ldi	r24, 0x01	; 1
+  ca:	c1 df       	rcall	.-126    	; 0x4e <pcd8544_send>
+  cc:	c0 e0       	ldi	r28, 0x00	; 0
+  ce:	d0 e0       	ldi	r29, 0x00	; 0
+  d0:	13 c0       	rjmp	.+38     	; 0xf8 <pcd8544_send_char+0x42>
+  d2:	21 2f       	mov	r18, r17
+  d4:	30 e0       	ldi	r19, 0x00	; 0
+  d6:	20 52       	subi	r18, 0x20	; 32
+  d8:	31 09       	sbc	r19, r1
+  da:	f9 01       	movw	r30, r18
+  dc:	ee 0f       	add	r30, r30
+  de:	ff 1f       	adc	r31, r31
+  e0:	ee 0f       	add	r30, r30
+  e2:	ff 1f       	adc	r31, r31
+  e4:	e2 0f       	add	r30, r18
+  e6:	f3 1f       	adc	r31, r19
+  e8:	e3 58       	subi	r30, 0x83	; 131
+  ea:	ff 4f       	sbci	r31, 0xFF	; 255
+  ec:	ec 0f       	add	r30, r28
+  ee:	fd 1f       	adc	r31, r29
+  f0:	60 81       	ld	r22, Z
+  f2:	81 e0       	ldi	r24, 0x01	; 1
+  f4:	ac df       	rcall	.-168    	; 0x4e <pcd8544_send>
+  f6:	21 96       	adiw	r28, 0x01	; 1
+  f8:	c5 30       	cpi	r28, 0x05	; 5
+  fa:	d1 05       	cpc	r29, r1
+  fc:	54 f3       	brlt	.-44     	; 0xd2 <pcd8544_send_char+0x1c>
+  fe:	60 e0       	ldi	r22, 0x00	; 0
+ 100:	81 e0       	ldi	r24, 0x01	; 1
+ 102:	a5 df       	rcall	.-182    	; 0x4e <pcd8544_send>
+ 104:	df 91       	pop	r29
+ 106:	cf 91       	pop	r28
+ 108:	1f 91       	pop	r17
+ 10a:	08 95       	ret
+
+0000010c <pcd8544_clear>:
+		}
+		pcd8544_send(LCD_D, 0x00);
+	}
+}
+void pcd8544_clear(void)
+{
+ 10c:	cf 93       	push	r28
+ 10e:	df 93       	push	r29
+	int i;
+	for (i=0; i < LCD_X * LCD_Y / 8; i++)
+ 110:	c0 e0       	ldi	r28, 0x00	; 0
+ 112:	d0 e0       	ldi	r29, 0x00	; 0
+ 114:	04 c0       	rjmp	.+8      	; 0x11e <pcd8544_clear+0x12>
+	{
+		pcd8544_send(LCD_D, 0x00);
+ 116:	60 e0       	ldi	r22, 0x00	; 0
+ 118:	81 e0       	ldi	r24, 0x01	; 1
+ 11a:	99 df       	rcall	.-206    	; 0x4e <pcd8544_send>
+	}
+}
+void pcd8544_clear(void)
+{
+	int i;
+	for (i=0; i < LCD_X * LCD_Y / 8; i++)
+ 11c:	21 96       	adiw	r28, 0x01	; 1
+ 11e:	c8 3f       	cpi	r28, 0xF8	; 248
+ 120:	81 e0       	ldi	r24, 0x01	; 1
+ 122:	d8 07       	cpc	r29, r24
+ 124:	c4 f3       	brlt	.-16     	; 0x116 <pcd8544_clear+0xa>
+	{
+		pcd8544_send(LCD_D, 0x00);
+	}
+}
+ 126:	df 91       	pop	r29
+ 128:	cf 91       	pop	r28
+ 12a:	08 95       	ret
+
+0000012c <pcd8544_set_cursor>:
+
+void pcd8544_set_cursor(uint8_t x, uint8_t y) {
+ 12c:	cf 93       	push	r28
+	x=x%12; y=y%6;
+ 12e:	9b ea       	ldi	r25, 0xAB	; 171
+ 130:	89 9f       	mul	r24, r25
+ 132:	c1 2d       	mov	r28, r1
+ 134:	11 24       	eor	r1, r1
+ 136:	c6 95       	lsr	r28
+ 138:	c6 95       	lsr	r28
+ 13a:	c6 95       	lsr	r28
+ 13c:	2c 2f       	mov	r18, r28
+ 13e:	22 0f       	add	r18, r18
+ 140:	c2 0f       	add	r28, r18
+ 142:	2c 2f       	mov	r18, r28
+ 144:	22 0f       	add	r18, r18
+ 146:	22 0f       	add	r18, r18
+ 148:	c8 2f       	mov	r28, r24
+ 14a:	c2 1b       	sub	r28, r18
+ 14c:	69 9f       	mul	r22, r25
+ 14e:	81 2d       	mov	r24, r1
+ 150:	11 24       	eor	r1, r1
+ 152:	86 95       	lsr	r24
+ 154:	86 95       	lsr	r24
+ 156:	98 2f       	mov	r25, r24
+ 158:	99 0f       	add	r25, r25
+ 15a:	89 0f       	add	r24, r25
+ 15c:	98 2f       	mov	r25, r24
+ 15e:	99 0f       	add	r25, r25
+ 160:	86 2f       	mov	r24, r22
+ 162:	89 1b       	sub	r24, r25
+	pcd8544_send(LCD_C, 0x40+y);
+ 164:	60 e4       	ldi	r22, 0x40	; 64
+ 166:	68 0f       	add	r22, r24
+ 168:	80 e0       	ldi	r24, 0x00	; 0
+ 16a:	71 df       	rcall	.-286    	; 0x4e <pcd8544_send>
+	pcd8544_send(LCD_C, 0x80+x*7);
+ 16c:	6c 2f       	mov	r22, r28
+ 16e:	66 0f       	add	r22, r22
+ 170:	66 0f       	add	r22, r22
+ 172:	66 0f       	add	r22, r22
+ 174:	6c 1b       	sub	r22, r28
+ 176:	60 58       	subi	r22, 0x80	; 128
+ 178:	80 e0       	ldi	r24, 0x00	; 0
+ 17a:	69 df       	rcall	.-302    	; 0x4e <pcd8544_send>
+}
+ 17c:	cf 91       	pop	r28
+ 17e:	08 95       	ret
+
+00000180 <pcd8544_print_at>:
+
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y)
+{
+ 180:	cf 93       	push	r28
+ 182:	df 93       	push	r29
+ 184:	ec 01       	movw	r28, r24
+ 186:	86 2f       	mov	r24, r22
+	pcd8544_set_cursor(x,y);
+ 188:	64 2f       	mov	r22, r20
+ 18a:	d0 df       	rcall	.-96     	; 0x12c <pcd8544_set_cursor>
+	while (*str)
+ 18c:	02 c0       	rjmp	.+4      	; 0x192 <pcd8544_print_at+0x12>
+	{
+		pcd8544_send_char(*str++);
+ 18e:	21 96       	adiw	r28, 0x01	; 1
+ 190:	92 df       	rcall	.-220    	; 0xb6 <pcd8544_send_char>
+}
+
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y)
+{
+	pcd8544_set_cursor(x,y);
+	while (*str)
+ 192:	88 81       	ld	r24, Y
+ 194:	81 11       	cpse	r24, r1
+ 196:	fb cf       	rjmp	.-10     	; 0x18e <pcd8544_print_at+0xe>
+	{
+		pcd8544_send_char(*str++);
+	}
+}
+ 198:	df 91       	pop	r29
+ 19a:	cf 91       	pop	r28
+ 19c:	08 95       	ret
+
+0000019e <main>:
+void pcd8544_set_cursor(uint8_t x, uint8_t y);
+void pcd8544_print_at(char *str, uint8_t x, uint8_t y);
+
+int main(void)
+{
+    pcd8544_init();
+ 19e:	6a df       	rcall	.-300    	; 0x74 <pcd8544_init>
+    pcd8544_clear();
+ 1a0:	b5 df       	rcall	.-150    	; 0x10c <pcd8544_clear>
+    pcd8544_print_at("Nokia 3310",1,0);
+ 1a2:	40 e0       	ldi	r20, 0x00	; 0
+ 1a4:	61 e0       	ldi	r22, 0x01	; 1
+ 1a6:	80 e6       	ldi	r24, 0x60	; 96
+ 1a8:	90 e0       	ldi	r25, 0x00	; 0
+ 1aa:	ea df       	rcall	.-44     	; 0x180 <pcd8544_print_at>
+    pcd8544_print_at("Connecting",1,2);
+ 1ac:	42 e0       	ldi	r20, 0x02	; 2
+ 1ae:	61 e0       	ldi	r22, 0x01	; 1
+ 1b0:	8b e6       	ldi	r24, 0x6B	; 107
+ 1b2:	90 e0       	ldi	r25, 0x00	; 0
+ 1b4:	e5 df       	rcall	.-54     	; 0x180 <pcd8544_print_at>
+    pcd8544_print_at("People",6,3);
+ 1b6:	43 e0       	ldi	r20, 0x03	; 3
+ 1b8:	66 e0       	ldi	r22, 0x06	; 6
+ 1ba:	86 e7       	ldi	r24, 0x76	; 118
+ 1bc:	90 e0       	ldi	r25, 0x00	; 0
+ 1be:	e0 df       	rcall	.-64     	; 0x180 <pcd8544_print_at>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 1c0:	2f ef       	ldi	r18, 0xFF	; 255
+ 1c2:	89 e6       	ldi	r24, 0x69	; 105
+ 1c4:	98 e1       	ldi	r25, 0x18	; 24
+ 1c6:	21 50       	subi	r18, 0x01	; 1
+ 1c8:	80 40       	sbci	r24, 0x00	; 0
+ 1ca:	90 40       	sbci	r25, 0x00	; 0
+ 1cc:	e1 f7       	brne	.-8      	; 0x1c6 <main+0x28>
+ 1ce:	00 c0       	rjmp	.+0      	; 0x1d0 <main+0x32>
+ 1d0:	00 00       	nop
+ 1d2:	f6 cf       	rjmp	.-20     	; 0x1c0 <main+0x22>
+
+000001d4 <_exit>:
+ 1d4:	f8 94       	cli
+
+000001d6 <__stop_program>:
+ 1d6:	ff cf       	rjmp	.-2      	; 0x1d6 <__stop_program>

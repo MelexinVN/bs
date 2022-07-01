@@ -149,29 +149,7 @@ int main(void)
 	adc_init();
     sei();									//глобальное разрешение прерываний
 	usart_println("start");					//отправка стартовой строки в порт
-	/*
-	dt_reg = NRF24_ReadReg(CONFIG);			
-	sprintf(str,"CONFIG: 0x%02X",dt_reg);
-	usart_println(str);
-	dt_reg = NRF24_ReadReg(EN_AA);
-	sprintf(str,"EN_AA: 0x%02X",dt_reg);
-	usart_println(str);
-	dt_reg = NRF24_ReadReg(EN_RXADDR);
-	sprintf(str,"EN_RXADDR: 0x%02X",dt_reg);
-	usart_println(str);
-	dt_reg = NRF24_ReadReg(STATUS);
-	sprintf(str,"STATUS: 0x%02X",dt_reg);
-	usart_println(str);
-	dt_reg = NRF24_ReadReg(RF_SETUP);
-	sprintf(str,"RF_SETUP: 0x%02X",dt_reg);
-	usart_println(str);
-	NRF24_Read_Buf(TX_ADDR,buf,3);
-	sprintf(str,"TX_ADDR: 0x%02X, 0x%02X, 0x%02X",buf[0],buf[1],buf[2]);
-	usart_println(str);
-	NRF24_Read_Buf(RX_ADDR_P1,buf,3);
-	sprintf(str,"RX_ADDR: 0x%02X, 0x%02X, 0x%02X",buf[0],buf[1],buf[2]);
-	usart_println(str);
-	*/
+
 	uint8_t blink_counter = 5;
 	while (blink_counter)
 	{
@@ -181,11 +159,12 @@ int main(void)
 		_delay_ms(50);
 		blink_counter--;
 	}
+
 	wdt_enable(WDTO_120MS);
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля
-		//if (!f_reset) wdt_reset();
+		if (!f_reset) wdt_reset();
     }
 }
 
