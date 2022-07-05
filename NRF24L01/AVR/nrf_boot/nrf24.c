@@ -24,6 +24,8 @@ extern uint8_t f_send;								//флаг отправки
 extern volatile uint32_t time_ms;					//сохраненное время мс
 extern volatile uint32_t miliseconds;				//счетчик милисекунд
 extern uint8_t buf1[20];							//буфер
+extern uint16_t address;
+extern uint8_t device, val;
 
 //функция чтения регистра модуля
 uint8_t NRF24_ReadReg(uint8_t addr)
@@ -209,6 +211,36 @@ void nrf24l01_receive(void)
 	}
 }
 
+//------------------------------------------------
+void nrf_boot_receive(void)
+{
+	if(f_rx == 1)						//если флаг приема поднят
+	{
+		char stektemp = SREG;// сохраним значение стека
+		cli(); //запрещаем прерывания
+		f_rx = 0;						//опускаем флаг приема
+		if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
+		{
+			if (rx_buf[1] == 'B')	break;
+
+			if (rx_buf[1] == 'A')	address = (rx_buf[2]<<8) | rx_buf[3];
+
+			if (rx_buf[1] == 'F')		//
+			{
+				pagebuf_t size;
+				size = (rx_buf[2]<<8) | rx_buf[3];
+				address = writeFlashPage(address, size);
+			}
+			if (rx_buf[1] == 'E')		//
+			{
+				pagebuf_t size;
+				size = (rx_buf[2]<<8) | rx_buf[3];
+				address = writeEEpromPage(address, size);
+			}
+		}
+		SREG = stektemp;// вернем значение стека
+	}
+}
 //------------------------------------------------
 void nrf24_init(void)
 {//инициализация

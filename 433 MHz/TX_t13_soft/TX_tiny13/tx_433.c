@@ -39,6 +39,7 @@ void send_rf(uint8_t dev_adr, uint8_t command)
 	}
 
 	_delay_us(PAUSE);	
+/*
 
 	//Отправка адреса устройства
 	for(uint8_t i=0;i<8;i++)//посылаем отдельно каждый бит 
@@ -71,6 +72,7 @@ void send_rf(uint8_t dev_adr, uint8_t command)
 		else						//посылаем 0
 		send_zero();
 	}
+*/
 
 	//конечная пауза
 	RF_LOW();						//низкий уровень на передатчик

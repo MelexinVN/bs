@@ -30,8 +30,21 @@ ISR(TIM0_COMPA_vect)
 void react(void)
 {
 	LED_ON();
-	_delay_ms(100);
+	_delay_ms(20);
 	LED_OFF();
+	_delay_ms(20);
+	LED_ON();
+	_delay_ms(20);
+	LED_OFF();
+	_delay_ms(20);
+	LED_ON();
+	_delay_ms(20);
+	LED_OFF();
+	_delay_ms(20);
+	LED_ON();
+	_delay_ms(20);
+	LED_OFF();
+	_delay_ms(20);
 }
 
 int main(void)
@@ -69,12 +82,7 @@ int main(void)
 	GIFR=(0<<INTF0) | (1<<PCIF);
 
 	wdt_enable(WDTO_8S);
-	react();
-	_delay_ms(50);
-	react();
-	_delay_ms(50);
-	react();
-	_delay_ms(50);
+	//react();
 
 	sei();
 
@@ -82,28 +90,15 @@ int main(void)
     {
 		if(f_received == 1) //если пришёл пакет
 		{
-			LED_ON();	
-			//if ((dev_addr == 0xBB) && (tx_addr == 0xAA))	
-			//react();
-			//сброс значений переменных и массива битов
-			memset(bit_array, 0x00, SIZE_ARRAY);
-			dev_addr = 0;
-			tx_addr = 0;
-			command = 0;
-			crc = 0;
+			//if (dev_addr == 0xAA) 
+			react();
 			ten_micros = 0;
 			//опускаем флаг приема
 			f_received = 0;
+			//dev_addr = 0;
 			sei();   // включаем прерывания 
 		}
-		/*
-		LED_ON();
-		_delay_ms(50);
-		LED_OFF();
-		_delay_ms(50);
-		*/
 		wdt_reset();
-
     }
 }
 

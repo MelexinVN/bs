@@ -61,6 +61,8 @@ uint8_t f_rec_proc = 0;														//
 uint8_t firm_update = 0;
 uint16_t string_counter = 0;
 uint8_t ready_to_update = 0;
+uint8_t command_update = 0xAA;
+uint8_t addr_to_update = 7;
 	
 uint8_t buff[8];													//буфер 
 uint8_t size_data, type_data, check_sum;	//размер, тип данных и чек сумма
@@ -156,6 +158,11 @@ void update_receive(void)
 						program_data |= buff[i] <<(i*4);
 					}
 					//отправка доп адреса, осн адреса, слова
+					tx_buf[0] = but_addrs[addr_to_update];	//адреса текущей кнопки
+					tx_buf[1] = but_cmnds[but_counter];	//команды
+					tx_buf[2] = led_stat[but_counter];	//статуса светодиода
+					NRF24L01_Send(tx_buf);							//отправка посылки в эфир
+					
 					//FLASHStatus = FLASH_Program_Word(extented_linear_adress + address_data, program_data);
 					calculation_check_sum +=  (uint8_t)program_data + (uint8_t)(program_data>>8) + (uint8_t)(program_data>>16) + (uint8_t)(program_data>>24);	
 					size_data -=8;
@@ -394,27 +401,31 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		nrf24l01_receive();			//процедура приема данных радиомодуля
 		update_receive();
-		//обработка команды сброса
-		if ((f_push_rst) || (rec_cmnd == 255)) 		
-		{//если нажата кнопка сброса или пршла команда сброса
-			reset_button_pushed();
-		}
-		else
-		{//если нет команды сброса, запись в буфер
-			tx_buf[0] = but_addrs[but_counter];	//адреса текущей кнопки
-			tx_buf[1] = but_cmnds[but_counter];	//команды
-			tx_buf[2] = led_stat[but_counter];	//статуса светодиода
-			//LL_mDelay(1);
-			NRF24L01_Send(tx_buf);							//отправка посылки в эфир
-			but_counter++;											//переход к следующей кнопке
-			if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
-		}
+		
+		if ((!firm_update) && (!ready_to_update))
+		{
+			nrf24l01_receive();			//процедура приема данных радиомодуля
+			//обработка команды сброса
+			if ((f_push_rst) || (rec_cmnd == 255)) 		
+			{//если нажата кнопка сброса или пршла команда сброса
+				reset_button_pushed();
+			}
+			else
+			{//если нет команды сброса, запись в буфер
+				tx_buf[0] = but_addrs[but_counter];	//адреса текущей кнопки
+				tx_buf[1] = but_cmnds[but_counter];	//команды
+				tx_buf[2] = led_stat[but_counter];	//статуса светодиода
+				//LL_mDelay(1);
+				NRF24L01_Send(tx_buf);							//отправка посылки в эфир
+				but_counter++;											//переход к следующей кнопке
+				if (but_counter == NUM_OF_BUTS) but_counter = 0;//или к нулевой кнопке
+			}
 
-		first_push_finding();
+			first_push_finding();
 
-		LL_mDelay(5);//подбирается экспериментально 
+			LL_mDelay(5);//подбирается экспериментально 
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

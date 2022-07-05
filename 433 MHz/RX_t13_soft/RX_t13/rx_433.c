@@ -65,7 +65,7 @@ void RX_Input()
 
 	if(preamble_count == PREAM_NUM_IMP)		//если приамбула принята полностью
 	{
-
+		//f_received = 1;
 		if(cur_status == 1)//если предыдущий интервал был 0
 		{
 			if(((ZERO_DUR - INTERVAL < pulse_duration) && (pulse_duration < ZERO_DUR + INTERVAL)) || bit_counter == 0)
@@ -83,25 +83,24 @@ void RX_Input()
 				
 				bit_array[SIZE_ARRAY - bit_counter - 1] = (pulse_duration < DURATION) ? 0 : 1;
 
-				if (bit_counter >= 7) LED_ON();
+				//if (bit_counter >= 7) LED_ON();
 
 				bit_counter++;		//считаем импульс
 				
-
-
 				if (bit_counter == SIZE_ARRAY)	//если приняты все байты
 				{
 					//сохранение адреса устройства
 					for(uint8_t i = 0; i < 8; i++)		//8 раз
 					{//сдвигаем значение влево и прибавляем текущее значение бита
-						crc = (crc << 1) + bit_array[i];
+						dev_addr = (dev_addr << 1) + bit_array[i];
 					}
-					
+					/*
 					//сохранение адреса передатчика
 					for(uint8_t i = 8; i < 16; i++)
 					{//сдвигаем значение влево и прибавляем текущее значение бита
 						command = (command << 1) + bit_array[i];
 					}
+*/
 
 /*
 					//сохранение команды
@@ -109,7 +108,7 @@ void RX_Input()
 					{//сдвигаем значение влево и прибавляем текущее значение бита
 						tx_addr = (tx_addr << 1) + bit_array[i];
 					}*/
-					
+					/*
 					//for(uint8_t i = 24; i < 32; i++)
 					for(uint8_t i = 16; i < 24; i++)
 					{//сдвигаем значение влево и прибавляем текущее значение бита
@@ -123,8 +122,9 @@ void RX_Input()
 					crc_calc = ~crc_calc + 1;
 					preamble_count = 0;//обнуляем счетчик преамбулы
 					//сравниваем принятую и рассчитанную контрольные суммы
-					if (crc == crc_calc) f_received = 1;	//поднимаем флаг приема
-
+					if (crc == crc_calc) f_received = 1;	//поднимаем флаг приема*/
+					
+					f_received = 1;
 					cli(); 	// отключаем прерывания 
 				}
 			}

@@ -1,0 +1,883 @@
+
+main.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000003d2  00001800  00001800  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000006  00800060  00001bd2  00000466  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          0000009b  00800066  00800066  0000046c  2**0
+                  ALLOC
+  3 .stab         000010f8  00000000  00000000  0000046c  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00001412  00000000  00000000  00001564  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .comment      00000030  00000000  00000000  00002976  2**0
+                  CONTENTS, READONLY
+  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000029a8  2**2
+                  CONTENTS, READONLY
+  7 .debug_info   0000048c  00000000  00000000  000029e4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_abbrev 0000044e  00000000  00000000  00002e70  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_line   0000001a  00000000  00000000  000032be  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000017a  00000000  00000000  000032d8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00001800 <__vectors>:
+    1800:	12 c0       	rjmp	.+36     	; 0x1826 <__ctors_end>
+    1802:	95 c1       	rjmp	.+810    	; 0x1b2e <__vector_1>
+    1804:	2b c0       	rjmp	.+86     	; 0x185c <__bad_interrupt>
+    1806:	2a c0       	rjmp	.+84     	; 0x185c <__bad_interrupt>
+    1808:	29 c0       	rjmp	.+82     	; 0x185c <__bad_interrupt>
+    180a:	28 c0       	rjmp	.+80     	; 0x185c <__bad_interrupt>
+    180c:	27 c0       	rjmp	.+78     	; 0x185c <__bad_interrupt>
+    180e:	26 c0       	rjmp	.+76     	; 0x185c <__bad_interrupt>
+    1810:	25 c0       	rjmp	.+74     	; 0x185c <__bad_interrupt>
+    1812:	24 c0       	rjmp	.+72     	; 0x185c <__bad_interrupt>
+    1814:	23 c0       	rjmp	.+70     	; 0x185c <__bad_interrupt>
+    1816:	22 c0       	rjmp	.+68     	; 0x185c <__bad_interrupt>
+    1818:	21 c0       	rjmp	.+66     	; 0x185c <__bad_interrupt>
+    181a:	20 c0       	rjmp	.+64     	; 0x185c <__bad_interrupt>
+    181c:	1f c0       	rjmp	.+62     	; 0x185c <__bad_interrupt>
+    181e:	1e c0       	rjmp	.+60     	; 0x185c <__bad_interrupt>
+    1820:	1d c0       	rjmp	.+58     	; 0x185c <__bad_interrupt>
+    1822:	1c c0       	rjmp	.+56     	; 0x185c <__bad_interrupt>
+    1824:	1b c0       	rjmp	.+54     	; 0x185c <__bad_interrupt>
+
+00001826 <__ctors_end>:
+    1826:	11 24       	eor	r1, r1
+    1828:	1f be       	out	0x3f, r1	; 63
+    182a:	cf e5       	ldi	r28, 0x5F	; 95
+    182c:	d4 e0       	ldi	r29, 0x04	; 4
+    182e:	de bf       	out	0x3e, r29	; 62
+    1830:	cd bf       	out	0x3d, r28	; 61
+
+00001832 <__do_copy_data>:
+    1832:	10 e0       	ldi	r17, 0x00	; 0
+    1834:	a0 e6       	ldi	r26, 0x60	; 96
+    1836:	b0 e0       	ldi	r27, 0x00	; 0
+    1838:	e2 ed       	ldi	r30, 0xD2	; 210
+    183a:	fb e1       	ldi	r31, 0x1B	; 27
+    183c:	02 c0       	rjmp	.+4      	; 0x1842 <__do_copy_data+0x10>
+    183e:	05 90       	lpm	r0, Z+
+    1840:	0d 92       	st	X+, r0
+    1842:	a6 36       	cpi	r26, 0x66	; 102
+    1844:	b1 07       	cpc	r27, r17
+    1846:	d9 f7       	brne	.-10     	; 0x183e <__do_copy_data+0xc>
+
+00001848 <__do_clear_bss>:
+    1848:	21 e0       	ldi	r18, 0x01	; 1
+    184a:	a6 e6       	ldi	r26, 0x66	; 102
+    184c:	b0 e0       	ldi	r27, 0x00	; 0
+    184e:	01 c0       	rjmp	.+2      	; 0x1852 <.do_clear_bss_start>
+
+00001850 <.do_clear_bss_loop>:
+    1850:	1d 92       	st	X+, r1
+
+00001852 <.do_clear_bss_start>:
+    1852:	a1 30       	cpi	r26, 0x01	; 1
+    1854:	b2 07       	cpc	r27, r18
+    1856:	e1 f7       	brne	.-8      	; 0x1850 <.do_clear_bss_loop>
+    1858:	8d d1       	rcall	.+794    	; 0x1b74 <main>
+    185a:	b9 c1       	rjmp	.+882    	; 0x1bce <_exit>
+
+0000185c <__bad_interrupt>:
+    185c:	d1 cf       	rjmp	.-94     	; 0x1800 <__vectors>
+
+0000185e <port_init>:
+void port_init(void)//Инициализация портов
+{
+	// Input/Output Ports initialization
+	// Port B initialization
+	// Function: Bit7=In Bit6=In Bit5=Out Bit4=In Bit3=Out Bit2=Out Bit1=In Bit0=Out
+	DDRB=(0<<DDB7) | (0<<DDB6) | (1<<DDB5) | (0<<DDB4) | (1<<DDB3) | (1<<DDB2) | (0<<DDB1) | (1<<DDB0);
+    185e:	8d e2       	ldi	r24, 0x2D	; 45
+    1860:	87 bb       	out	0x17, r24	; 23
+	// State: Bit7=T Bit6=T Bit5=0 Bit4=T Bit3=0 Bit2=0 Bit1=T Bit0=0
+	PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (1<<PORTB0);
+    1862:	81 e0       	ldi	r24, 0x01	; 1
+    1864:	88 bb       	out	0x18, r24	; 24
+
+	// Port C initialization
+	// Function: Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+	DDRC=(0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
+    1866:	14 ba       	out	0x14, r1	; 20
+	// State: Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+	PORTC=(0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
+    1868:	15 ba       	out	0x15, r1	; 21
+
+	// Port D initialization
+	// Function: Bit7=Out Bit6=Out Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+	DDRD=(1<<DDD7) | (1<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
+    186a:	80 ec       	ldi	r24, 0xC0	; 192
+    186c:	81 bb       	out	0x11, r24	; 17
+	// State: Bit7=0 Bit6=0 Bit5=T Bit4=T Bit3=P Bit2=T Bit1=T Bit0=T
+	PORTD=(1<<PORTD7) | (1<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (1<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
+    186e:	88 ec       	ldi	r24, 0xC8	; 200
+    1870:	82 bb       	out	0x12, r24	; 18
+    1872:	08 95       	ret
+
+00001874 <interrupt_init>:
+	// External Interrupt(s) initialization
+	// INT0: On
+	// INT0 Mode: Falling Edge
+	// INT1: On
+	// INT1 Mode: Falling Edge
+	GICR|=(1<<INT1) | (1<<INT0);
+    1874:	8b b7       	in	r24, 0x3b	; 59
+    1876:	80 6c       	ori	r24, 0xC0	; 192
+    1878:	8b bf       	out	0x3b, r24	; 59
+	MCUCR=(1<<ISC11) | (0<<ISC10) | (1<<ISC01) | (0<<ISC00);
+    187a:	8a e0       	ldi	r24, 0x0A	; 10
+    187c:	85 bf       	out	0x35, r24	; 53
+	GIFR=(1<<INTF1) | (1<<INTF0);
+    187e:	80 ec       	ldi	r24, 0xC0	; 192
+    1880:	8a bf       	out	0x3a, r24	; 58
+	// Timer(s)/Counter(s) Interrupt(s) initialization
+	TIMSK=(0<<OCIE2) | (0<<TOIE2) | (0<<TICIE1) | (1<<OCIE1A) | (0<<OCIE1B) | (0<<TOIE1) | (1<<TOIE0);
+    1882:	81 e1       	ldi	r24, 0x11	; 17
+    1884:	89 bf       	out	0x39, r24	; 57
+    1886:	08 95       	ret
+
+00001888 <spi_init>:
+
+
+//инициализация SPI
+void spi_init(void)
+{
+	DDRB |= ((1<<PORTB2)|(1<<PORTB3)|(1<<PORTB5)); //ножки SPI на выход
+    1888:	87 b3       	in	r24, 0x17	; 23
+    188a:	8c 62       	ori	r24, 0x2C	; 44
+    188c:	87 bb       	out	0x17, r24	; 23
+	PORTB &= ~((1<<PORTB2)|(1<<PORTB3)|(1<<PORTB5)); //низкий уровень
+    188e:	88 b3       	in	r24, 0x18	; 24
+    1890:	83 7d       	andi	r24, 0xD3	; 211
+    1892:	88 bb       	out	0x18, r24	; 24
+	SPCR=(0<<SPIE) | (1<<SPE) | (0<<DORD) | (1<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
+    1894:	80 e5       	ldi	r24, 0x50	; 80
+    1896:	8d b9       	out	0x0d, r24	; 13
+    1898:	08 95       	ret
+
+0000189a <spi_sendByte>:
+}
+//отправка байта
+void spi_sendByte(uint8_t byte)
+{
+	SPDR = byte;				//записываем байт в регистр
+    189a:	8f b9       	out	0x0f, r24	; 15
+	while(!(SPSR & (1<<SPIF)));	//подождем пока данные передадутся
+    189c:	77 9b       	sbis	0x0e, 7	; 14
+    189e:	fe cf       	rjmp	.-4      	; 0x189c <spi_sendByte+0x2>
+}
+    18a0:	08 95       	ret
+
+000018a2 <spi_changeByte>:
+//прием/отправка байта
+uint8_t spi_changeByte(uint8_t byte)
+{
+	SPDR = byte;				//записываем байт в регистр
+    18a2:	8f b9       	out	0x0f, r24	; 15
+	while(!(SPSR & (1<<SPIF)));	//подождем пока данные передадутся (обменяются)
+    18a4:	77 9b       	sbis	0x0e, 7	; 14
+    18a6:	fe cf       	rjmp	.-4      	; 0x18a4 <spi_changeByte+0x2>
+	return SPDR;				//возвращаем принятое значение
+    18a8:	8f b1       	in	r24, 0x0f	; 15
+}
+    18aa:	08 95       	ret
+
+000018ac <NRF24_ReadReg>:
+
+//функция чтения регистра модуля
+uint8_t NRF24_ReadReg(uint8_t addr)
+{
+    18ac:	cf 93       	push	r28
+    18ae:	c8 2f       	mov	r28, r24
+	uint8_t dt=0, cmd;								//переменные данных и команды
+	CS_ON();											//ногу cs к земле
+    18b0:	97 98       	cbi	0x12, 7	; 18
+	dt = spi_changeByte(addr);						//Прием/отправкадайта адреса регистра
+    18b2:	f7 df       	rcall	.-18     	; 0x18a2 <spi_changeByte>
+	//если адрес равен адрес регистра статус то и возварщаем его состояние
+	if (addr!=STATUS)//а если не равен
+    18b4:	c7 30       	cpi	r28, 0x07	; 7
+    18b6:	11 f0       	breq	.+4      	; 0x18bc <NRF24_ReadReg+0x10>
+	{
+		cmd=0xFF;									//команда NOP для получения данных
+		dt = spi_changeByte(cmd);					//
+    18b8:	8f ef       	ldi	r24, 0xFF	; 255
+    18ba:	f3 df       	rcall	.-26     	; 0x18a2 <spi_changeByte>
+	}
+	CS_OFF();											//поднимаем ногу CS
+    18bc:	97 9a       	sbi	0x12, 7	; 18
+	return dt;	//возвращаемое значение
+}
+    18be:	cf 91       	pop	r28
+    18c0:	08 95       	ret
+
+000018c2 <NRF24_WriteReg>:
+//------------------------------------------------
+//функция записи регистра в модуль
+void NRF24_WriteReg(uint8_t addr, uint8_t dt)
+{
+    18c2:	cf 93       	push	r28
+    18c4:	c6 2f       	mov	r28, r22
+	addr |= W_REGISTER;//включим бит записи в адрес
+	CS_ON();
+    18c6:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(addr);									//
+    18c8:	80 62       	ori	r24, 0x20	; 32
+    18ca:	e7 df       	rcall	.-50     	; 0x189a <spi_sendByte>
+	spi_sendByte(dt);										//
+    18cc:	8c 2f       	mov	r24, r28
+    18ce:	e5 df       	rcall	.-54     	; 0x189a <spi_sendByte>
+	CS_OFF();
+    18d0:	97 9a       	sbi	0x12, 7	; 18
+}
+    18d2:	cf 91       	pop	r28
+    18d4:	08 95       	ret
+
+000018d6 <NRF24_ToggleFeatures>:
+//------------------------------------------------
+void NRF24_ToggleFeatures(void)							//активация команд R_RX_PL_WID, W_ACK_PAYLOAD и W_TX_PAYLOAD_NOACK
+{	//есть в даташите "без плюса"
+	uint8_t dt[1] = {ACTIVATE};
+	CS_ON();
+    18d6:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(dt[0]);
+    18d8:	80 e5       	ldi	r24, 0x50	; 80
+    18da:	df df       	rcall	.-66     	; 0x189a <spi_sendByte>
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+    18dc:	82 e0       	ldi	r24, 0x02	; 2
+    18de:	8a 95       	dec	r24
+    18e0:	f1 f7       	brne	.-4      	; 0x18de <NRF24_ToggleFeatures+0x8>
+    18e2:	00 c0       	rjmp	.+0      	; 0x18e4 <NRF24_ToggleFeatures+0xe>
+	_delay_us(1);
+	dt[0] = 0x73;
+	spi_sendByte(dt[0]);
+    18e4:	83 e7       	ldi	r24, 0x73	; 115
+    18e6:	d9 df       	rcall	.-78     	; 0x189a <spi_sendByte>
+	CS_OFF();
+    18e8:	97 9a       	sbi	0x12, 7	; 18
+    18ea:	08 95       	ret
+
+000018ec <NRF24_Read_Buf>:
+}
+//-----------------------------------------------
+void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
+{//чтение буфера (несколько байт)
+    18ec:	ef 92       	push	r14
+    18ee:	ff 92       	push	r15
+    18f0:	0f 93       	push	r16
+    18f2:	1f 93       	push	r17
+    18f4:	cf 93       	push	r28
+    18f6:	df 93       	push	r29
+    18f8:	18 2f       	mov	r17, r24
+    18fa:	06 2f       	mov	r16, r22
+    18fc:	e7 2e       	mov	r14, r23
+    18fe:	f4 2e       	mov	r15, r20
+	CS_ON();
+    1900:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(addr);
+    1902:	cb df       	rcall	.-106    	; 0x189a <spi_sendByte>
+    1904:	c0 2f       	mov	r28, r16
+    1906:	de 2d       	mov	r29, r14
+    1908:	ce 01       	movw	r24, r28
+    190a:	8f 0d       	add	r24, r15
+    190c:	91 1d       	adc	r25, r1
+    190e:	7c 01       	movw	r14, r24
+	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
+    1910:	ce 15       	cp	r28, r14
+    1912:	df 05       	cpc	r29, r15
+    1914:	21 f0       	breq	.+8      	; 0x191e <NRF24_Read_Buf+0x32>
+	{																					//
+		pBuf[i] = spi_changeByte(addr);
+    1916:	81 2f       	mov	r24, r17
+    1918:	c4 df       	rcall	.-120    	; 0x18a2 <spi_changeByte>
+    191a:	89 93       	st	Y+, r24
+    191c:	f9 cf       	rjmp	.-14     	; 0x1910 <NRF24_Read_Buf+0x24>
+	}
+	CS_OFF();
+    191e:	97 9a       	sbi	0x12, 7	; 18
+}
+    1920:	df 91       	pop	r29
+    1922:	cf 91       	pop	r28
+    1924:	1f 91       	pop	r17
+    1926:	0f 91       	pop	r16
+    1928:	ff 90       	pop	r15
+    192a:	ef 90       	pop	r14
+    192c:	08 95       	ret
+
+0000192e <NRF24_Write_Buf>:
+//------------------------------------------------
+void NRF24_Write_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
+{//запись буфера
+    192e:	ff 92       	push	r15
+    1930:	0f 93       	push	r16
+    1932:	1f 93       	push	r17
+    1934:	cf 93       	push	r28
+    1936:	df 93       	push	r29
+    1938:	f6 2e       	mov	r15, r22
+    193a:	07 2f       	mov	r16, r23
+    193c:	14 2f       	mov	r17, r20
+	addr |= W_REGISTER;//включим бит записи в адрес
+	CS_ON();
+    193e:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(addr);
+    1940:	80 62       	ori	r24, 0x20	; 32
+    1942:	ab df       	rcall	.-170    	; 0x189a <spi_sendByte>
+    1944:	82 e0       	ldi	r24, 0x02	; 2
+    1946:	8a 95       	dec	r24
+    1948:	f1 f7       	brne	.-4      	; 0x1946 <NRF24_Write_Buf+0x18>
+    194a:	00 c0       	rjmp	.+0      	; 0x194c <NRF24_Write_Buf+0x1e>
+    194c:	cf 2d       	mov	r28, r15
+    194e:	d0 2f       	mov	r29, r16
+    1950:	ce 01       	movw	r24, r28
+    1952:	81 0f       	add	r24, r17
+    1954:	91 1d       	adc	r25, r1
+    1956:	8c 01       	movw	r16, r24
+	_delay_us(1);
+	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
+    1958:	c0 17       	cp	r28, r16
+    195a:	d1 07       	cpc	r29, r17
+    195c:	19 f0       	breq	.+6      	; 0x1964 <NRF24_Write_Buf+0x36>
+	{
+		spi_sendByte(pBuf[i]);
+    195e:	89 91       	ld	r24, Y+
+    1960:	9c df       	rcall	.-200    	; 0x189a <spi_sendByte>
+    1962:	fa cf       	rjmp	.-12     	; 0x1958 <NRF24_Write_Buf+0x2a>
+	}
+	CS_OFF();
+    1964:	97 9a       	sbi	0x12, 7	; 18
+}
+    1966:	df 91       	pop	r29
+    1968:	cf 91       	pop	r28
+    196a:	1f 91       	pop	r17
+    196c:	0f 91       	pop	r16
+    196e:	ff 90       	pop	r15
+    1970:	08 95       	ret
+
+00001972 <NRF24_FlushRX>:
+//------------------------------------------------
+void NRF24_FlushRX(void)
+{//очистка буфера приема
+	uint8_t dt[1] = {FLUSH_RX};
+	CS_ON();
+    1972:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(dt[0]);
+    1974:	82 ee       	ldi	r24, 0xE2	; 226
+    1976:	91 df       	rcall	.-222    	; 0x189a <spi_sendByte>
+    1978:	82 e0       	ldi	r24, 0x02	; 2
+    197a:	8a 95       	dec	r24
+    197c:	f1 f7       	brne	.-4      	; 0x197a <NRF24_FlushRX+0x8>
+    197e:	00 c0       	rjmp	.+0      	; 0x1980 <NRF24_FlushRX+0xe>
+	_delay_us(1); //пауза в микросекунду для завершения процесса
+	CS_OFF();
+    1980:	97 9a       	sbi	0x12, 7	; 18
+    1982:	08 95       	ret
+
+00001984 <NRF24_FlushTX>:
+}
+//------------------------------------------------
+void NRF24_FlushTX(void)
+{//очистка буфера передачи
+	uint8_t dt[1] = {FLUSH_TX};
+	CS_ON();
+    1984:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(dt[0]);
+    1986:	81 ee       	ldi	r24, 0xE1	; 225
+    1988:	88 df       	rcall	.-240    	; 0x189a <spi_sendByte>
+    198a:	82 e0       	ldi	r24, 0x02	; 2
+    198c:	8a 95       	dec	r24
+    198e:	f1 f7       	brne	.-4      	; 0x198c <NRF24_FlushTX+0x8>
+    1990:	00 c0       	rjmp	.+0      	; 0x1992 <NRF24_FlushTX+0xe>
+	_delay_us(1); //пауза в микросекунду для завершения процесса
+	CS_OFF();
+    1992:	97 9a       	sbi	0x12, 7	; 18
+    1994:	08 95       	ret
+
+00001996 <NRF24L01_RX_Mode>:
+}
+//------------------------------------------------
+void NRF24L01_RX_Mode(void)
+{//режим приемника
+	uint8_t regval=0x00;
+	regval = NRF24_ReadReg(CONFIG);	//сохраняем значение регистра конфигурации
+    1996:	80 e0       	ldi	r24, 0x00	; 0
+    1998:	89 df       	rcall	.-238    	; 0x18ac <NRF24_ReadReg>
+	//разбудим модуль и переведём его в режим приёмника, включив биты PWR_UP и PRIM_RX
+	regval |= (1<<PWR_UP)|(1<<PRIM_RX);
+	NRF24_WriteReg(CONFIG,regval);	//возвращаем значение регистра статуса
+    199a:	68 2f       	mov	r22, r24
+    199c:	63 60       	ori	r22, 0x03	; 3
+    199e:	80 e0       	ldi	r24, 0x00	; 0
+    19a0:	90 df       	rcall	.-224    	; 0x18c2 <NRF24_WriteReg>
+	
+	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS1, TX_ADR_WIDTH);		//записываем  адрес передатчика
+    19a2:	43 e0       	ldi	r20, 0x03	; 3
+    19a4:	60 e6       	ldi	r22, 0x60	; 96
+    19a6:	70 e0       	ldi	r23, 0x00	; 0
+    19a8:	80 e1       	ldi	r24, 0x10	; 16
+    19aa:	c1 df       	rcall	.-126    	; 0x192e <NRF24_Write_Buf>
+	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS1, TX_ADR_WIDTH);	//записываем адрес приемника
+    19ac:	43 e0       	ldi	r20, 0x03	; 3
+    19ae:	60 e6       	ldi	r22, 0x60	; 96
+    19b0:	70 e0       	ldi	r23, 0x00	; 0
+    19b2:	8a e0       	ldi	r24, 0x0A	; 10
+    19b4:	bc df       	rcall	.-136    	; 0x192e <NRF24_Write_Buf>
+	
+	CE_SET();
+    19b6:	c0 9a       	sbi	0x18, 0	; 24
+    19b8:	8b e2       	ldi	r24, 0x2B	; 43
+    19ba:	91 e0       	ldi	r25, 0x01	; 1
+    19bc:	01 97       	sbiw	r24, 0x01	; 1
+    19be:	f1 f7       	brne	.-4      	; 0x19bc <NRF24L01_RX_Mode+0x26>
+    19c0:	00 c0       	rjmp	.+0      	; 0x19c2 <NRF24L01_RX_Mode+0x2c>
+    19c2:	00 00       	nop
+	_delay_us(150); //Задержка минимум 130 мкс
+	// Flush buffers
+	NRF24_FlushRX();
+    19c4:	d6 df       	rcall	.-84     	; 0x1972 <NRF24_FlushRX>
+	NRF24_FlushTX();
+    19c6:	de cf       	rjmp	.-68     	; 0x1984 <NRF24_FlushTX>
+
+000019c8 <NRF24L01_TX_Mode>:
+}
+//------------------------------------------------
+void NRF24L01_TX_Mode(uint8_t *pBuf)
+{//режим передатчика
+	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);		//записываем адрес передатчика
+    19c8:	43 e0       	ldi	r20, 0x03	; 3
+    19ca:	63 e6       	ldi	r22, 0x63	; 99
+    19cc:	70 e0       	ldi	r23, 0x00	; 0
+    19ce:	80 e1       	ldi	r24, 0x10	; 16
+    19d0:	ae df       	rcall	.-164    	; 0x192e <NRF24_Write_Buf>
+	NRF24_Write_Buf(RX_ADDR_P0, TX_ADDRESS0, TX_ADR_WIDTH);	//записываем адрес приемника
+    19d2:	43 e0       	ldi	r20, 0x03	; 3
+    19d4:	63 e6       	ldi	r22, 0x63	; 99
+    19d6:	70 e0       	ldi	r23, 0x00	; 0
+    19d8:	8a e0       	ldi	r24, 0x0A	; 10
+    19da:	a9 df       	rcall	.-174    	; 0x192e <NRF24_Write_Buf>
+	CE_RESET();
+    19dc:	c0 98       	cbi	0x18, 0	; 24
+	// Flush buffers
+	NRF24_FlushRX();
+    19de:	c9 df       	rcall	.-110    	; 0x1972 <NRF24_FlushRX>
+	NRF24_FlushTX();
+    19e0:	d1 cf       	rjmp	.-94     	; 0x1984 <NRF24_FlushTX>
+
+000019e2 <NRF24_Transmit>:
+}
+//------------------------------------------------
+void NRF24_Transmit(uint8_t addr,uint8_t *pBuf,uint8_t bytes)
+{//передача данных в модуль
+    19e2:	ff 92       	push	r15
+    19e4:	0f 93       	push	r16
+    19e6:	1f 93       	push	r17
+    19e8:	cf 93       	push	r28
+    19ea:	df 93       	push	r29
+    19ec:	f6 2e       	mov	r15, r22
+    19ee:	07 2f       	mov	r16, r23
+    19f0:	14 2f       	mov	r17, r20
+	CE_RESET();
+    19f2:	c0 98       	cbi	0x18, 0	; 24
+	CS_ON();
+    19f4:	97 98       	cbi	0x12, 7	; 18
+	spi_sendByte(addr);
+    19f6:	51 df       	rcall	.-350    	; 0x189a <spi_sendByte>
+    19f8:	82 e0       	ldi	r24, 0x02	; 2
+    19fa:	8a 95       	dec	r24
+    19fc:	f1 f7       	brne	.-4      	; 0x19fa <NRF24_Transmit+0x18>
+    19fe:	00 c0       	rjmp	.+0      	; 0x1a00 <NRF24_Transmit+0x1e>
+    1a00:	cf 2d       	mov	r28, r15
+    1a02:	d0 2f       	mov	r29, r16
+    1a04:	ce 01       	movw	r24, r28
+    1a06:	81 0f       	add	r24, r17
+    1a08:	91 1d       	adc	r25, r1
+    1a0a:	8c 01       	movw	r16, r24
+	_delay_us(1); //пауза в микросекунду для завершения процесса
+	for (uint8_t i = 0 ; i < bytes ; i++)
+    1a0c:	c0 17       	cp	r28, r16
+    1a0e:	d1 07       	cpc	r29, r17
+    1a10:	19 f0       	breq	.+6      	; 0x1a18 <NRF24_Transmit+0x36>
+	{
+		spi_sendByte(pBuf[i]);
+    1a12:	89 91       	ld	r24, Y+
+    1a14:	42 df       	rcall	.-380    	; 0x189a <spi_sendByte>
+    1a16:	fa cf       	rjmp	.-12     	; 0x1a0c <NRF24_Transmit+0x2a>
+	}
+	CS_OFF();
+    1a18:	97 9a       	sbi	0x12, 7	; 18
+	CE_SET();
+    1a1a:	c0 9a       	sbi	0x18, 0	; 24
+}
+    1a1c:	df 91       	pop	r29
+    1a1e:	cf 91       	pop	r28
+    1a20:	1f 91       	pop	r17
+    1a22:	0f 91       	pop	r16
+    1a24:	ff 90       	pop	r15
+    1a26:	08 95       	ret
+
+00001a28 <NRF24L01_Send>:
+//------------------------------------------------
+uint8_t NRF24L01_Send(uint8_t *pBuf)
+{//отправка данных в эфир
+    1a28:	cf 93       	push	r28
+    1a2a:	df 93       	push	r29
+    1a2c:	ec 01       	movw	r28, r24
+	uint8_t regval=0x00;						//переменная для отправки в конфигурационный регистр
+	NRF24L01_TX_Mode(pBuf);					//включаем режим передачи
+    1a2e:	cc df       	rcall	.-104    	; 0x19c8 <NRF24L01_TX_Mode>
+	regval = NRF24_ReadReg(CONFIG);	//сохраняем значения конфигурационного региста
+    1a30:	80 e0       	ldi	r24, 0x00	; 0
+    1a32:	3c df       	rcall	.-392    	; 0x18ac <NRF24_ReadReg>
+    1a34:	8e 7f       	andi	r24, 0xFE	; 254
+	//если модуль ушел в спящий режим, то разбудим его, включив бит PWR_UP и выключив PRIM_RX
+	regval |= (1<<PWR_UP);
+	regval &= ~(1<<PRIM_RX);
+	NRF24_WriteReg(CONFIG,regval);//записываем новое значение конфигурационного регистра
+    1a36:	68 2f       	mov	r22, r24
+    1a38:	62 60       	ori	r22, 0x02	; 2
+    1a3a:	80 e0       	ldi	r24, 0x00	; 0
+    1a3c:	42 df       	rcall	.-380    	; 0x18c2 <NRF24_WriteReg>
+    1a3e:	8b e2       	ldi	r24, 0x2B	; 43
+    1a40:	91 e0       	ldi	r25, 0x01	; 1
+    1a42:	01 97       	sbiw	r24, 0x01	; 1
+    1a44:	f1 f7       	brne	.-4      	; 0x1a42 <NRF24L01_Send+0x1a>
+    1a46:	00 c0       	rjmp	.+0      	; 0x1a48 <NRF24L01_Send+0x20>
+    1a48:	00 00       	nop
+	_delay_us(150); //Задержка минимум 130 мкс
+	//Отправим данные в воздух
+	NRF24_Transmit(WR_TX_PLOAD, pBuf, TX_PLOAD_WIDTH);//отправка данных
+    1a4a:	40 e2       	ldi	r20, 0x20	; 32
+    1a4c:	be 01       	movw	r22, r28
+    1a4e:	80 ea       	ldi	r24, 0xA0	; 160
+    1a50:	c8 df       	rcall	.-112    	; 0x19e2 <NRF24_Transmit>
+	CE_SET();
+    1a52:	c0 9a       	sbi	0x18, 0	; 24
+    1a54:	98 e2       	ldi	r25, 0x28	; 40
+    1a56:	9a 95       	dec	r25
+    1a58:	f1 f7       	brne	.-4      	; 0x1a56 <NRF24L01_Send+0x2e>
+	_delay_us(15); //minimum 10us high pulse (Page 21)
+	CE_RESET();
+    1a5a:	c0 98       	cbi	0x18, 0	; 24
+	return 0;
+}
+    1a5c:	80 e0       	ldi	r24, 0x00	; 0
+    1a5e:	df 91       	pop	r29
+    1a60:	cf 91       	pop	r28
+    1a62:	08 95       	ret
+
+00001a64 <nrf24_init>:
+//------------------------------------------------
+void nrf24_init(void)
+{//инициализация
+	CE_RESET();							//опускаем к земле вывод ce
+    1a64:	c0 98       	cbi	0x18, 0	; 24
+    1a66:	8f e0       	ldi	r24, 0x0F	; 15
+    1a68:	97 e2       	ldi	r25, 0x27	; 39
+    1a6a:	01 97       	sbiw	r24, 0x01	; 1
+    1a6c:	f1 f7       	brne	.-4      	; 0x1a6a <nrf24_init+0x6>
+    1a6e:	00 c0       	rjmp	.+0      	; 0x1a70 <nrf24_init+0xc>
+    1a70:	00 00       	nop
+	_delay_us(5000);					//задержка 5 мс
+	//записываем конфигурационный байт,
+	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
+    1a72:	6a e0       	ldi	r22, 0x0A	; 10
+    1a74:	80 e0       	ldi	r24, 0x00	; 0
+    1a76:	25 df       	rcall	.-438    	; 0x18c2 <NRF24_WriteReg>
+    1a78:	8f e0       	ldi	r24, 0x0F	; 15
+    1a7a:	97 e2       	ldi	r25, 0x27	; 39
+    1a7c:	01 97       	sbiw	r24, 0x01	; 1
+    1a7e:	f1 f7       	brne	.-4      	; 0x1a7c <nrf24_init+0x18>
+    1a80:	00 c0       	rjmp	.+0      	; 0x1a82 <nrf24_init+0x1e>
+    1a82:	00 00       	nop
+	_delay_us(5000);
+	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
+    1a84:	60 e0       	ldi	r22, 0x00	; 0
+    1a86:	81 e0       	ldi	r24, 0x01	; 1
+    1a88:	1c df       	rcall	.-456    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
+    1a8a:	61 e0       	ldi	r22, 0x01	; 1
+    1a8c:	82 e0       	ldi	r24, 0x02	; 2
+    1a8e:	19 df       	rcall	.-462    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
+    1a90:	61 e0       	ldi	r22, 0x01	; 1
+    1a92:	83 e0       	ldi	r24, 0x03	; 3
+    1a94:	16 df       	rcall	.-468    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
+    1a96:	60 e0       	ldi	r22, 0x00	; 0
+    1a98:	84 e0       	ldi	r24, 0x04	; 4
+    1a9a:	13 df       	rcall	.-474    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_ToggleFeatures();				//активация команд
+    1a9c:	1c df       	rcall	.-456    	; 0x18d6 <NRF24_ToggleFeatures>
+	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE
+    1a9e:	67 e0       	ldi	r22, 0x07	; 7
+    1aa0:	8d e1       	ldi	r24, 0x1D	; 29
+    1aa2:	0f df       	rcall	.-482    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
+    1aa4:	60 e0       	ldi	r22, 0x00	; 0
+    1aa6:	8c e1       	ldi	r24, 0x1C	; 28
+    1aa8:	0c df       	rcall	.-488    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
+    1aaa:	60 e7       	ldi	r22, 0x70	; 112
+    1aac:	87 e0       	ldi	r24, 0x07	; 7
+    1aae:	09 df       	rcall	.-494    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
+    1ab0:	6c e4       	ldi	r22, 0x4C	; 76
+    1ab2:	85 e0       	ldi	r24, 0x05	; 5
+    1ab4:	06 df       	rcall	.-500    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_WriteReg(RF_SETUP, 0x06);		//TX_PWR:0dBm, Datarate:1Mbps
+    1ab6:	66 e0       	ldi	r22, 0x06	; 6
+    1ab8:	86 e0       	ldi	r24, 0x06	; 6
+    1aba:	03 df       	rcall	.-506    	; 0x18c2 <NRF24_WriteReg>
+	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
+    1abc:	43 e0       	ldi	r20, 0x03	; 3
+    1abe:	63 e6       	ldi	r22, 0x63	; 99
+    1ac0:	70 e0       	ldi	r23, 0x00	; 0
+    1ac2:	80 e1       	ldi	r24, 0x10	; 16
+    1ac4:	34 df       	rcall	.-408    	; 0x192e <NRF24_Write_Buf>
+	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
+    1ac6:	43 e0       	ldi	r20, 0x03	; 3
+    1ac8:	63 e6       	ldi	r22, 0x63	; 99
+    1aca:	70 e0       	ldi	r23, 0x00	; 0
+    1acc:	8b e0       	ldi	r24, 0x0B	; 11
+    1ace:	2f df       	rcall	.-418    	; 0x192e <NRF24_Write_Buf>
+	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
+    1ad0:	60 e2       	ldi	r22, 0x20	; 32
+    1ad2:	81 e1       	ldi	r24, 0x11	; 17
+    1ad4:	f6 de       	rcall	.-532    	; 0x18c2 <NRF24_WriteReg>
+	//пока уходим в режим приёмника
+	NRF24L01_RX_Mode();					//режим приема
+    1ad6:	5f df       	rcall	.-322    	; 0x1996 <NRF24L01_RX_Mode>
+	LED_OFF();
+    1ad8:	96 98       	cbi	0x12, 6	; 18
+    1ada:	08 95       	ret
+
+00001adc <IRQ_Callback>:
+}
+//--------------------------------------------------
+void IRQ_Callback(void)
+{
+    1adc:	cf 93       	push	r28
+    1ade:	8a e1       	ldi	r24, 0x1A	; 26
+    1ae0:	8a 95       	dec	r24
+    1ae2:	f1 f7       	brne	.-4      	; 0x1ae0 <IRQ_Callback+0x4>
+    1ae4:	00 c0       	rjmp	.+0      	; 0x1ae6 <IRQ_Callback+0xa>
+	
+	//LED_ON();
+	uint8_t status=0x01;	//переменная статус
+	_delay_us(10);			//_delay_us(10);
+	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
+    1ae6:	87 e0       	ldi	r24, 0x07	; 7
+    1ae8:	e1 de       	rcall	.-574    	; 0x18ac <NRF24_ReadReg>
+    1aea:	c8 2f       	mov	r28, r24
+	if(status & RX_DR)				//если есть данные на прием
+    1aec:	86 ff       	sbrs	r24, 6
+    1aee:	0b c0       	rjmp	.+22     	; 0x1b06 <IRQ_Callback+0x2a>
+	{
+		NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
+    1af0:	40 e2       	ldi	r20, 0x20	; 32
+    1af2:	6b e8       	ldi	r22, 0x8B	; 139
+    1af4:	70 e0       	ldi	r23, 0x00	; 0
+    1af6:	81 e6       	ldi	r24, 0x61	; 97
+    1af8:	f9 de       	rcall	.-526    	; 0x18ec <NRF24_Read_Buf>
+		NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
+    1afa:	60 e4       	ldi	r22, 0x40	; 64
+    1afc:	87 e0       	ldi	r24, 0x07	; 7
+    1afe:	e1 de       	rcall	.-574    	; 0x18c2 <NRF24_WriteReg>
+		f_rx = 1;						//поднимаем флаг приема
+    1b00:	81 e0       	ldi	r24, 0x01	; 1
+    1b02:	80 93 6a 00 	sts	0x006A, r24	; 0x80006a <f_rx>
+	}
+	if(status & TX_DS) //данные успешно отправлены
+    1b06:	c5 ff       	sbrs	r28, 5
+    1b08:	08 c0       	rjmp	.+16     	; 0x1b1a <IRQ_Callback+0x3e>
+	{
+		NRF24_WriteReg(STATUS, 0x20);	//очистка всех битов кроме пятого
+    1b0a:	60 e2       	ldi	r22, 0x20	; 32
+    1b0c:	87 e0       	ldi	r24, 0x07	; 7
+    1b0e:	d9 de       	rcall	.-590    	; 0x18c2 <NRF24_WriteReg>
+		NRF24L01_RX_Mode();				//переход в режим приема
+    1b10:	42 df       	rcall	.-380    	; 0x1996 <NRF24L01_RX_Mode>
+		f_tx = 1;						//поднимаем флаг передачи
+    1b12:	81 e0       	ldi	r24, 0x01	; 1
+    1b14:	80 93 69 00 	sts	0x0069, r24	; 0x800069 <f_tx>
+    1b18:	08 c0       	rjmp	.+16     	; 0x1b2a <IRQ_Callback+0x4e>
+	}
+	else if(status & MAX_RT)//превышение количества попыток отправки
+    1b1a:	c4 ff       	sbrs	r28, 4
+    1b1c:	06 c0       	rjmp	.+12     	; 0x1b2a <IRQ_Callback+0x4e>
+	{
+		NRF24_WriteReg(STATUS, 0x10);	//однуление всех остальных битов, кроме 4го
+    1b1e:	60 e1       	ldi	r22, 0x10	; 16
+    1b20:	87 e0       	ldi	r24, 0x07	; 7
+    1b22:	cf de       	rcall	.-610    	; 0x18c2 <NRF24_WriteReg>
+		NRF24_FlushTX();				//очистка буфера отправки
+    1b24:	2f df       	rcall	.-418    	; 0x1984 <NRF24_FlushTX>
+		//Уходим в режим приёмника
+		NRF24L01_RX_Mode();
+	}
+}
+    1b26:	cf 91       	pop	r28
+	else if(status & MAX_RT)//превышение количества попыток отправки
+	{
+		NRF24_WriteReg(STATUS, 0x10);	//однуление всех остальных битов, кроме 4го
+		NRF24_FlushTX();				//очистка буфера отправки
+		//Уходим в режим приёмника
+		NRF24L01_RX_Mode();
+    1b28:	36 cf       	rjmp	.-404    	; 0x1996 <NRF24L01_RX_Mode>
+	}
+}
+    1b2a:	cf 91       	pop	r28
+    1b2c:	08 95       	ret
+
+00001b2e <__vector_1>:
+
+
+
+
+ISR(INT0_vect)
+{
+    1b2e:	1f 92       	push	r1
+    1b30:	0f 92       	push	r0
+    1b32:	0f b6       	in	r0, 0x3f	; 63
+    1b34:	0f 92       	push	r0
+    1b36:	11 24       	eor	r1, r1
+    1b38:	2f 93       	push	r18
+    1b3a:	3f 93       	push	r19
+    1b3c:	4f 93       	push	r20
+    1b3e:	5f 93       	push	r21
+    1b40:	6f 93       	push	r22
+    1b42:	7f 93       	push	r23
+    1b44:	8f 93       	push	r24
+    1b46:	9f 93       	push	r25
+    1b48:	af 93       	push	r26
+    1b4a:	bf 93       	push	r27
+    1b4c:	ef 93       	push	r30
+    1b4e:	ff 93       	push	r31
+	IRQ_Callback();
+    1b50:	c5 df       	rcall	.-118    	; 0x1adc <IRQ_Callback>
+}
+    1b52:	ff 91       	pop	r31
+    1b54:	ef 91       	pop	r30
+    1b56:	bf 91       	pop	r27
+    1b58:	af 91       	pop	r26
+    1b5a:	9f 91       	pop	r25
+    1b5c:	8f 91       	pop	r24
+    1b5e:	7f 91       	pop	r23
+    1b60:	6f 91       	pop	r22
+    1b62:	5f 91       	pop	r21
+    1b64:	4f 91       	pop	r20
+    1b66:	3f 91       	pop	r19
+    1b68:	2f 91       	pop	r18
+    1b6a:	0f 90       	pop	r0
+    1b6c:	0f be       	out	0x3f, r0	; 63
+    1b6e:	0f 90       	pop	r0
+    1b70:	1f 90       	pop	r1
+    1b72:	18 95       	reti
+
+00001b74 <main>:
+
+static void (*jump_to_app)(void) = 0x0000;
+
+int main(void)
+{
+	nrf24_init();
+    1b74:	77 df       	rcall	.-274    	; 0x1a64 <nrf24_init>
+	interrupt_init();						//инициализация прерываний
+    1b76:	7e de       	rcall	.-772    	; 0x1874 <interrupt_init>
+	port_init();							//инициализация портов
+    1b78:	72 de       	rcall	.-796    	; 0x185e <port_init>
+	spi_init();								//инициализация SPI
+    1b7a:	86 de       	rcall	.-756    	; 0x1888 <spi_init>
+    1b7c:	85 e0       	ldi	r24, 0x05	; 5
+	uint16_t cnt = 0;
+
+	uint8_t blink_counter = 5;
+	while (blink_counter)
+	{
+		LED_ON();
+    1b7e:	96 9a       	sbi	0x12, 6	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+    1b80:	2f e7       	ldi	r18, 0x7F	; 127
+    1b82:	38 e3       	ldi	r19, 0x38	; 56
+    1b84:	91 e0       	ldi	r25, 0x01	; 1
+    1b86:	21 50       	subi	r18, 0x01	; 1
+    1b88:	30 40       	sbci	r19, 0x00	; 0
+    1b8a:	90 40       	sbci	r25, 0x00	; 0
+    1b8c:	e1 f7       	brne	.-8      	; 0x1b86 <main+0x12>
+    1b8e:	00 c0       	rjmp	.+0      	; 0x1b90 <main+0x1c>
+    1b90:	00 00       	nop
+		_delay_ms(50);
+		LED_OFF();
+    1b92:	96 98       	cbi	0x12, 6	; 18
+    1b94:	ef e7       	ldi	r30, 0x7F	; 127
+    1b96:	f8 e3       	ldi	r31, 0x38	; 56
+    1b98:	21 e0       	ldi	r18, 0x01	; 1
+    1b9a:	e1 50       	subi	r30, 0x01	; 1
+    1b9c:	f0 40       	sbci	r31, 0x00	; 0
+    1b9e:	20 40       	sbci	r18, 0x00	; 0
+    1ba0:	e1 f7       	brne	.-8      	; 0x1b9a <main+0x26>
+    1ba2:	00 c0       	rjmp	.+0      	; 0x1ba4 <main+0x30>
+    1ba4:	00 00       	nop
+    1ba6:	81 50       	subi	r24, 0x01	; 1
+	spi_init();								//инициализация SPI
+
+	uint16_t cnt = 0;
+
+	uint8_t blink_counter = 5;
+	while (blink_counter)
+    1ba8:	51 f7       	brne	.-44     	; 0x1b7e <main+0xa>
+    1baa:	c0 e0       	ldi	r28, 0x00	; 0
+    1bac:	d0 e0       	ldi	r29, 0x00	; 0
+			SREG = stektemp;// вернем значение стека
+		}*/
+
+		if (cnt++ >= WAIT_VALUE) 
+		{
+			jump_to_app();			// Jump to application sector
+    1bae:	00 e0       	ldi	r16, 0x00	; 0
+    1bb0:	10 e0       	ldi	r17, 0x00	; 0
+				}
+			}
+			SREG = stektemp;// вернем значение стека
+		}*/
+
+		if (cnt++ >= WAIT_VALUE) 
+    1bb2:	c0 39       	cpi	r28, 0x90	; 144
+    1bb4:	31 e0       	ldi	r19, 0x01	; 1
+    1bb6:	d3 07       	cpc	r29, r19
+    1bb8:	10 f0       	brcs	.+4      	; 0x1bbe <main+0x4a>
+		{
+			jump_to_app();			// Jump to application sector
+    1bba:	f8 01       	movw	r30, r16
+    1bbc:	09 95       	icall
+    1bbe:	8f e1       	ldi	r24, 0x1F	; 31
+    1bc0:	9e e4       	ldi	r25, 0x4E	; 78
+    1bc2:	01 97       	sbiw	r24, 0x01	; 1
+    1bc4:	f1 f7       	brne	.-4      	; 0x1bc2 <main+0x4e>
+    1bc6:	00 c0       	rjmp	.+0      	; 0x1bc8 <main+0x54>
+    1bc8:	00 00       	nop
+    1bca:	21 96       	adiw	r28, 0x01	; 1
+    1bcc:	f2 cf       	rjmp	.-28     	; 0x1bb2 <main+0x3e>
+
+00001bce <_exit>:
+    1bce:	f8 94       	cli
+
+00001bd0 <__stop_program>:
+    1bd0:	ff cf       	rjmp	.-2      	; 0x1bd0 <__stop_program>

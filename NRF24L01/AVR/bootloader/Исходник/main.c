@@ -42,53 +42,6 @@
 	  "wasted": 3 words for AVR5 (>8kB), 2 words for AVR4
 	- Check watchdog-disable-function in avr-libc.
 */
-// tabsize: 4
-
-/* MCU frequency */
-#ifndef F_CPU
-//#define F_CPU 16000000
-#define F_CPU 7372800
-// #define F_CPU (7372800/2)
-#endif
-
-/* UART Baudrate */
-// #define BAUDRATE 9600
-#define BAUDRATE 19200
-// #define BAUDRATE 115200
-
-/* use "Double Speed Operation" */
-//#define UART_DOUBLESPEED
-
-/* use second UART on mega128 / can128 / mega162 / mega324p / mega644p */
-//#define UART_USE_SECOND
-
-/* Device-Type:
-   For AVRProg the BOOT-option is prefered 
-   which is the "correct" value for a bootloader.
-   avrdude may only detect the part-code for ISP */
-#define DEVTYPE     DEVTYPE_BOOT
-// #define DEVTYPE     DEVTYPE_ISP
-
-
-// Включение потдержки RS-485
-//#define ENABLED_RS485
-
-// Задержка при переключении драйвера RS-485 в мс
-#define RS_DELAY  1
-
-/*
- * Pin "STARTPIN" on port "STARTPORT" in this port has to grounded
- * (active low) to start the bootloader
- */
-#define BLPORT		PORTD
-#define BLDDR		DDRD
-#define BLPIN		PIND
-#define BLPNUM		PIND3
-
-// RS-485
-#define RSPORT		PORTD
-#define RSDDR		DDRD
-#define RSPIN		PIND2
 
 /*
  * Define if Watchdog-Timer should be disable at startup
@@ -119,13 +72,11 @@
  * WAIT-mode waits 1 sec for the defined character if nothing 
  *    is recived then the user prog is started.
  */
-//#define START_SIMPLE
+
 #define START_WAIT
-//#define START_POWERSAVE
-//#define START_BOOTICE
 
 /* character to start the bootloader in mode START_WAIT */
-#define START_WAIT_UARTCHAR 'S'
+#define START_WAIT_CHAR 'S'
 
 /* wait-time for START_WAIT mode ( t = WAIT_TIME * 10ms ) */
 #define WAIT_VALUE 300 /* here: 100*10ms = 1000ms = 1sec */
@@ -152,7 +103,6 @@
  */
 #define READ_PROTECT_BOOTLOADER
 
-
 #define VERSION_HIGH '0'
 #define VERSION_LOW  '8'
 
@@ -160,16 +110,6 @@
 #define GET_LOW_FUSE_BITS       0x0000
 #define GET_HIGH_FUSE_BITS      0x0003
 #define GET_EXTENDED_FUSE_BITS  0x0002
-
-
-#ifdef UART_DOUBLESPEED
-// #define UART_CALC_BAUDRATE(baudRate) (((F_CPU*10UL) / ((baudRate) *8UL) +5)/10 -1)
-#define UART_CALC_BAUDRATE(baudRate) ((uint32_t)((F_CPU) + ((uint32_t)baudRate * 4UL)) / ((uint32_t)(baudRate) * 8UL) - 1)
-#else
-// #define UART_CALC_BAUDRATE(baudRate) (((F_CPU*10UL) / ((baudRate)*16UL) +5)/10 -1)
-#define UART_CALC_BAUDRATE(baudRate) ((uint32_t)((F_CPU) + ((uint32_t)baudRate * 8UL)) / ((uint32_t)(baudRate) * 16UL) - 1)
-#endif
-
 
 #include <stdint.h>
 #include <avr/io.h>
@@ -190,38 +130,6 @@ uint8_t gBuffer[SPM_PAGESIZE];
 // void __vector_default(void) { ; }
 void __vector_default(void) { ; }
 #endif
-
-#if defined(ENABLED_RS485)
-static void rs_init(void)
-{
-	RSDDR |= (1 << RSPIN);
-	RSPORT &= ~(1 << RSPIN);
-}
-#endif
-
-static void sendchar(uint8_t data)
-{
-
-#if defined(ENABLED_RS485)
-RSPORT |= (1 << RSPIN);
-_delay_ms(RS_DELAY);
-#endif
-
-	while (!(UART_STATUS & (1<<UART_TXREADY)));
-	UART_DATA = data;
-
-#if defined(ENABLED_RS485)
-_delay_ms(RS_DELAY);
-RSPORT &= ~(1 << RSPIN);
-
-#endif
-}
-
-static uint8_t recvchar(void)
-{
-	while (!(UART_STATUS & (1<<UART_RXREADY)));
-	return UART_DATA;
-}
 
 static inline void eraseFlash(void)
 {
@@ -351,17 +259,6 @@ static uint8_t read_fuse_lock(uint16_t addr)
 }
 #endif
 
-static void send_boot(void)
-{
-	sendchar('A');
-	sendchar('V');
-	sendchar('R');
-	sendchar('B');
-	sendchar('O');
-	sendchar('O');
-	sendchar('T');
-}
-
 static void (*jump_to_app)(void) = 0x0000;
 
 //=========================================================================================================================
@@ -369,110 +266,25 @@ int main(void)
 {
 	uint16_t address = 0;
 	uint8_t device = 0, val;
-
-#if defined(ENABLED_RS485)
-rs_init();
-#endif
-
-#ifdef DISABLE_WDT_AT_STARTUP
-#ifdef WDT_OFF_SPECIAL
-#warning "using target specific watchdog_off"
-	bootloader_wdt_off();
-#else
-	cli();
-	wdt_reset();
-	wdt_disable();
-#endif
-#endif
 	
-#ifdef START_POWERSAVE
-	uint8_t OK = 1;
-#endif
+	for(;;) 
+	{
+		uint16_t cnt = 0;
 
-	BLDDR  &= ~(1<<BLPNUM);		// set as Input
-	BLPORT |= (1<<BLPNUM);		// Enable pullup
+		while (1) {
+			if (UART_STATUS & (1<<UART_RXREADY))
+				if (UART_DATA == START_WAIT_CHAR)
+					break;
 
-	// Set baud rate
-	UART_BAUD_HIGH = (UART_CALC_BAUDRATE(BAUDRATE)>>8) & 0xFF;
-	UART_BAUD_LOW = (UART_CALC_BAUDRATE(BAUDRATE) & 0xFF);
-
-#ifdef UART_DOUBLESPEED
-	UART_STATUS = ( 1<<UART_DOUBLE );
-#endif
-
-	UART_CTRL = UART_CTRL_DATA;
-	UART_CTRL2 = UART_CTRL2_DATA;
-	
-#if defined(START_POWERSAVE)
-	/*
-		This is an adoption of the Butterfly Bootloader startup-sequence.
-		It may look a little strange but separating the login-loop from
-		the main parser-loop gives a lot a possibilities (timeout, sleep-modes
-	    etc.).
-	*/
-	for(;OK;) {
-		if ((BLPIN & (1<<BLPNUM))) {
-			// jump to main app if pin is not grounded
-			BLPORT &= ~(1<<BLPNUM);	// set to default
-#ifdef UART_DOUBLESPEED
-			UART_STATUS &= ~( 1<<UART_DOUBLE );
-#endif
-			jump_to_app();		// Jump to application sector
-
-		} else {
-			val = recvchar();
-			/* ESC */
-			if (val == 0x1B) {
-				// AVRPROG connection
-				// Wait for signon
-				while (val != 'S')
-					val = recvchar();
-
-				send_boot();			// Report signon
-				OK = 0;
-
-			} else {
-				sendchar('?');
+			if (cnt++ >= WAIT_VALUE) {
+				//BLPORT &= ~(1<<BLPNUM);		// set to default
+				jump_to_app();			// Jump to application sector
 			}
-	        }
-		// Power-Save code here
-	}
 
-#elif defined(START_SIMPLE)
-
-	if ((BLPIN & (1<<BLPNUM))) {
-		// jump to main app if pin is not grounded
-		BLPORT &= ~(1<<BLPNUM);		// set to default		
-#ifdef UART_DOUBLESPEED
-		UART_STATUS &= ~( 1<<UART_DOUBLE );
-#endif
-		jump_to_app();			// Jump to application sector
-	}
-
-#elif defined(START_WAIT)
-
-	uint16_t cnt = 0;
-
-	while (1) {
-		if (UART_STATUS & (1<<UART_RXREADY))
-			if (UART_DATA == START_WAIT_UARTCHAR)
-				break;
-
-		if (cnt++ >= WAIT_VALUE) {
-			BLPORT &= ~(1<<BLPNUM);		// set to default
-			jump_to_app();			// Jump to application sector
+			_delay_ms(10);
 		}
+		send_boot();
 
-		_delay_ms(10);
-	}
-	send_boot();
-
-#elif defined(START_BOOTICE)
-#warning "BOOTICE mode - no startup-condition"
-
-#else
-#error "Select START_ condition for bootloader in main.c"
-#endif
 
 	for(;;) {
 		val = recvchar();
@@ -536,18 +348,6 @@ rs_init();
 			wdt_enable(EXIT_WDT_TIME); // Enable Watchdog Timer to give reset
 			sendchar('\r');
 
-#ifdef WRITELOCKBITS
-#warning "Extension 'WriteLockBits' enabled"
-		// TODO: does not work reliably
-		// write lockbits
-		} else if (val == 'l') {
-			if (device == DEVTYPE) {
-				// write_lock_bits(recvchar());
-				boot_lock_bits_set(recvchar());	// boot.h takes care of mask
-				boot_spm_busy_wait();
-			}
-			sendchar('\r');
-#endif
 		// Enter programming mode
 		} else if (val == 'P') {
 			sendchar('\r');
@@ -559,25 +359,6 @@ rs_init();
 		// return programmer type
 		} else if (val == 'p') {
 			sendchar('S');		// always serial programmer
-
-#ifdef ENABLEREADFUSELOCK
-#warning "Extension 'ReadFuseLock' enabled"
-		// read "low" fuse bits
-		} else if (val == 'F') {
-			sendchar(read_fuse_lock(GET_LOW_FUSE_BITS));
-
-		// read lock bits
-		} else if (val == 'r') {
-			sendchar(read_fuse_lock(GET_LOCK_BITS));
-
-		// read high fuse bits
-		} else if (val == 'N') {
-			sendchar(read_fuse_lock(GET_HIGH_FUSE_BITS));
-
-		// read extended fuse bits
-		} else if (val == 'Q') {
-			sendchar(read_fuse_lock(GET_EXTENDED_FUSE_BITS));
-#endif
 
 		// Return device type
 		} else if (val == 't') {

@@ -1,18 +1,11 @@
 ﻿#ifndef MAIN_H_
 #define MAIN_H_
 
-#define F_CPU 8000000UL
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
-#include <avr/wdt.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "spi.h"
 #include "nrf24.h"
+#include "chipdef.h"
 
 typedef uint8_t pagebuf_t;
 
@@ -37,7 +30,5 @@ typedef uint8_t pagebuf_t;
 #define SIG_BYTE1	0x1E
 #define SIG_BYTE2	0x93
 #define SIG_BYTE3	0x07
-
-#define APP_END		0x780
 
 #endif /* MAIN_H_ */
