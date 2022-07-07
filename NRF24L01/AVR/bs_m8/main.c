@@ -65,7 +65,7 @@ void timer_init(void)
 	OCR1BH=0x00;
 	OCR1BL=0x00;
 
-	}
+}
 
 void adc_init(void)
 {

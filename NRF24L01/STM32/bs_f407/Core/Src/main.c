@@ -159,8 +159,9 @@ void update_receive(void)
 					}
 					//отправка доп адреса, осн адреса, слова
 					tx_buf[0] = but_addrs[addr_to_update];	//адреса текущей кнопки
-					tx_buf[1] = but_cmnds[but_counter];	//команды
-					tx_buf[2] = led_stat[but_counter];	//статуса светодиода
+					
+					//tx_buf[1] = but_cmnds[but_counter];	//команды
+					//tx_buf[2] = led_stat[but_counter];	//статуса светодиода
 					NRF24L01_Send(tx_buf);							//отправка посылки в эфир
 					
 					//FLASHStatus = FLASH_Program_Word(extented_linear_adress + address_data, program_data);
