@@ -47,7 +47,7 @@
 volatile uint8_t rx_counter = 0;
 volatile uint8_t byte_counter = 0;
 //extern char str[32];
-char rx_str[UART_RX_BUFFER_SIZE] = {0};
+volatile char rx_str[UART_RX_BUFFER_SIZE] = {0};
 volatile uint8_t f_uart_rec = 0;
 volatile uint8_t f_update_rec;	
 volatile int command = 0;
@@ -262,8 +262,7 @@ void USART1_IRQHandler(void)
 	  {
 			LL_USART_DisableIT_RXNE(USART1);
 			char in_char = LL_USART_ReceiveData8(USART1);	
-			
-			
+	
 			
 			if (in_char == ':') 									//если начало строки
 			{
@@ -284,7 +283,7 @@ void USART1_IRQHandler(void)
 			}
 			
 			
-			
+			/*
 			if (in_char == '#') 									//если начало посылки
 			{
 				byte_counter = 0;										//обнуляем счетчик байтов
@@ -299,15 +298,15 @@ void USART1_IRQHandler(void)
 			{																			
 				if (byte_counter == 0) 
 				{
-					rec_cmnd = atol(rx_str);	//если пришло первое число, записываем адрес 
+					rec_cmnd = atol((char*)rx_str);	//если пришло первое число, записываем адрес 
 				}
 				else if (byte_counter == 1) 
 				{
-					command = atol(rx_str);		//если пришло второе число
+					command = atol((char*)rx_str);		//если пришло второе число
 				}
 				else if (byte_counter == 2) 
 				{
-					led_st = atol(rx_str);		//если пришло третье число
+					led_st = atol((char*)rx_str);		//если пришло третье число
 					f_uart_rec = 1;
 				}
 				byte_counter++;							//считаем этот байт		
@@ -316,6 +315,7 @@ void USART1_IRQHandler(void)
 				rx_str[1] = 0x00;
 				rx_str[2] = 0x00;		
 			}
+			*/
 			LL_USART_EnableIT_RXNE(USART1);
 	  }
 	else //сбрасываем посторонние флаги

@@ -419,7 +419,7 @@ int main(void)
 		{
 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
 			{
-				LED_ON();
+				
 				if (rx_buf[1] == 'E')	
 				{
 					eraseFlash();
@@ -428,30 +428,30 @@ int main(void)
 				if (rx_buf[1] == 'W')	
 				{
 					f_wait = 1;
-				}
-
-				if (rx_buf[1] == 'A')	
-				{
-					address = (rx_buf[2]<<8) | rx_buf[3]); //проверить какой из них старший
+					tx_buf[0] = 'W';
+					NRF24L01_Send(tx_buf);
 				}
 
 				if (rx_buf[1] == 'F')		//
 				{
+					LED_ON();
 					pagebuf_t size;
-					size = (rx_buf[2]<<8) | rx_buf[3];
+					size = rx_buf[2];
+					address = rx_buf[3]; //
+
+					for (uint8_t i = 0; i < size; i++)
+					{
+						gBuffer[i] = rx_buf[i+4];
+					}
+					
 					writeFlashPage(address, size);
 				}
-				if (rx_buf[1] == 'E')		//
-				{
-					pagebuf_t size;
-					size = (rx_buf[2]<<8) | rx_buf[3];
-					writeEEpromPage(address, size);
-				}
+
 			}
 
 			f_rx = 0;						//опускаем флаг приема
 		}
-		
+		/*
 		if (!f_wait)
 		{
 			if (cnt++ >= WAIT_VALUE) 
@@ -460,5 +460,6 @@ int main(void)
 			}
 			_delay_ms(1);		
 		}
+		*/
 	}
 }

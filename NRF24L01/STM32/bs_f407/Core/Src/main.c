@@ -36,10 +36,9 @@
 
 /* USER CODE BEGIN PV */
 char str[64] = {0};																//строка для вывода данных в порт
-uint8_t tx_buf[3]={0};														//буфер для отправки (попробовать 5 байт)
-extern uint8_t rx_buf[];													//приемный буфер
+uint8_t tx_buf[TX_PLOAD_WIDTH]={0};														//буфер для отправки (попробовать 5 байт)
 extern volatile char rx_str[UART_RX_BUFFER_SIZE];	//приемная строка уарта
-extern uint8_t rx_buf[TX_PLOAD_WIDTH];						//приемный буфер
+extern volatile char rx_buf[TX_PLOAD_WIDTH];						//приемный буфер
 uint8_t buf[5]={0};																//буфер для чтения адресов модуля
 uint8_t dt_reg = 0;																//переменная для чтения значения регистра
 uint8_t led_stat[NUM_OF_BUTS] = {0x00};						//массив текущих состояний светодиодов кнопок
@@ -69,6 +68,7 @@ uint8_t size_data, type_data, check_sum;	//размер, тип данных и чек сумма
 uint16_t address_data;										//младшие 16 бит адреса
 uint8_t calculation_check_sum = 0;				//чек-сумма
 uint32_t extented_linear_adress = 0;			//дополнительный адрес
+uint8_t update_respond = 0;								//ответ от модуля о готовности к загрузке	
 	
 /* USER CODE END PV */
 
@@ -120,63 +120,51 @@ void update_receive(void)
 	{					
 		if (firm_update)
 		{
-			uint8_t index = 0;			//переменная индекса строки
+
 			/*читаем 8 симовлов с метаданными*/
 			for (uint8_t i = 0; i < 8; i++)
 			{
 				buff[i] = rx_str[i];	//сохраняем символ
-				index++;							//следующий индекс
 			}
 			
 			Ascii_To_Hex(buff, 8);//переводим символы в хекс
 			
-			size_data = 2*(buff[1] + 16*buff[0]);//находим размер данных
-			address_data = buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2];//адрес
+			size_data = buff[1] + 16*buff[0];//находим размер данных
+			uint16_t address_data_calc = buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2];//адрес
+			address_data = address_data_calc/2;
 			type_data = buff[7] + 16*buff[6];//и тип
 			//промежуточное значение контрольной суммы
-			calculation_check_sum = size_data/2 + (uint8_t)address_data + (uint8_t)(address_data>>8) + type_data;//считаем чек сумму
+			
+			uint8_t cs_index = size_data*2 + 8;
+			
+			calculation_check_sum = size_data/2 + (uint8_t)address_data_calc + (uint8_t)((address_data_calc)>>8) + type_data;//считаем чек сумму
 			
 			if(type_data == 0x00)	//если пришли данные для записи
 			{
-				uint8_t count = 1; 					//счетчик слов
-				uint32_t program_data = 0;	//слово которое пишется во флеш
-				while(size_data > 0)
+				tx_buf[0] = 0x07;	//адрес устройства
+				tx_buf[1] = 'F';	//команда записи flash
+				tx_buf[2] = size_data;
+				tx_buf[3] = address_data;
+				for (uint8_t i = 8; i < 40; i++)
 				{
-					/*читаем 8 симовлов*/
-					for (uint8_t i = index; i < (8*count + 8); i++)
-					{
-						buff[i - 8*count] = rx_str[i];
-						index++;							//следующий индекс
-					}
-					
-					Ascii_To_Hex(buff, 8);//переводим их в хекс
-				
-					for(uint8_t i=0; i<8;i=i+2)//формируем 32-битное слово для записи
-					{
-						buff[i] <<= 4;
-						buff[i] = buff[i] | buff[i+1];
-						program_data |= buff[i] <<(i*4);
-					}
-					//отправка доп адреса, осн адреса, слова
-					tx_buf[0] = but_addrs[addr_to_update];	//адреса текущей кнопки
-					
-					//tx_buf[1] = but_cmnds[but_counter];	//команды
-					//tx_buf[2] = led_stat[but_counter];	//статуса светодиода
-					NRF24L01_Send(tx_buf);							//отправка посылки в эфир
-					
-					//FLASHStatus = FLASH_Program_Word(extented_linear_adress + address_data, program_data);
-					calculation_check_sum +=  (uint8_t)program_data + (uint8_t)(program_data>>8) + (uint8_t)(program_data>>16) + (uint8_t)(program_data>>24);	
-					size_data -=8;
-					address_data +=4;
-					count++;
-					program_data = 0;	
+					buff[i - 8] = rx_str[i];	//сохраняем символ
 				}
 				
+				Ascii_To_Hex(buff, 32);//переводим в хекс	
+					
+				for (uint8_t i = 0; i < 32; i += 2)
+				{
+					buff[i] <<= 4;
+					buff[i] = buff[i] | buff[i+1];
+					tx_buf[4 + i/2] = buff[i];
+					calculation_check_sum += buff[i];
+				}
+			
 				calculation_check_sum =  ~(calculation_check_sum) + 1;
 				
 				/*читаем 2 байта*/
-				buff[0] = rx_str[index];
-				buff[1] = rx_str[index + 1];
+				buff[0] = rx_str[cs_index];
+				buff[1] = rx_str[cs_index + 1];
 				
 				Ascii_To_Hex(buff,2);
 				check_sum = buff[1] + 16*buff[0];		
@@ -184,19 +172,22 @@ void update_receive(void)
 				if(calculation_check_sum != check_sum )
 				{
 					string_counter--;
-				}				
+				}
+				else
+				{
+					NRF24L01_Send(tx_buf);
+					LL_mDelay(400);
+				}
 				calculation_check_sum = 0;//обнуляем чек сумму
 				string_counter++;		
-				index = 0;
 			}
 			
 			else if(type_data == 0x04)//если пришел дополнительный адрес
 			{
 				/*читаем 4 байта*/
-				for (uint8_t i = index; i < 12; i++)
+				for (uint8_t i = 8; i < 12; i++)
 				{
 					buff[i - 8] = rx_str[i];
-					index++;
 				}
 				
 				Ascii_To_Hex(buff, 4);//переводим их в хекс				
@@ -207,10 +198,9 @@ void update_receive(void)
 				calculation_check_sum =  ~(calculation_check_sum) + 1;
 						
 				/*читаем 2 байта*/
-				for (uint8_t i = index; i < 14; i++)
+				for (uint8_t i = 12; i < 14; i++)
 				{
 					buff[i - 12] = rx_str[i];
-					index++;
 				}
 				
 				Ascii_To_Hex(buff,2);
@@ -223,7 +213,6 @@ void update_receive(void)
 				}	
 				calculation_check_sum = 0;//обнуляем чек сумму	
 				string_counter++;
-				index = 0;
 			}
 			
 			else if(type_data == 0x05) 
@@ -251,13 +240,35 @@ void update_receive(void)
 				firm_update = 1;
 				sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
 				USART_TX((uint8_t*)str,strlen(str));
+				
+				/*
+				tx_buf[0] = 0x07;	//адрес устройства
+				tx_buf[1] = 'E';	//команда
+				NRF24L01_Send(tx_buf);
+				LL_mDelay(100);
+				*/
 			}
 		}
 		else if (rx_str[0] == '!')	
 		{
-			sprintf(str,"RTL!");	
-			USART_TX((uint8_t*)str,strlen(str));
-			ready_to_update = 1;
+			//tx_buf[0] = but_addrs[rx_str[1]];
+			//tx_buf[0] = RESET_BUTTONS;
+			//NRF24L01_Send(tx_buf);
+			//if (update_respond)
+			//{
+				//tx_buf[0] = but_addrs[rx_str[1]];
+				//tx_buf[0] = 'W';
+				//NRF24L01_Send(tx_buf);
+				sprintf(str,"RTL!");	
+				USART_TX((uint8_t*)str,strlen(str));
+				ready_to_update = 1;
+			
+				tx_buf[0] = 0x07;	//адрес устройства
+				tx_buf[1] = 'E';	//команда
+				NRF24L01_Send(tx_buf);
+				LL_mDelay(100);
+			
+			//}
 		}
 		f_update_rec = 0;
 	}
@@ -280,7 +291,7 @@ void uart_receiving(void)
 //Процедура сброса по нажатию кнопки сброса
 void reset_button_pushed(void)
 {
-	tx_buf[0] = 0xFF;		//записываем команду на сброс в буфер
+	tx_buf[0] = RESET_BUTTONS;		//записываем команду на сброс в буфер
 	tx_buf[1] = 0x01;		//значение по умолчанию
 	tx_buf[2] = 0x00;		//значение по умолчанию
 	NRF24L01_Send(tx_buf);	//отправка в эфир посылки
@@ -396,14 +407,81 @@ int main(void)
 	LED_OFF();
 	rec_cmnd = 255;//команда сброса для сброса при запуске/перезапуске базы
 	
+	//временный фрагмент для проверки загрузчика
+/*
+	tx_buf[0] = 0x07;	//адрес устройства
+	tx_buf[1] = 'E';	//команда
+	NRF24L01_Send(tx_buf);
+	LL_mDelay(100);
+
+	tx_buf[0] = 0x07;	//адрес устройства
+	tx_buf[1] = 'F';	//команда записи адреса
+	tx_buf[2] = 0x00;	//адрес в словах
+	tx_buf[3] = 16;		//размер (количество байт)
+	tx_buf[4] = 0x01; //старший
+	tx_buf[5] = 0x00;	//младший в слове
+	tx_buf[6] = 0x03;	
+	tx_buf[7] = 0x02;	
+	tx_buf[8] = 0x05;	
+	tx_buf[9] = 0x04;
+	tx_buf[10] = 0x07;	
+	tx_buf[11] = 0x06;
+	tx_buf[12] = 0x09;	
+	tx_buf[13] = 0x08;
+	tx_buf[14] = 0x0B;	
+	tx_buf[15] = 0x0A;
+	tx_buf[16] = 0x0D;	
+	tx_buf[17] = 0x0C;	
+	tx_buf[18] = 0x0F;
+	tx_buf[19] = 0x0E;	
+	
+	NRF24L01_Send(tx_buf);
+	LL_mDelay(350);			//необходимая задержка между посылками. Но лучше использовать запросы
+*/
+/*
+	//отправка строки из реальной прошивки
+	uint8_t buff[40] = {'1', '0', '0', '0', '0', '0', '0', '0', '1', '2', 'C', '0', '6', 'F', 'C', '0', '9', '1', 'C', '0', '2', 'A', 'C', '0', '2', '9', 'C', '0', '2', '8', 'C', '0', 'B', '6', 'C', '0', '2', '6', 'C', '0'};
+	
+	tx_buf[0] = 0x07;	//адрес устройства
+	tx_buf[1] = 'E';	//команда
+	NRF24L01_Send(tx_buf);
+	LL_mDelay(100);
+
+	tx_buf[0] = 0x07;	//адрес устройства
+	tx_buf[1] = 'F';	//команда записи flash
+	
+	Ascii_To_Hex(buff, 40);//переводим в хекс	
+		
+	tx_buf[2] = buff[1] + 16*buff[0];		//размер (количество байт)
+	tx_buf[3] = buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2];//адрес
+	
+	sprintf(str,"size = %d\t addr = %d\r\n",tx_buf[2], tx_buf[3]);				//
+	USART_TX((uint8_t*)str,strlen(str));
+		
+	for (uint8_t i = 8; i < 40; i += 2)
+	{
+		buff[i] <<= 4;
+		buff[i] = buff[i] | buff[i+1];
+		tx_buf[i/2] = buff[i];
+	}
+
+	NRF24L01_Send(tx_buf);
+	*/
+	/*
+	tx_buf[0] = 0x07;	//адрес устройства
+	tx_buf[1] = 'E';	//команда
+	NRF24L01_Send(tx_buf);
+	LL_mDelay(100);
+	*/
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
 		update_receive();
-		
+		/*
 		if ((!firm_update) && (!ready_to_update))
 		{
 			nrf24l01_receive();			//процедура приема данных радиомодуля
@@ -426,7 +504,7 @@ int main(void)
 			first_push_finding();
 
 			LL_mDelay(5);//подбирается экспериментально 
-		}
+		}*/
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
