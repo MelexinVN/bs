@@ -10,6 +10,7 @@
 #define IRQ()			IRQ_Pin&(1<<IRQ_Pin)
 #define LED_ON()		LED_GPIO_Port|=(1<<LED_Pin)
 #define LED_OFF()		LED_GPIO_Port&=~(1<<LED_Pin)
+#define LED_TGL()		LED_GPIO_Port^=(1<<LED_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD		0x61 // Define RX payload register address

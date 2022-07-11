@@ -40,74 +40,74 @@
   30:main.c        **** 
   31:main.c        **** #define EXIT_WDT_TIME   WDTO_250MS
   32:main.c        **** 
-  33:main.c        **** #define WAIT_VALUE 500 //в мс
+  33:main.c        **** #define WAIT_VALUE 1000 //в мс
   34:main.c        **** 
   35:main.c        **** //------------------------------------------------
   36:main.c        **** #define CS_ON()			CSN_GPIO_Port&=~(1<<CSN_Pin)
   37:main.c        **** #define CS_OFF()		CSN_GPIO_Port|=(1<<CSN_Pin)
   38:main.c        **** #define CE_RESET()		CE_GPIO_Port&=~(1<<CE_Pin)
   39:main.c        **** #define CE_SET()		CE_GPIO_Port|=(1<<CE_Pin)
-  40:main.c        **** #define IRQ()			IRQ_Pin&(1<<IRQ_Pin)
+  40:main.c        **** 
   41:main.c        **** #define LED_ON()		LED_GPIO_Port|=(1<<LED_Pin)
   42:main.c        **** #define LED_OFF()		LED_GPIO_Port&=~(1<<LED_Pin)
-  43:main.c        **** //------------------------------------------------
-  44:main.c        **** #define ACTIVATE 		0x50 //
-  45:main.c        **** #define RD_RX_PLOAD		0x61 // Define RX payload register address
-  46:main.c        **** #define WR_TX_PLOAD		0xA0 // Define TX payload register address
-  47:main.c        **** #define FLUSH_TX 		0xE1
-  48:main.c        **** #define FLUSH_RX 		0xE2
-  49:main.c        **** //------------------------------------------------
-  50:main.c        **** #define CONFIG 			0x00 //'Config' register address
-  51:main.c        **** #define EN_AA 			0x01 //'Enable Auto Acknowledgment' register address
-  52:main.c        **** #define EN_RXADDR 		0x02 //'Enabled RX addresses' register address
-  53:main.c        **** #define SETUP_AW 		0x03 //'Setup address width' register address
-  54:main.c        **** #define SETUP_RETR 		0x04 //'Setup Auto. Retrans' register address
-  55:main.c        **** #define RF_CH 			0x05 //'RF channel' register address
-  56:main.c        **** #define RF_SETUP 		0x06 //'RF setup' register address
-  57:main.c        **** #define STATUS 			0x07 //'Status' register address
-  58:main.c        **** #define OBSERVE_TX 		0x08 //'Transmit observe' register
-  59:main.c        **** #define RX_ADDR_P0 		0x0A //'RX address pipe0' register address
-  60:main.c        **** #define RX_ADDR_P1 		0x0B //'RX address pipe1' register address
-  61:main.c        **** #define TX_ADDR 		0x10 //'TX address' register address
-  62:main.c        **** #define RX_PW_P0 		0x11 //'RX payload width, pipe0' register address
-  63:main.c        **** #define RX_PW_P1 		0x12 //'RX payload width, pipe1' register address
-  64:main.c        **** #define FIFO_STATUS		0x17 //'FIFO Status Register' register address
-  65:main.c        **** #define DYNPD 			0x1C
-  66:main.c        **** #define FEATURE 		0x1D
-  67:main.c        **** //------------------------------------------------
-  68:main.c        **** #define PRIM_RX 		0x00 //RX/TX control (1: PRX, 0: PTX)
-  69:main.c        **** #define PWR_UP 			0x01 //1: POWER UP, 0:POWER DOWN
-  70:main.c        **** #define RX_DR 			0x40 //Data Ready RX FIFO interrupt
-  71:main.c        **** #define TX_DS 			0x20 //Data Sent TX FIFO interrupt
-  72:main.c        **** #define MAX_RT 			0x10 //Maximum number of TX retransmits interrupt
-  73:main.c        **** //------------------------------------------------
-  74:main.c        **** #define W_REGISTER 		0x20 //запись в регистр
-  75:main.c        **** //------------------------------------------------
-  76:main.c        **** #define TX_ADR_WIDTH 3						//размер адреса передачи
-  77:main.c        **** #define TX_PLOAD_WIDTH 32					//размер полезной нагрузки
-  78:main.c        **** //максимальное число байт, чтобы при добавлении новых функций не переделывать задержки
-  79:main.c        **** 
-  80:main.c        **** uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
-  81:main.c        **** uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
-  82:main.c        **** 
-  83:main.c        **** uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};				//буфер приема
-  84:main.c        **** uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};				//буфер передачи
-  85:main.c        **** 
-  86:main.c        **** volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
-  87:main.c        **** 
-  88:main.c        **** uint8_t f_send;								//флаг отправки
-  89:main.c        **** 
-  90:main.c        **** uint8_t buf[20];							//буфер
-  91:main.c        **** uint16_t address;
-  92:main.c        **** uint8_t device, val;
-  93:main.c        **** uint8_t f_wait = 0;
-  94:main.c        **** 
-  95:main.c        **** void nrf24_init(void);
-  96:main.c        **** uint8_t NRF24_ReadReg(uint8_t addr);
-  97:main.c        **** void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
-  98:main.c        **** uint8_t NRF24L01_Send(uint8_t *pBuf);
-  99:main.c        **** void nrf24l01_receive(void);
- 100:main.c        **** void IRQ_Callback(void);
+  43:main.c        **** #define LED_TGL()		LED_GPIO_Port^=(1<<LED_Pin)
+  44:main.c        **** //------------------------------------------------
+  45:main.c        **** #define ACTIVATE 		0x50 //
+  46:main.c        **** #define RD_RX_PLOAD		0x61 // Define RX payload register address
+  47:main.c        **** #define WR_TX_PLOAD		0xA0 // Define TX payload register address
+  48:main.c        **** #define FLUSH_TX 		0xE1
+  49:main.c        **** #define FLUSH_RX 		0xE2
+  50:main.c        **** //------------------------------------------------
+  51:main.c        **** #define CONFIG 			0x00 //'Config' register address
+  52:main.c        **** #define EN_AA 			0x01 //'Enable Auto Acknowledgment' register address
+  53:main.c        **** #define EN_RXADDR 		0x02 //'Enabled RX addresses' register address
+  54:main.c        **** #define SETUP_AW 		0x03 //'Setup address width' register address
+  55:main.c        **** #define SETUP_RETR 		0x04 //'Setup Auto. Retrans' register address
+  56:main.c        **** #define RF_CH 			0x05 //'RF channel' register address
+  57:main.c        **** #define RF_SETUP 		0x06 //'RF setup' register address
+  58:main.c        **** #define STATUS 			0x07 //'Status' register address
+  59:main.c        **** #define OBSERVE_TX 		0x08 //'Transmit observe' register
+  60:main.c        **** #define RX_ADDR_P0 		0x0A //'RX address pipe0' register address
+  61:main.c        **** #define RX_ADDR_P1 		0x0B //'RX address pipe1' register address
+  62:main.c        **** #define TX_ADDR 		0x10 //'TX address' register address
+  63:main.c        **** #define RX_PW_P0 		0x11 //'RX payload width, pipe0' register address
+  64:main.c        **** #define RX_PW_P1 		0x12 //'RX payload width, pipe1' register address
+  65:main.c        **** #define FIFO_STATUS		0x17 //'FIFO Status Register' register address
+  66:main.c        **** #define DYNPD 			0x1C
+  67:main.c        **** #define FEATURE 		0x1D
+  68:main.c        **** //------------------------------------------------
+  69:main.c        **** #define PRIM_RX 		0x00 //RX/TX control (1: PRX, 0: PTX)
+  70:main.c        **** #define PWR_UP 			0x01 //1: POWER UP, 0:POWER DOWN
+  71:main.c        **** #define RX_DR 			0x40 //Data Ready RX FIFO interrupt
+  72:main.c        **** #define TX_DS 			0x20 //Data Sent TX FIFO interrupt
+  73:main.c        **** #define MAX_RT 			0x10 //Maximum number of TX retransmits interrupt
+  74:main.c        **** //------------------------------------------------
+  75:main.c        **** #define W_REGISTER 		0x20 //запись в регистр
+  76:main.c        **** //------------------------------------------------
+  77:main.c        **** #define TX_ADR_WIDTH 3						//размер адреса передачи
+  78:main.c        **** #define TX_PLOAD_WIDTH 32					//размер полезной нагрузки
+  79:main.c        **** //максимальное число байт, чтобы при добавлении новых функций не переделывать задержки
+  80:main.c        **** 
+  81:main.c        **** uint8_t TX_ADDRESS0[TX_ADR_WIDTH] = {0xb5,0xb5,0xa1};	//адрес 0
+  82:main.c        **** uint8_t TX_ADDRESS1[TX_ADR_WIDTH] = {0xb7,0xb5,0xa1};	//адрес 1
+  83:main.c        **** 
+  84:main.c        **** uint8_t rx_buf[TX_PLOAD_WIDTH] = {0};				//буфер приема
+  85:main.c        **** uint8_t tx_buf[TX_PLOAD_WIDTH] = {0};				//буфер передачи
+  86:main.c        **** 
+  87:main.c        **** volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
+  88:main.c        **** 
+  89:main.c        **** uint8_t f_send;								//флаг отправки
+  90:main.c        **** 
+  91:main.c        **** uint8_t buf[20];							//буфер
+  92:main.c        **** uint16_t address;
+  93:main.c        **** uint8_t device, val;
+  94:main.c        **** uint8_t f_wait = 0;
+  95:main.c        **** 
+  96:main.c        **** void nrf24_init(void);
+  97:main.c        **** uint8_t NRF24_ReadReg(uint8_t addr);
+  98:main.c        **** void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
+  99:main.c        **** uint8_t NRF24L01_Send(uint8_t *pBuf);
+ 100:main.c        **** void nrf24l01_receive(void);
  101:main.c        **** 
  102:main.c        **** uint8_t gBuffer[SPM_PAGESIZE];
  103:main.c        **** uint16_t address = 0;
@@ -338,8 +338,8 @@
  344               	.LM35:
  345 0066 80E5      		ldi r24,lo8(80)
  346 0068 00D0      		rcall spi_sendByte
- 347               	.LBB30:
- 348               	.LBB31:
+ 347               	.LBB34:
+ 348               	.LBB35:
  350               	.Ltext1:
    1:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
    2:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
@@ -622,8 +622,8 @@
  354 006c 8A95      	1:	dec r24
  355 006e 01F4      		brne 1b
  356 0070 00C0      		rjmp .
- 357               	.LBE31:
- 358               	.LBE30:
+ 357               	.LBE35:
+ 358               	.LBE34:
  360               	.Ltext2:
  183:main.c        **** 	_delay_us(1);
  184:main.c        **** 	dt[0] = 0x73;
@@ -672,7 +672,7 @@
  404 009a 911D      		adc r25,__zero_reg__
  405 009c 7C01      		movw r14,r24
  406               	.L18:
- 407               	.LBB32:
+ 407               	.LBB36:
  194:main.c        **** 	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
  409               	.LM42:
  410 009e CE15      		cp r28,r14
@@ -686,7 +686,7 @@
  417 00a8 8993      		st Y+,r24
  418 00aa 00C0      		rjmp .L18
  419               	.L20:
- 420               	.LBE32:
+ 420               	.LBE36:
  197:main.c        **** 	}
  198:main.c        **** 	CS_OFF();
  422               	.LM44:
@@ -730,8 +730,8 @@
  461               	.LM48:
  462 00ce 8062      		ori r24,lo8(32)
  463 00d0 00D0      		rcall spi_sendByte
- 464               	.LBB33:
- 465               	.LBB34:
+ 464               	.LBB37:
+ 465               	.LBB38:
  467               	.Ltext3:
  469               	.LM49:
  470 00d2 82E0      		ldi r24,lo8(2)
@@ -745,9 +745,9 @@
  478 00e2 911D      		adc r25,__zero_reg__
  479 00e4 8C01      		movw r16,r24
  480               	.L22:
- 481               	.LBE34:
- 482               	.LBE33:
- 483               	.LBB35:
+ 481               	.LBE38:
+ 482               	.LBE37:
+ 483               	.LBB39:
  485               	.Ltext4:
  207:main.c        **** 	_delay_us(1);
  208:main.c        **** 	for (uint8_t i = 0 ; i < bytes ; i++) 		//для нужного количества байт
@@ -762,7 +762,7 @@
  494 00ee 00D0      		rcall spi_sendByte
  495 00f0 00C0      		rjmp .L22
  496               	.L24:
- 497               	.LBE35:
+ 497               	.LBE39:
  211:main.c        **** 	}
  212:main.c        **** 	CS_OFF();
  499               	.LM52:
@@ -797,16 +797,16 @@
  527               	.LM56:
  528 0102 82EE      		ldi r24,lo8(-30)
  529 0104 00D0      		rcall spi_sendByte
- 530               	.LBB36:
- 531               	.LBB37:
+ 530               	.LBB40:
+ 531               	.LBB41:
  533               	.Ltext5:
  535               	.LM57:
  536 0106 82E0      		ldi r24,lo8(2)
  537 0108 8A95      	1:	dec r24
  538 010a 01F4      		brne 1b
  539 010c 00C0      		rjmp .
- 540               	.LBE37:
- 541               	.LBE36:
+ 540               	.LBE41:
+ 541               	.LBE40:
  543               	.Ltext6:
  221:main.c        **** 	_delay_us(1); //пауза в микросекунду для завершения процесса
  222:main.c        **** 	CS_OFF();
@@ -835,16 +835,16 @@
  565               	.LM61:
  566 0114 81EE      		ldi r24,lo8(-31)
  567 0116 00D0      		rcall spi_sendByte
- 568               	.LBB38:
- 569               	.LBB39:
+ 568               	.LBB42:
+ 569               	.LBB43:
  571               	.Ltext7:
  573               	.LM62:
  574 0118 82E0      		ldi r24,lo8(2)
  575 011a 8A95      	1:	dec r24
  576 011c 01F4      		brne 1b
  577 011e 00C0      		rjmp .
- 578               	.LBE39:
- 579               	.LBE38:
+ 578               	.LBE43:
+ 579               	.LBE42:
  581               	.Ltext8:
  231:main.c        **** 	_delay_us(1); //пауза в микросекунду для завершения процесса
  232:main.c        **** 	CS_OFF();
@@ -897,8 +897,8 @@
  247:main.c        **** 	CE_SET();
  624               	.LM69:
  625 0144 C09A      		sbi 0x18,0
- 626               	.LBB40:
- 627               	.LBB41:
+ 626               	.LBB44:
+ 627               	.LBB45:
  629               	.Ltext9:
  631               	.LM70:
  632 0146 8BE2      		ldi r24,lo8(299)
@@ -907,8 +907,8 @@
  635 014c 01F4      		brne 1b
  636 014e 00C0      		rjmp .
  637 0150 0000      		nop
- 638               	.LBE41:
- 639               	.LBE40:
+ 638               	.LBE45:
+ 639               	.LBE44:
  641               	.Ltext10:
  248:main.c        **** 	_delay_us(150); //Задержка минимум 130 мкс
  249:main.c        **** 	// Flush buffers
@@ -987,8 +987,8 @@
  270:main.c        **** 	spi_sendByte(addr);
  715               	.LM82:
  716 0184 00D0      		rcall spi_sendByte
- 717               	.LBB42:
- 718               	.LBB43:
+ 717               	.LBB46:
+ 718               	.LBB47:
  720               	.Ltext11:
  722               	.LM83:
  723 0186 82E0      		ldi r24,lo8(2)
@@ -1002,9 +1002,9 @@
  731 0196 911D      		adc r25,__zero_reg__
  732 0198 8C01      		movw r16,r24
  733               	.L30:
- 734               	.LBE43:
- 735               	.LBE42:
- 736               	.LBB44:
+ 734               	.LBE47:
+ 735               	.LBE46:
+ 736               	.LBB48:
  738               	.Ltext12:
  271:main.c        **** 	_delay_us(1); //пауза в микросекунду для завершения процесса
  272:main.c        **** 	for (uint8_t i = 0 ; i < bytes ; i++)
@@ -1019,7 +1019,7 @@
  747 01a2 00D0      		rcall spi_sendByte
  748 01a4 00C0      		rjmp .L30
  749               	.L32:
- 750               	.LBE44:
+ 750               	.LBE48:
  275:main.c        **** 	}
  276:main.c        **** 	CS_OFF();
  752               	.LM86:
@@ -1070,8 +1070,8 @@
  794 01c6 6260      		ori r22,lo8(2)
  795 01c8 80E0      		ldi r24,0
  796 01ca 00D0      		rcall NRF24_WriteReg
- 797               	.LBB45:
- 798               	.LBB46:
+ 797               	.LBB49:
+ 798               	.LBB50:
  800               	.Ltext13:
  802               	.LM93:
  803 01cc 8BE2      		ldi r24,lo8(299)
@@ -1080,8 +1080,8 @@
  806 01d2 01F4      		brne 1b
  807 01d4 00C0      		rjmp .
  808 01d6 0000      		nop
- 809               	.LBE46:
- 810               	.LBE45:
+ 809               	.LBE50:
+ 810               	.LBE49:
  812               	.Ltext14:
  290:main.c        **** 	_delay_us(150); //Задержка минимум 130 мкс
  291:main.c        **** 	//Отправим данные в воздух
@@ -1094,715 +1094,853 @@
  293:main.c        **** 	CE_SET();
  820               	.LM95:
  821 01e0 C09A      		sbi 0x18,0
- 822               	.LBB47:
- 823               	.LBB48:
+ 822               	.LBB51:
+ 823               	.LBB52:
  825               	.Ltext15:
  827               	.LM96:
  828 01e2 98E2      		ldi r25,lo8(40)
  829 01e4 9A95      	1:	dec r25
  830 01e6 01F4      		brne 1b
- 831               	.LBE48:
- 832               	.LBE47:
+ 831               	.LBE52:
+ 832               	.LBE51:
  834               	.Ltext16:
  294:main.c        **** 	_delay_us(15); //minimum 10us high pulse (Page 21)
  295:main.c        **** 	CE_RESET();
  836               	.LM97:
  837 01e8 C098      		cbi 0x18,0
- 296:main.c        **** 	NRF24L01_RX_Mode();				//переход в режим приема
- 839               	.LM98:
- 840 01ea 00D0      		rcall NRF24L01_RX_Mode
- 297:main.c        **** 	return 0;
- 298:main.c        **** }
- 842               	.LM99:
- 843 01ec 80E0      		ldi r24,0
- 844               	/* epilogue start */
- 845 01ee DF91      		pop r29
- 846 01f0 CF91      		pop r28
- 847 01f2 0895      		ret
- 849               	.Lscope15:
- 851               	.global	nrf24_init
- 853               	nrf24_init:
- 299:main.c        **** 
- 300:main.c        **** //------------------------------------------------
- 301:main.c        **** void nrf24_init(void)
- 302:main.c        **** {//инициализация
- 855               	.LM100:
- 856               	.LFBB16:
- 857               	/* prologue: function */
- 858               	/* frame size = 0 */
- 859               	/* stack size = 0 */
- 860               	.L__stack_usage = 0
- 303:main.c        **** 	CE_RESET();							//опускаем к земле вывод ce
- 862               	.LM101:
- 863 01f4 C098      		cbi 0x18,0
- 864               	.LBB49:
- 865               	.LBB50:
- 867               	.Ltext17:
- 869               	.LM102:
- 870 01f6 8FE0      		ldi r24,lo8(9999)
- 871 01f8 97E2      		ldi r25,hi8(9999)
- 872 01fa 0197      	1:	sbiw r24,1
- 873 01fc 01F4      		brne 1b
- 874 01fe 00C0      		rjmp .
- 875 0200 0000      		nop
- 876               	.LBE50:
- 877               	.LBE49:
- 879               	.Ltext18:
- 304:main.c        **** 	_delay_us(5000);					//задержка 5 мс
- 305:main.c        **** 	//записываем конфигурационный байт,
- 306:main.c        **** 	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
- 881               	.LM103:
- 882 0202 6AE0      		ldi r22,lo8(10)
- 883 0204 80E0      		ldi r24,0
- 884 0206 00D0      		rcall NRF24_WriteReg
- 885               	.LBB51:
- 886               	.LBB52:
- 888               	.Ltext19:
- 890               	.LM104:
- 891 0208 8FE0      		ldi r24,lo8(9999)
- 892 020a 97E2      		ldi r25,hi8(9999)
- 893 020c 0197      	1:	sbiw r24,1
- 894 020e 01F4      		brne 1b
- 895 0210 00C0      		rjmp .
- 896 0212 0000      		nop
- 897               	.LBE52:
- 898               	.LBE51:
- 900               	.Ltext20:
- 307:main.c        **** 	_delay_us(5000);
- 308:main.c        **** 	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
- 902               	.LM105:
- 903 0214 60E0      		ldi r22,0
- 904 0216 81E0      		ldi r24,lo8(1)
- 905 0218 00D0      		rcall NRF24_WriteReg
- 309:main.c        **** 	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
- 907               	.LM106:
- 908 021a 61E0      		ldi r22,lo8(1)
- 909 021c 82E0      		ldi r24,lo8(2)
- 910 021e 00D0      		rcall NRF24_WriteReg
- 310:main.c        **** 	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
- 912               	.LM107:
- 913 0220 61E0      		ldi r22,lo8(1)
- 914 0222 83E0      		ldi r24,lo8(3)
- 915 0224 00D0      		rcall NRF24_WriteReg
- 311:main.c        **** 	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
- 917               	.LM108:
- 918 0226 60E0      		ldi r22,0
- 919 0228 84E0      		ldi r24,lo8(4)
- 920 022a 00D0      		rcall NRF24_WriteReg
- 312:main.c        **** 	NRF24_ToggleFeatures();				//активация команд
- 922               	.LM109:
- 923 022c 00D0      		rcall NRF24_ToggleFeatures
- 313:main.c        **** 	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE
- 925               	.LM110:
- 926 022e 67E0      		ldi r22,lo8(7)
- 927 0230 8DE1      		ldi r24,lo8(29)
- 928 0232 00D0      		rcall NRF24_WriteReg
- 314:main.c        **** 	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
- 930               	.LM111:
- 931 0234 60E0      		ldi r22,0
- 932 0236 8CE1      		ldi r24,lo8(28)
- 933 0238 00D0      		rcall NRF24_WriteReg
- 315:main.c        **** 	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
- 935               	.LM112:
- 936 023a 60E7      		ldi r22,lo8(112)
- 937 023c 87E0      		ldi r24,lo8(7)
- 938 023e 00D0      		rcall NRF24_WriteReg
- 316:main.c        **** 	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
- 940               	.LM113:
- 941 0240 6CE4      		ldi r22,lo8(76)
- 942 0242 85E0      		ldi r24,lo8(5)
- 943 0244 00D0      		rcall NRF24_WriteReg
- 317:main.c        **** 	NRF24_WriteReg(RF_SETUP, 0x06);		//TX_PWR:0dBm, Datarate:1Mbps
- 945               	.LM114:
- 946 0246 66E0      		ldi r22,lo8(6)
- 947 0248 86E0      		ldi r24,lo8(6)
- 948 024a 00D0      		rcall NRF24_WriteReg
- 318:main.c        **** 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
- 950               	.LM115:
- 951 024c 43E0      		ldi r20,lo8(3)
- 952 024e 60E0      		ldi r22,lo8(TX_ADDRESS0)
- 953 0250 70E0      		ldi r23,hi8(TX_ADDRESS0)
- 954 0252 80E1      		ldi r24,lo8(16)
- 955 0254 00D0      		rcall NRF24_Write_Buf
- 319:main.c        **** 	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
- 957               	.LM116:
- 958 0256 43E0      		ldi r20,lo8(3)
- 959 0258 60E0      		ldi r22,lo8(TX_ADDRESS0)
- 960 025a 70E0      		ldi r23,hi8(TX_ADDRESS0)
- 961 025c 8BE0      		ldi r24,lo8(11)
- 962 025e 00D0      		rcall NRF24_Write_Buf
- 320:main.c        **** 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
- 964               	.LM117:
- 965 0260 60E2      		ldi r22,lo8(32)
- 966 0262 81E1      		ldi r24,lo8(17)
- 967 0264 00D0      		rcall NRF24_WriteReg
- 321:main.c        **** 	//пока уходим в режим приёмника
- 322:main.c        **** 	NRF24L01_RX_Mode();					//режим приема
- 969               	.LM118:
- 970 0266 00D0      		rcall NRF24L01_RX_Mode
- 323:main.c        **** 	LED_OFF();
- 972               	.LM119:
- 973 0268 9698      		cbi 0x12,6
- 974 026a 0895      		ret
- 976               	.Lscope16:
- 978               	.global	nrf24_receive
- 980               	nrf24_receive:
- 324:main.c        **** }
- 325:main.c        **** 
- 326:main.c        **** //--------------------------------------------------
- 327:main.c        **** void nrf24_receive(void)
- 328:main.c        **** {
- 982               	.LM120:
- 983               	.LFBB17:
- 984               	/* prologue: function */
- 985               	/* frame size = 0 */
- 986               	/* stack size = 0 */
- 987               	.L__stack_usage = 0
- 329:main.c        **** 	uint8_t status = 0x01;	//переменная статус
- 330:main.c        **** 	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
- 989               	.LM121:
- 990 026c 87E0      		ldi r24,lo8(7)
- 991 026e 00D0      		rcall NRF24_ReadReg
- 331:main.c        **** 	if(status & RX_DR)				//если есть данные на прием
- 993               	.LM122:
- 994 0270 86FF      		sbrs r24,6
- 995 0272 00C0      		rjmp .L35
- 996               	.LBB55:
- 997               	.LBB56:
- 332:main.c        **** 	{
- 333:main.c        **** 		NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
- 999               	.LM123:
- 1000 0274 40E2      		ldi r20,lo8(32)
- 1001 0276 60E0      		ldi r22,lo8(rx_buf)
- 1002 0278 70E0      		ldi r23,hi8(rx_buf)
- 1003 027a 81E6      		ldi r24,lo8(97)
- 1004 027c 00D0      		rcall NRF24_Read_Buf
- 334:main.c        **** 		NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
- 1006               	.LM124:
- 1007 027e 60E4      		ldi r22,lo8(64)
- 1008 0280 87E0      		ldi r24,lo8(7)
- 1009 0282 00D0      		rcall NRF24_WriteReg
- 335:main.c        **** 		f_rx = 1;						//поднимаем флаг приема
- 1011               	.LM125:
- 1012 0284 81E0      		ldi r24,lo8(1)
- 1013 0286 8093 0000 		sts f_rx,r24
- 1014               	.L35:
- 1015 028a 0895      		ret
- 1016               	.LBE56:
- 1017               	.LBE55:
- 1019               	.Lscope17:
- 1020               		.section	.text.startup,"ax",@progbits
- 1022               	.global	main
- 1024               	main:
- 336:main.c        **** 	}
- 337:main.c        **** }
- 338:main.c        **** 
- 339:main.c        **** static inline void eraseFlash(void)
- 340:main.c        **** {
- 341:main.c        **** 	// erase only main section (bootloader protection)
- 342:main.c        **** 	uint32_t addr = 0;
- 343:main.c        **** 	while (APP_END > addr) 
- 344:main.c        **** 	{
- 345:main.c        **** 		boot_page_erase(addr);		// Perform page erase
- 346:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
- 347:main.c        **** 		addr += SPM_PAGESIZE;
- 348:main.c        **** 	}
- 349:main.c        **** 	boot_rww_enable();
- 350:main.c        **** }
- 351:main.c        **** 
- 352:main.c        **** static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
- 353:main.c        **** {
- 354:main.c        **** 	uint32_t pagestart = (uint32_t)waddr<<1;
- 355:main.c        **** 	uint32_t baddr = pagestart;
- 356:main.c        **** 	uint16_t data;
- 357:main.c        **** 	uint8_t *tmp = gBuffer;
- 358:main.c        **** 
- 359:main.c        **** 	do 
- 360:main.c        **** 		{
- 361:main.c        **** 		data = *tmp++;
- 362:main.c        **** 		data |= *tmp++ << 8;
- 363:main.c        **** 		boot_page_fill(baddr, data);	// call asm routine.
- 364:main.c        **** 
- 365:main.c        **** 		baddr += 2;			// Select next word in memory
- 366:main.c        **** 		size -= 2;			// Reduce number of bytes to write by two
- 367:main.c        **** 		} 
- 368:main.c        **** 	while (size);				// Loop until all bytes written
- 369:main.c        **** 
- 370:main.c        **** 	boot_page_write(pagestart);
- 371:main.c        **** 	boot_spm_busy_wait();
- 372:main.c        **** 	boot_rww_enable();		// Re-enable the RWW section
- 373:main.c        **** 
- 374:main.c        **** 	return baddr>>1;
- 375:main.c        **** }
- 376:main.c        **** 
- 377:main.c        **** static inline uint16_t writeEEpromPage(uint16_t address, pagebuf_t size)
- 378:main.c        **** {
- 379:main.c        **** 	uint8_t *tmp = gBuffer;
- 380:main.c        **** 
- 381:main.c        **** 	do 
- 382:main.c        **** 		{
- 383:main.c        **** 		eeprom_write_byte( (uint8_t*)address, *tmp++ );
- 384:main.c        **** 		address++;			// Select next byte
- 385:main.c        **** 		size--;				// Decreas number of bytes to write
- 386:main.c        **** 		}
- 387:main.c        **** 	while (size);				// Loop until all bytes written
- 388:main.c        **** 
- 389:main.c        **** 	//eeprom_busy_wait();
- 390:main.c        **** 
- 391:main.c        **** 	return address;
- 392:main.c        **** }
- 393:main.c        **** 
- 394:main.c        **** static void (*jump_to_app)(void) = 0x0000;
- 395:main.c        **** 
- 396:main.c        **** int main(void)
- 397:main.c        **** {
- 1026               	.LM126:
- 1027               	.LFBB18:
- 1028               	/* prologue: function */
- 1029               	/* frame size = 0 */
- 1030               	/* stack size = 0 */
- 1031               	.L__stack_usage = 0
- 398:main.c        **** 	port_init();							//инициализация портов
- 1033               	.LM127:
- 1034 0000 00D0      		rcall port_init
- 399:main.c        **** 	spi_init();								//инициализация SPI
- 1036               	.LM128:
- 1037 0002 00D0      		rcall spi_init
- 400:main.c        **** 	nrf24_init();
- 1039               	.LM129:
- 1040 0004 00D0      		rcall nrf24_init
- 401:main.c        **** 
- 402:main.c        **** 	uint8_t blink_counter = 2;
- 403:main.c        **** 	while (blink_counter)
- 404:main.c        **** 	{
- 405:main.c        **** 		LED_ON();
- 1042               	.LM130:
- 1043 0006 969A      		sbi 0x12,6
- 1044               	.LBB67:
- 1045               	.LBB68:
- 1047               	.Ltext21:
+ 838               	.LBB53:
+ 839               	.LBB54:
+ 841               	.Ltext17:
+ 843               	.LM98:
+ 844 01ea 87EE      		ldi r24,lo8(999)
+ 845 01ec 93E0      		ldi r25,hi8(999)
+ 846 01ee 0197      	1:	sbiw r24,1
+ 847 01f0 01F4      		brne 1b
+ 848 01f2 00C0      		rjmp .
+ 849 01f4 0000      		nop
+ 850               	.LBE54:
+ 851               	.LBE53:
+ 853               	.Ltext18:
+ 296:main.c        **** 	_delay_us(500);
+ 297:main.c        **** 	NRF24L01_RX_Mode();				//переход в режим приема
+ 855               	.LM99:
+ 856 01f6 00D0      		rcall NRF24L01_RX_Mode
+ 298:main.c        **** 	return 0;
+ 299:main.c        **** }
+ 858               	.LM100:
+ 859 01f8 80E0      		ldi r24,0
+ 860               	/* epilogue start */
+ 861 01fa DF91      		pop r29
+ 862 01fc CF91      		pop r28
+ 863 01fe 0895      		ret
+ 865               	.Lscope15:
+ 867               	.global	nrf24_init
+ 869               	nrf24_init:
+ 300:main.c        **** 
+ 301:main.c        **** //------------------------------------------------
+ 302:main.c        **** void nrf24_init(void)
+ 303:main.c        **** {//инициализация
+ 871               	.LM101:
+ 872               	.LFBB16:
+ 873               	/* prologue: function */
+ 874               	/* frame size = 0 */
+ 875               	/* stack size = 0 */
+ 876               	.L__stack_usage = 0
+ 304:main.c        **** 	CE_RESET();							//опускаем к земле вывод ce
+ 878               	.LM102:
+ 879 0200 C098      		cbi 0x18,0
+ 880               	.LBB55:
+ 881               	.LBB56:
+ 883               	.Ltext19:
+ 885               	.LM103:
+ 886 0202 8FE0      		ldi r24,lo8(9999)
+ 887 0204 97E2      		ldi r25,hi8(9999)
+ 888 0206 0197      	1:	sbiw r24,1
+ 889 0208 01F4      		brne 1b
+ 890 020a 00C0      		rjmp .
+ 891 020c 0000      		nop
+ 892               	.LBE56:
+ 893               	.LBE55:
+ 895               	.Ltext20:
+ 305:main.c        **** 	_delay_us(5000);					//задержка 5 мс
+ 306:main.c        **** 	//записываем конфигурационный байт,
+ 307:main.c        **** 	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
+ 897               	.LM104:
+ 898 020e 6AE0      		ldi r22,lo8(10)
+ 899 0210 80E0      		ldi r24,0
+ 900 0212 00D0      		rcall NRF24_WriteReg
+ 901               	.LBB57:
+ 902               	.LBB58:
+ 904               	.Ltext21:
+ 906               	.LM105:
+ 907 0214 8FE0      		ldi r24,lo8(9999)
+ 908 0216 97E2      		ldi r25,hi8(9999)
+ 909 0218 0197      	1:	sbiw r24,1
+ 910 021a 01F4      		brne 1b
+ 911 021c 00C0      		rjmp .
+ 912 021e 0000      		nop
+ 913               	.LBE58:
+ 914               	.LBE57:
+ 916               	.Ltext22:
+ 308:main.c        **** 	_delay_us(5000);
+ 309:main.c        **** 	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
+ 918               	.LM106:
+ 919 0220 60E0      		ldi r22,0
+ 920 0222 81E0      		ldi r24,lo8(1)
+ 921 0224 00D0      		rcall NRF24_WriteReg
+ 310:main.c        **** 	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
+ 923               	.LM107:
+ 924 0226 61E0      		ldi r22,lo8(1)
+ 925 0228 82E0      		ldi r24,lo8(2)
+ 926 022a 00D0      		rcall NRF24_WriteReg
+ 311:main.c        **** 	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
+ 928               	.LM108:
+ 929 022c 61E0      		ldi r22,lo8(1)
+ 930 022e 83E0      		ldi r24,lo8(3)
+ 931 0230 00D0      		rcall NRF24_WriteReg
+ 312:main.c        **** 	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
+ 933               	.LM109:
+ 934 0232 60E0      		ldi r22,0
+ 935 0234 84E0      		ldi r24,lo8(4)
+ 936 0236 00D0      		rcall NRF24_WriteReg
+ 313:main.c        **** 	NRF24_ToggleFeatures();				//активация команд
+ 938               	.LM110:
+ 939 0238 00D0      		rcall NRF24_ToggleFeatures
+ 314:main.c        **** 	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE
+ 941               	.LM111:
+ 942 023a 67E0      		ldi r22,lo8(7)
+ 943 023c 8DE1      		ldi r24,lo8(29)
+ 944 023e 00D0      		rcall NRF24_WriteReg
+ 315:main.c        **** 	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
+ 946               	.LM112:
+ 947 0240 60E0      		ldi r22,0
+ 948 0242 8CE1      		ldi r24,lo8(28)
+ 949 0244 00D0      		rcall NRF24_WriteReg
+ 316:main.c        **** 	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
+ 951               	.LM113:
+ 952 0246 60E7      		ldi r22,lo8(112)
+ 953 0248 87E0      		ldi r24,lo8(7)
+ 954 024a 00D0      		rcall NRF24_WriteReg
+ 317:main.c        **** 	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
+ 956               	.LM114:
+ 957 024c 6CE4      		ldi r22,lo8(76)
+ 958 024e 85E0      		ldi r24,lo8(5)
+ 959 0250 00D0      		rcall NRF24_WriteReg
+ 318:main.c        **** 	NRF24_WriteReg(RF_SETUP, 0x06);		//TX_PWR:0dBm, Datarate:1Mbps
+ 961               	.LM115:
+ 962 0252 66E0      		ldi r22,lo8(6)
+ 963 0254 86E0      		ldi r24,lo8(6)
+ 964 0256 00D0      		rcall NRF24_WriteReg
+ 319:main.c        **** 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
+ 966               	.LM116:
+ 967 0258 43E0      		ldi r20,lo8(3)
+ 968 025a 60E0      		ldi r22,lo8(TX_ADDRESS0)
+ 969 025c 70E0      		ldi r23,hi8(TX_ADDRESS0)
+ 970 025e 80E1      		ldi r24,lo8(16)
+ 971 0260 00D0      		rcall NRF24_Write_Buf
+ 320:main.c        **** 	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
+ 973               	.LM117:
+ 974 0262 43E0      		ldi r20,lo8(3)
+ 975 0264 60E0      		ldi r22,lo8(TX_ADDRESS0)
+ 976 0266 70E0      		ldi r23,hi8(TX_ADDRESS0)
+ 977 0268 8BE0      		ldi r24,lo8(11)
+ 978 026a 00D0      		rcall NRF24_Write_Buf
+ 321:main.c        **** 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
+ 980               	.LM118:
+ 981 026c 60E2      		ldi r22,lo8(32)
+ 982 026e 81E1      		ldi r24,lo8(17)
+ 983 0270 00D0      		rcall NRF24_WriteReg
+ 322:main.c        **** 	//пока уходим в режим приёмника
+ 323:main.c        **** 	NRF24L01_RX_Mode();					//режим приема
+ 985               	.LM119:
+ 986 0272 00D0      		rcall NRF24L01_RX_Mode
+ 324:main.c        **** 	LED_OFF();
+ 988               	.LM120:
+ 989 0274 9698      		cbi 0x12,6
+ 990 0276 0895      		ret
+ 992               	.Lscope16:
+ 994               	.global	nrf24_receive
+ 996               	nrf24_receive:
+ 325:main.c        **** }
+ 326:main.c        **** 
+ 327:main.c        **** //--------------------------------------------------
+ 328:main.c        **** void nrf24_receive(void)
+ 329:main.c        **** {
+ 998               	.LM121:
+ 999               	.LFBB17:
+ 1000               	/* prologue: function */
+ 1001               	/* frame size = 0 */
+ 1002               	/* stack size = 0 */
+ 1003               	.L__stack_usage = 0
+ 330:main.c        **** 	uint8_t status = 0x01;	//переменная статус
+ 331:main.c        **** 	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
+ 1005               	.LM122:
+ 1006 0278 87E0      		ldi r24,lo8(7)
+ 1007 027a 00D0      		rcall NRF24_ReadReg
+ 332:main.c        **** 	if(status & RX_DR)				//если есть данные на прием
+ 1009               	.LM123:
+ 1010 027c 86FF      		sbrs r24,6
+ 1011 027e 00C0      		rjmp .L35
+ 1012               	.LBB61:
+ 1013               	.LBB62:
+ 333:main.c        **** 	{
+ 334:main.c        **** 		NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
+ 1015               	.LM124:
+ 1016 0280 40E2      		ldi r20,lo8(32)
+ 1017 0282 60E0      		ldi r22,lo8(rx_buf)
+ 1018 0284 70E0      		ldi r23,hi8(rx_buf)
+ 1019 0286 81E6      		ldi r24,lo8(97)
+ 1020 0288 00D0      		rcall NRF24_Read_Buf
+ 335:main.c        **** 		NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
+ 1022               	.LM125:
+ 1023 028a 60E4      		ldi r22,lo8(64)
+ 1024 028c 87E0      		ldi r24,lo8(7)
+ 1025 028e 00D0      		rcall NRF24_WriteReg
+ 336:main.c        **** 		f_rx = 1;						//поднимаем флаг приема
+ 1027               	.LM126:
+ 1028 0290 81E0      		ldi r24,lo8(1)
+ 1029 0292 8093 0000 		sts f_rx,r24
+ 1030               	.L35:
+ 1031 0296 0895      		ret
+ 1032               	.LBE62:
+ 1033               	.LBE61:
+ 1035               	.Lscope17:
+ 1036               		.section	.text.startup,"ax",@progbits
+ 1038               	.global	main
+ 1040               	main:
+ 337:main.c        **** 	}
+ 338:main.c        **** }
+ 339:main.c        **** 
+ 340:main.c        **** static inline void eraseFlash(void)
+ 341:main.c        **** {
+ 342:main.c        **** 	// erase only main section (bootloader protection)
+ 343:main.c        **** 	uint32_t addr = 0;
+ 344:main.c        **** 	while (APP_END > addr) 
+ 345:main.c        **** 	{
+ 346:main.c        **** 		boot_page_erase(addr);		// Perform page erase
+ 347:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
+ 348:main.c        **** 		addr += SPM_PAGESIZE;
+ 349:main.c        **** 	}
+ 350:main.c        **** 	boot_rww_enable();
+ 351:main.c        **** }
+ 352:main.c        **** 
+ 353:main.c        **** static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
+ 354:main.c        **** {
+ 355:main.c        **** 	uint32_t pagestart = (uint32_t)waddr<<1;
+ 356:main.c        **** 	uint32_t baddr = pagestart;
+ 357:main.c        **** 	uint16_t data;
+ 358:main.c        **** 	uint8_t *tmp = gBuffer;
+ 359:main.c        **** 
+ 360:main.c        **** 	do 
+ 361:main.c        **** 		{
+ 362:main.c        **** 		data = *tmp++;
+ 363:main.c        **** 		data |= *tmp++ << 8;
+ 364:main.c        **** 		boot_page_fill(baddr, data);	// call asm routine.
+ 365:main.c        **** 
+ 366:main.c        **** 		baddr += 2;			// Select next word in memory
+ 367:main.c        **** 		size -= 2;			// Reduce number of bytes to write by two
+ 368:main.c        **** 		} 
+ 369:main.c        **** 	while (size);				// Loop until all bytes written
+ 370:main.c        **** 
+ 371:main.c        **** 	boot_page_write(pagestart);
+ 372:main.c        **** 	boot_spm_busy_wait();
+ 373:main.c        **** 	boot_rww_enable();		// Re-enable the RWW section
+ 374:main.c        **** 
+ 375:main.c        **** 	return baddr>>1;
+ 376:main.c        **** }
+ 377:main.c        **** 
+ 378:main.c        **** static inline uint16_t writeEEpromPage(uint16_t address, pagebuf_t size)
+ 379:main.c        **** {
+ 380:main.c        **** 	uint8_t *tmp = gBuffer;
+ 381:main.c        **** 
+ 382:main.c        **** 	do 
+ 383:main.c        **** 		{
+ 384:main.c        **** 		eeprom_write_byte( (uint8_t*)address, *tmp++ );
+ 385:main.c        **** 		address++;			// Select next byte
+ 386:main.c        **** 		size--;				// Decreas number of bytes to write
+ 387:main.c        **** 		}
+ 388:main.c        **** 	while (size);				// Loop until all bytes written
+ 389:main.c        **** 
+ 390:main.c        **** 	//eeprom_busy_wait();
+ 391:main.c        **** 
+ 392:main.c        **** 	return address;
+ 393:main.c        **** }
+ 394:main.c        **** 
+ 395:main.c        **** static void (*jump_to_app)(void) = 0x0000;
+ 396:main.c        **** 
+ 397:main.c        **** int main(void)
+ 398:main.c        **** {
+ 1042               	.LM127:
+ 1043               	.LFBB18:
+ 1044               	/* prologue: function */
+ 1045               	/* frame size = 0 */
+ 1046               	/* stack size = 0 */
+ 1047               	.L__stack_usage = 0
+ 399:main.c        **** 	port_init();							//инициализация портов
+ 1049               	.LM128:
+ 1050 0000 00D0      		rcall port_init
+ 400:main.c        **** 	spi_init();								//инициализация SPI
+ 1052               	.LM129:
+ 1053 0002 00D0      		rcall spi_init
+ 401:main.c        **** 	nrf24_init();
+ 1055               	.LM130:
+ 1056 0004 00D0      		rcall nrf24_init
+ 402:main.c        **** 
+ 403:main.c        **** 	uint8_t blink_counter = 2;
+ 404:main.c        **** 	while (blink_counter)
+ 405:main.c        **** 	{
+ 406:main.c        **** 		LED_ON();
+ 1058               	.LM131:
+ 1059 0006 969A      		sbi 0x12,6
+ 1060               	.LBB75:
+ 1061               	.LBB76:
+ 1063               	.Ltext23:
  187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
- 1049               	.LM131:
- 1050 0008 2FEF      		ldi r18,lo8(159999)
- 1051 000a 80E7      		ldi r24,hi8(159999)
- 1052 000c 92E0      		ldi r25,hlo8(159999)
- 1053 000e 2150      	1:	subi r18,1
- 1054 0010 8040      		sbci r24,0
- 1055 0012 9040      		sbci r25,0
- 1056 0014 01F4      		brne 1b
- 1057 0016 00C0      		rjmp .
- 1058 0018 0000      		nop
- 1059               	.LBE68:
- 1060               	.LBE67:
- 1062               	.Ltext22:
+ 1065               	.LM132:
+ 1066 0008 2FEF      		ldi r18,lo8(159999)
+ 1067 000a 80E7      		ldi r24,hi8(159999)
+ 1068 000c 92E0      		ldi r25,hlo8(159999)
+ 1069 000e 2150      	1:	subi r18,1
+ 1070 0010 8040      		sbci r24,0
+ 1071 0012 9040      		sbci r25,0
+ 1072 0014 01F4      		brne 1b
+ 1073 0016 00C0      		rjmp .
+ 1074 0018 0000      		nop
+ 1075               	.LBE76:
+ 1076               	.LBE75:
+ 1078               	.Ltext24:
+ 407:main.c        **** 		_delay_ms(100);
+ 408:main.c        **** 		LED_OFF();
+ 1080               	.LM133:
+ 1081 001a 9698      		cbi 0x12,6
+ 1082               	.LBB78:
+ 1083               	.LBB79:
+ 1085               	.Ltext25:
+ 187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
+ 1087               	.LM134:
+ 1088 001c EFEF      		ldi r30,lo8(159999)
+ 1089 001e F0E7      		ldi r31,hi8(159999)
+ 1090 0020 22E0      		ldi r18,hlo8(159999)
+ 1091 0022 E150      	1:	subi r30,1
+ 1092 0024 F040      		sbci r31,0
+ 1093 0026 2040      		sbci r18,0
+ 1094 0028 01F4      		brne 1b
+ 1095 002a 00C0      		rjmp .
+ 1096 002c 0000      		nop
+ 1097               	.LBE79:
+ 1098               	.LBE78:
+ 1100               	.Ltext26:
  406:main.c        **** 		_delay_ms(100);
- 407:main.c        **** 		LED_OFF();
- 1064               	.LM132:
- 1065 001a 9698      		cbi 0x12,6
- 1066               	.LBB70:
- 1067               	.LBB71:
- 1069               	.Ltext23:
+ 1102               	.LM135:
+ 1103 002e 969A      		sbi 0x12,6
+ 1104               	.LBB81:
+ 1105               	.LBB77:
+ 1107               	.Ltext27:
  187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
- 1071               	.LM133:
- 1072 001c AFEF      		ldi r26,lo8(159999)
- 1073 001e B0E7      		ldi r27,hi8(159999)
- 1074 0020 E2E0      		ldi r30,hlo8(159999)
- 1075 0022 A150      	1:	subi r26,1
- 1076 0024 B040      		sbci r27,0
- 1077 0026 E040      		sbci r30,0
- 1078 0028 01F4      		brne 1b
- 1079 002a 00C0      		rjmp .
- 1080 002c 0000      		nop
- 1081               	.LBE71:
- 1082               	.LBE70:
- 1084               	.Ltext24:
- 405:main.c        **** 		_delay_ms(100);
- 1086               	.LM134:
- 1087 002e 969A      		sbi 0x12,6
- 1088               	.LBB73:
- 1089               	.LBB69:
- 1091               	.Ltext25:
+ 1109               	.LM136:
+ 1110 0030 8FEF      		ldi r24,lo8(159999)
+ 1111 0032 90E7      		ldi r25,hi8(159999)
+ 1112 0034 E2E0      		ldi r30,hlo8(159999)
+ 1113 0036 8150      	1:	subi r24,1
+ 1114 0038 9040      		sbci r25,0
+ 1115 003a E040      		sbci r30,0
+ 1116 003c 01F4      		brne 1b
+ 1117 003e 00C0      		rjmp .
+ 1118 0040 0000      		nop
+ 1119               	.LBE77:
+ 1120               	.LBE81:
+ 1122               	.Ltext28:
+ 1124               	.LM137:
+ 1125 0042 9698      		cbi 0x12,6
+ 1126               	.LBB82:
+ 1127               	.LBB80:
+ 1129               	.Ltext29:
  187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
- 1093               	.LM135:
- 1094 0030 FFEF      		ldi r31,lo8(159999)
- 1095 0032 20E7      		ldi r18,hi8(159999)
- 1096 0034 82E0      		ldi r24,hlo8(159999)
- 1097 0036 F150      	1:	subi r31,1
- 1098 0038 2040      		sbci r18,0
- 1099 003a 8040      		sbci r24,0
- 1100 003c 01F4      		brne 1b
- 1101 003e 00C0      		rjmp .
- 1102 0040 0000      		nop
- 1103               	.LBE69:
- 1104               	.LBE73:
- 1106               	.Ltext26:
- 1108               	.LM136:
- 1109 0042 9698      		cbi 0x12,6
- 1110               	.LBB74:
- 1111               	.LBB72:
- 1113               	.Ltext27:
- 187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
- 1115               	.LM137:
- 1116 0044 9FEF      		ldi r25,lo8(159999)
- 1117 0046 A0E7      		ldi r26,hi8(159999)
- 1118 0048 B2E0      		ldi r27,hlo8(159999)
- 1119 004a 9150      	1:	subi r25,1
- 1120 004c A040      		sbci r26,0
- 1121 004e B040      		sbci r27,0
- 1122 0050 01F4      		brne 1b
- 1123 0052 00C0      		rjmp .
- 1124 0054 0000      		nop
- 1125               	.LBE72:
- 1126               	.LBE74:
- 1127               	.LBB75:
- 1128               	.LBB76:
- 1129               	.LBB77:
- 1131               	.Ltext28:
- 363:main.c        **** 
- 1133               	.LM138:
- 1134 0056 D1E0      		ldi r29,lo8(1)
- 370:main.c        **** 	boot_spm_busy_wait();
- 1136               	.LM139:
- 1137 0058 15E0      		ldi r17,lo8(5)
- 372:main.c        **** 
- 1139               	.LM140:
- 1140 005a C1E1      		ldi r28,lo8(17)
- 1141               	.LBE77:
- 1142               	.LBE76:
- 1143               	.LBE75:
- 1144               	.LBB81:
- 1145               	.LBB82:
- 345:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
- 1147               	.LM141:
- 1148 005c 03E0      		ldi r16,lo8(3)
- 1149               	.L41:
- 1150               	.LBE82:
- 1151               	.LBE81:
- 408:main.c        **** 		_delay_ms(100);
- 409:main.c        **** 		blink_counter--;
- 410:main.c        **** 	}
- 411:main.c        **** 
- 412:main.c        **** 	uint16_t cnt = 0;
- 413:main.c        **** 
- 414:main.c        **** 	while (1) 
- 415:main.c        **** 	{
- 416:main.c        **** 		nrf24_receive();
- 1153               	.LM142:
- 1154 005e 00D0      		rcall nrf24_receive
- 417:main.c        **** 
- 418:main.c        **** 		if(f_rx == 1)						//если флаг приема поднят
- 1156               	.LM143:
- 1157 0060 9091 0000 		lds r25,f_rx
- 1158 0064 9130      		cpi r25,lo8(1)
- 1159 0066 01F4      		brne .L41
- 419:main.c        **** 		{
- 420:main.c        **** 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
- 1161               	.LM144:
- 1162 0068 8091 0000 		lds r24,rx_buf
- 1163 006c 8730      		cpi r24,lo8(7)
- 1164 006e 01F0      		breq .+2
- 1165 0070 00C0      		rjmp .L43
- 421:main.c        **** 			{
- 422:main.c        **** 				
- 423:main.c        **** 				if (rx_buf[1] == 'E')	
- 1167               	.LM145:
- 1168 0072 8091 0000 		lds r24,rx_buf+1
- 1169 0076 8534      		cpi r24,lo8(69)
- 1170 0078 01F4      		brne .L44
- 1171 007a E0E0      		ldi r30,0
- 1172 007c F0E0      		ldi r31,0
- 1173               	.L46:
- 1174               	.LBB84:
- 1175               	.LBB83:
- 345:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
- 1177               	.LM146:
- 1178               	/* #APP */
- 1179               	 ;  345 "main.c" 1
- 1180 007e 0093 5700 		sts 87, r16
- 1181 0082 E895      		spm
- 1182               		
- 1183               	 ;  0 "" 2
- 1184               	/* #NOAPP */
- 1185               	.L45:
- 346:main.c        **** 		addr += SPM_PAGESIZE;
- 1187               	.LM147:
- 1188 0084 07B6      		in __tmp_reg__,0x37
- 1189 0086 00FC      		sbrc __tmp_reg__,0
- 1190 0088 00C0      		rjmp .L45
- 1191 008a E05C      		subi r30,-64
- 1192 008c FF4F      		sbci r31,-1
- 343:main.c        **** 	{
- 1194               	.LM148:
- 1195 008e E115      		cp r30,__zero_reg__
- 1196 0090 28E1      		ldi r18,24
- 1197 0092 F207      		cpc r31,r18
- 1198 0094 01F4      		brne .L46
- 349:main.c        **** }
- 1200               	.LM149:
- 1201               	/* #APP */
- 1202               	 ;  349 "main.c" 1
- 1203 0096 C093 5700 		sts 87, r28
- 1204 009a E895      		spm
- 1205               		
- 1206               	 ;  0 "" 2
- 1207               	/* #NOAPP */
- 1208 009c 00C0      		rjmp .L47
- 1209               	.L44:
- 1210               	.LBE83:
- 1211               	.LBE84:
+ 1131               	.LM138:
+ 1132 0044 FFEF      		ldi r31,lo8(159999)
+ 1133 0046 20E7      		ldi r18,hi8(159999)
+ 1134 0048 82E0      		ldi r24,hlo8(159999)
+ 1135 004a F150      	1:	subi r31,1
+ 1136 004c 2040      		sbci r18,0
+ 1137 004e 8040      		sbci r24,0
+ 1138 0050 01F4      		brne 1b
+ 1139 0052 00C0      		rjmp .
+ 1140 0054 0000      		nop
+ 1141 0056 C0E0      		ldi r28,0
+ 1142 0058 D0E0      		ldi r29,0
+ 1143               	.LBE80:
+ 1144               	.LBE82:
+ 1145               	.LBB83:
+ 1147               	.Ltext30:
+ 409:main.c        **** 		_delay_ms(100);
+ 410:main.c        **** 		blink_counter--;
+ 411:main.c        **** 	}
+ 412:main.c        **** 
+ 413:main.c        **** 	uint16_t cnt = 0;
+ 414:main.c        **** 
+ 415:main.c        **** 	while (1) 
+ 416:main.c        **** 	{
+ 417:main.c        **** 		nrf24_receive();
+ 418:main.c        **** 
+ 419:main.c        **** 		if(f_rx == 1)						//если флаг приема поднят
+ 420:main.c        **** 		{
+ 421:main.c        **** 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
+ 422:main.c        **** 			{
+ 423:main.c        **** 				if (rx_buf[1] == 'J')
  424:main.c        **** 				{
- 425:main.c        **** 					eraseFlash();
+ 425:main.c        **** 					jump_to_app();
  426:main.c        **** 				}
  427:main.c        **** 
- 428:main.c        **** 				if (rx_buf[1] == 'W')	
- 1213               	.LM150:
- 1214 009e 8735      		cpi r24,lo8(87)
- 1215 00a0 01F4      		brne .L47
+ 428:main.c        **** 				if (rx_buf[1] == 'E')	
  429:main.c        **** 				{
- 430:main.c        **** 					f_wait = 1;
- 1217               	.LM151:
- 1218 00a2 9093 0000 		sts f_wait,r25
- 431:main.c        **** 					tx_buf[0] = 'W';
- 1220               	.LM152:
- 1221 00a6 8093 0000 		sts tx_buf,r24
- 432:main.c        **** 					NRF24L01_Send(tx_buf);
- 1223               	.LM153:
- 1224 00aa 80E0      		ldi r24,lo8(tx_buf)
- 1225 00ac 90E0      		ldi r25,hi8(tx_buf)
- 1226 00ae 00D0      		rcall NRF24L01_Send
- 1227               	.L47:
- 433:main.c        **** 				}
- 434:main.c        **** 
- 435:main.c        **** 				if (rx_buf[1] == 'F')		//
- 1229               	.LM154:
- 1230 00b0 8091 0000 		lds r24,rx_buf+1
- 1231 00b4 8634      		cpi r24,lo8(70)
- 1232 00b6 01F0      		breq .+2
- 1233 00b8 00C0      		rjmp .L43
- 1234               	.LBB85:
- 436:main.c        **** 				{
- 437:main.c        **** 					LED_ON();
- 1236               	.LM155:
- 1237 00ba 969A      		sbi 0x12,6
- 438:main.c        **** 					pagebuf_t size;
- 439:main.c        **** 					size = rx_buf[2];
- 1239               	.LM156:
- 1240 00bc F090 0000 		lds r15,rx_buf+2
- 440:main.c        **** 					address = rx_buf[3]; //
- 1242               	.LM157:
- 1243 00c0 8091 0000 		lds r24,rx_buf+3
- 1244 00c4 282F      		mov r18,r24
- 1245 00c6 30E0      		ldi r19,0
- 1246 00c8 3093 0000 		sts address+1,r19
- 1247 00cc 2093 0000 		sts address,r18
- 1248 00d0 A0E0      		ldi r26,lo8(rx_buf+4)
- 1249 00d2 B0E0      		ldi r27,hi8(rx_buf+4)
- 1250               	.LBB79:
+ 430:main.c        **** 					eraseFlash();
+ 431:main.c        **** 				}
+ 432:main.c        **** 
+ 433:main.c        **** 				if (rx_buf[1] == 'W')	
+ 434:main.c        **** 				{
+ 435:main.c        **** 					LED_ON();
+ 436:main.c        **** 					f_wait = 1;
+ 437:main.c        **** 					tx_buf[0] = BUT_ADDR;
+ 438:main.c        **** 					tx_buf[1] = 'W';
+ 439:main.c        **** 					NRF24L01_Send(tx_buf);
+ 440:main.c        **** 				}
  441:main.c        **** 
- 442:main.c        **** 					for (uint8_t i = 0; i < size; i++)
- 1252               	.LM158:
- 1253 00d4 E0E0      		ldi r30,lo8(gBuffer)
- 1254 00d6 F0E0      		ldi r31,hi8(gBuffer)
- 1255 00d8 90E0      		ldi r25,0
- 1256               	.L49:
- 1258               	.LM159:
- 1259 00da 9F15      		cp r25,r15
- 1260 00dc 01F0      		breq .L59
- 443:main.c        **** 					{
- 444:main.c        **** 						gBuffer[i] = rx_buf[i+4];
- 1262               	.LM160:
- 1263 00de 2D91      		ld r18,X+
- 1264 00e0 2193      		st Z+,r18
- 442:main.c        **** 					{
- 1266               	.LM161:
- 1267 00e2 9F5F      		subi r25,lo8(-(1))
- 1268 00e4 00C0      		rjmp .L49
- 1269               	.L59:
- 1270               	.LBE79:
- 1271               	.LBB80:
- 1272               	.LBB78:
- 354:main.c        **** 	uint32_t baddr = pagestart;
- 1274               	.LM162:
- 1275 00e6 90E0      		ldi r25,0
- 1276 00e8 A0E0      		ldi r26,0
- 1277 00ea B0E0      		ldi r27,0
- 1278 00ec 880F      		lsl r24
- 1279 00ee 991F      		rol r25
- 1280 00f0 AA1F      		rol r26
- 1281 00f2 BB1F      		rol r27
- 357:main.c        **** 
- 1283               	.LM163:
- 1284 00f4 2091 0000 		lds r18,gBuffer
- 1285 00f8 40E0      		ldi r20,lo8(gBuffer)
- 1286 00fa 50E0      		ldi r21,hi8(gBuffer)
- 1287 00fc BC01      		movw r22,r24
- 363:main.c        **** 
- 1289               	.LM164:
- 1290 00fe 8050      		subi r24,lo8(gBuffer)
- 1291 0100 9040      		sbci r25,hi8(gBuffer)
- 1292               	.L52:
- 1293 0102 FC01      		movw r30,r24
- 1294 0104 E40F      		add r30,r20
- 1295 0106 F51F      		adc r31,r21
- 1296 0108 DA01      		movw r26,r20
- 1297 010a 1196      		adiw r26,1
- 1298 010c EC90      		ld r14,X
- 1299 010e 30E0      		ldi r19,0
- 1300 0110 3E29      		or r19,r14
- 1301               	/* #APP */
- 1302               	 ;  363 "main.c" 1
- 1303 0112 0901      		movw  r0, r18
- 1304 0114 D093 5700 		sts 87, r29
- 1305 0118 E895      		spm
- 1306 011a 1124      		clr  r1
- 1307               		
- 1308               	 ;  0 "" 2
- 366:main.c        **** 		} 
- 1310               	.LM165:
- 1311               	/* #NOAPP */
- 1312 011c FA94      		dec r15
- 1313 011e FA94      		dec r15
- 1314 0120 4E5F      		subi r20,-2
- 1315 0122 5F4F      		sbci r21,-1
- 368:main.c        **** 
- 1317               	.LM166:
- 1318 0124 FF20      		tst r15
- 1319 0126 01F0      		breq .L51
- 362:main.c        **** 		boot_page_fill(baddr, data);	// call asm routine.
- 1321               	.LM167:
- 1322 0128 FA01      		movw r30,r20
- 1323 012a 2081      		ld r18,Z
- 1324 012c 00C0      		rjmp .L52
- 1325               	.L51:
- 370:main.c        **** 	boot_spm_busy_wait();
- 1327               	.LM168:
- 1328 012e FB01      		movw r30,r22
- 1329               	/* #APP */
- 1330               	 ;  370 "main.c" 1
- 1331 0130 1093 5700 		sts 87, r17
- 1332 0134 E895      		spm
- 1333               		
- 1334               	 ;  0 "" 2
- 1335               	/* #NOAPP */
- 1336               	.L53:
- 371:main.c        **** 	boot_rww_enable();		// Re-enable the RWW section
- 1338               	.LM169:
- 1339 0136 07B6      		in __tmp_reg__,0x37
- 1340 0138 00FC      		sbrc __tmp_reg__,0
- 1341 013a 00C0      		rjmp .L53
- 372:main.c        **** 
- 1343               	.LM170:
- 1344               	/* #APP */
- 1345               	 ;  372 "main.c" 1
- 1346 013c C093 5700 		sts 87, r28
- 1347 0140 E895      		spm
- 1348               		
- 1349               	 ;  0 "" 2
- 1350               	/* #NOAPP */
- 1351               	.L43:
- 1352               	.LBE78:
- 1353               	.LBE80:
- 1354               	.LBE85:
- 445:main.c        **** 					}
- 446:main.c        **** 					
- 447:main.c        **** 					writeFlashPage(address, size);
- 448:main.c        **** 				}
- 449:main.c        **** 
- 450:main.c        **** 			}
- 451:main.c        **** 
- 452:main.c        **** 			f_rx = 0;						//опускаем флаг приема
- 1356               	.LM171:
- 1357 0142 1092 0000 		sts f_rx,__zero_reg__
- 1358 0146 00C0      		rjmp .L41
- 1375               	.Lscope18:
- 1376               		.comm	gBuffer,64,1
- 1377               	.global	f_wait
- 1378               		.section .bss
- 1381               	f_wait:
- 1382 0000 00        		.zero	1
- 1383               		.comm	val,1,1
- 1384               	.global	device
- 1387               	device:
- 1388 0001 00        		.zero	1
- 1389               	.global	address
- 1392               	address:
- 1393 0002 0000      		.zero	2
- 1394               		.comm	buf,20,1
- 1395               		.comm	f_send,1,1
- 1396               	.global	f_tx
- 1399               	f_tx:
- 1400 0004 00        		.zero	1
- 1401               	.global	f_rx
- 1404               	f_rx:
- 1405 0005 00        		.zero	1
- 1406               	.global	tx_buf
- 1409               	tx_buf:
- 1410 0006 0000 0000 		.zero	32
- 1410      0000 0000 
- 1410      0000 0000 
- 1410      0000 0000 
- 1410      0000 0000 
- 1411               	.global	rx_buf
- 1414               	rx_buf:
- 1415 0026 0000 0000 		.zero	32
- 1415      0000 0000 
- 1415      0000 0000 
- 1415      0000 0000 
- 1415      0000 0000 
- 1416               	.global	TX_ADDRESS1
- 1417               		.data
- 1420               	TX_ADDRESS1:
- 1421 0000 B7        		.byte	-73
- 1422 0001 B5        		.byte	-75
- 1423 0002 A1        		.byte	-95
- 1424               	.global	TX_ADDRESS0
- 1427               	TX_ADDRESS0:
- 1428 0003 B5        		.byte	-75
- 1429 0004 B5        		.byte	-75
- 1430 0005 A1        		.byte	-95
- 1444               		.text
- 1446               	.Letext0:
- 1447               		.ident	"GCC: (AVR_8_bit_GNU_Toolchain_3.6.2_1778) 5.4.0"
- 1448               	.global __do_copy_data
- 1449               	.global __do_clear_bss
+ 442:main.c        **** 				if (rx_buf[1] == 'F')		//
+ 443:main.c        **** 				{
+ 444:main.c        **** 					LED_TGL();
+ 1149               	.LM139:
+ 1150 005a 20E4      		ldi r18,lo8(64)
+ 1151 005c 822E      		mov r8,r18
+ 1152               	.LBB84:
+ 1153               	.LBB85:
+ 364:main.c        **** 
+ 1155               	.LM140:
+ 1156 005e 9924      		clr r9
+ 1157 0060 9394      		inc r9
+ 371:main.c        **** 	boot_spm_busy_wait();
+ 1159               	.LM141:
+ 1160 0062 35E0      		ldi r19,lo8(5)
+ 1161 0064 A32E      		mov r10,r19
+ 373:main.c        **** 
+ 1163               	.LM142:
+ 1164 0066 11E1      		ldi r17,lo8(17)
+ 1165               	.LBE85:
+ 1166               	.LBE84:
+ 1167               	.LBE83:
+ 1168               	.LBB91:
+ 1169               	.LBB92:
+ 346:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
+ 1171               	.LM143:
+ 1172 0068 43E0      		ldi r20,lo8(3)
+ 1173 006a D42E      		mov r13,r20
+ 1174               	.LBE92:
+ 1175               	.LBE91:
+ 425:main.c        **** 				}
+ 1177               	.LM144:
+ 1178 006c E12C      		mov r14,__zero_reg__
+ 1179 006e F12C      		mov r15,__zero_reg__
+ 1180               	.LBB94:
+ 1181               	.LBB88:
+ 1182               	.LBB86:
+ 364:main.c        **** 
+ 1184               	.LM145:
+ 1185 0070 CC24      		clr r12
+ 1186 0072 C394      		inc r12
+ 1187               	.L57:
+ 1188               	.LBE86:
+ 1189               	.LBE88:
+ 445:main.c        **** 					pagebuf_t size;
+ 446:main.c        **** 					size = rx_buf[2];
+ 447:main.c        **** 					address = rx_buf[3]; //
+ 448:main.c        **** 
+ 449:main.c        **** 					for (uint8_t i = 0; i < size; i++)
+ 450:main.c        **** 					{
+ 451:main.c        **** 						gBuffer[i] = rx_buf[i+4];
+ 452:main.c        **** 					}
+ 453:main.c        **** 
+ 454:main.c        **** 					writeFlashPage(address, size);
+ 455:main.c        **** 					//_delay_ms(100);
+ 456:main.c        **** 					tx_buf[0] = BUT_ADDR;
+ 1191               	.LM146:
+ 1192 0074 07E0      		ldi r16,lo8(7)
+ 457:main.c        **** 					tx_buf[1] = 'N';
+ 1194               	.LM147:
+ 1195 0076 9EE4      		ldi r25,lo8(78)
+ 1196 0078 B92E      		mov r11,r25
+ 1197               	.L55:
+ 1198               	.LBE94:
+ 417:main.c        **** 
+ 1200               	.LM148:
+ 1201 007a 00D0      		rcall nrf24_receive
+ 419:main.c        **** 		{
+ 1203               	.LM149:
+ 1204 007c 8091 0000 		lds r24,f_rx
+ 1205 0080 8130      		cpi r24,lo8(1)
+ 1206 0082 01F0      		breq .+2
+ 1207 0084 00C0      		rjmp .L41
+ 421:main.c        **** 			{
+ 1209               	.LM150:
+ 1210 0086 8091 0000 		lds r24,rx_buf
+ 1211 008a 8730      		cpi r24,lo8(7)
+ 1212 008c 01F0      		breq .+2
+ 1213 008e 00C0      		rjmp .L43
+ 423:main.c        **** 				{
+ 1215               	.LM151:
+ 1216 0090 8091 0000 		lds r24,rx_buf+1
+ 1217 0094 8A34      		cpi r24,lo8(74)
+ 1218 0096 01F4      		brne .L44
+ 425:main.c        **** 				}
+ 1220               	.LM152:
+ 1221 0098 F701      		movw r30,r14
+ 1222 009a 0995      		icall
+ 1223               	.L44:
+ 428:main.c        **** 				{
+ 1225               	.LM153:
+ 1226 009c 8091 0000 		lds r24,rx_buf+1
+ 1227 00a0 8534      		cpi r24,lo8(69)
+ 1228 00a2 01F4      		brne .L45
+ 1229 00a4 E0E0      		ldi r30,0
+ 1230 00a6 F0E0      		ldi r31,0
+ 1231               	.L47:
+ 1232               	.LBB95:
+ 1233               	.LBB93:
+ 346:main.c        **** 		boot_spm_busy_wait();		// Wait until the memory is erased.
+ 1235               	.LM154:
+ 1236               	/* #APP */
+ 1237               	 ;  346 "main.c" 1
+ 1238 00a8 D092 5700 		sts 87, r13
+ 1239 00ac E895      		spm
+ 1240               		
+ 1241               	 ;  0 "" 2
+ 1242               	/* #NOAPP */
+ 1243               	.L46:
+ 347:main.c        **** 		addr += SPM_PAGESIZE;
+ 1245               	.LM155:
+ 1246 00ae 07B6      		in __tmp_reg__,0x37
+ 1247 00b0 00FC      		sbrc __tmp_reg__,0
+ 1248 00b2 00C0      		rjmp .L46
+ 1249 00b4 E05C      		subi r30,-64
+ 1250 00b6 FF4F      		sbci r31,-1
+ 344:main.c        **** 	{
+ 1252               	.LM156:
+ 1253 00b8 E115      		cp r30,__zero_reg__
+ 1254 00ba 28E1      		ldi r18,24
+ 1255 00bc F207      		cpc r31,r18
+ 1256 00be 01F4      		brne .L47
+ 350:main.c        **** }
+ 1258               	.LM157:
+ 1259               	/* #APP */
+ 1260               	 ;  350 "main.c" 1
+ 1261 00c0 1093 5700 		sts 87, r17
+ 1262 00c4 E895      		spm
+ 1263               		
+ 1264               	 ;  0 "" 2
+ 1265               	/* #NOAPP */
+ 1266 00c6 00C0      		rjmp .L48
+ 1267               	.L45:
+ 1268               	.LBE93:
+ 1269               	.LBE95:
+ 433:main.c        **** 				{
+ 1271               	.LM158:
+ 1272 00c8 8735      		cpi r24,lo8(87)
+ 1273 00ca 01F4      		brne .L48
+ 435:main.c        **** 					f_wait = 1;
+ 1275               	.LM159:
+ 1276 00cc 969A      		sbi 0x12,6
+ 436:main.c        **** 					tx_buf[0] = BUT_ADDR;
+ 1278               	.LM160:
+ 1279 00ce C092 0000 		sts f_wait,r12
+ 437:main.c        **** 					tx_buf[1] = 'W';
+ 1281               	.LM161:
+ 1282 00d2 0093 0000 		sts tx_buf,r16
+ 438:main.c        **** 					NRF24L01_Send(tx_buf);
+ 1284               	.LM162:
+ 1285 00d6 8093 0000 		sts tx_buf+1,r24
+ 439:main.c        **** 				}
+ 1287               	.LM163:
+ 1288 00da 80E0      		ldi r24,lo8(tx_buf)
+ 1289 00dc 90E0      		ldi r25,hi8(tx_buf)
+ 1290 00de 00D0      		rcall NRF24L01_Send
+ 1291               	.L48:
+ 442:main.c        **** 				{
+ 1293               	.LM164:
+ 1294 00e0 8091 0000 		lds r24,rx_buf+1
+ 1295 00e4 8634      		cpi r24,lo8(70)
+ 1296 00e6 01F0      		breq .+2
+ 1297 00e8 00C0      		rjmp .L43
+ 1298               	.LBB96:
+ 444:main.c        **** 					pagebuf_t size;
+ 1300               	.LM165:
+ 1301 00ea 82B3      		in r24,0x12
+ 1302 00ec 8825      		eor r24,r8
+ 1303 00ee 82BB      		out 0x12,r24
+ 446:main.c        **** 					address = rx_buf[3]; //
+ 1305               	.LM166:
+ 1306 00f0 6091 0000 		lds r22,rx_buf+2
+ 447:main.c        **** 
+ 1308               	.LM167:
+ 1309 00f4 8091 0000 		lds r24,rx_buf+3
+ 1310 00f8 282F      		mov r18,r24
+ 1311 00fa 30E0      		ldi r19,0
+ 1312 00fc 3093 0000 		sts address+1,r19
+ 1313 0100 2093 0000 		sts address,r18
+ 1314 0104 A0E0      		ldi r26,lo8(rx_buf+4)
+ 1315 0106 B0E0      		ldi r27,hi8(rx_buf+4)
+ 1316               	.LBB89:
+ 449:main.c        **** 					{
+ 1318               	.LM168:
+ 1319 0108 E0E0      		ldi r30,lo8(gBuffer)
+ 1320 010a F0E0      		ldi r31,hi8(gBuffer)
+ 1321 010c 90E0      		ldi r25,0
+ 1322               	.L50:
+ 449:main.c        **** 					{
+ 1324               	.LM169:
+ 1325 010e 9617      		cp r25,r22
+ 1326 0110 01F0      		breq .L62
+ 451:main.c        **** 					}
+ 1328               	.LM170:
+ 1329 0112 2D91      		ld r18,X+
+ 1330 0114 2193      		st Z+,r18
+ 449:main.c        **** 					{
+ 1332               	.LM171:
+ 1333 0116 9F5F      		subi r25,lo8(-(1))
+ 1334 0118 00C0      		rjmp .L50
+ 1335               	.L62:
+ 1336               	.LBE89:
+ 1337               	.LBB90:
+ 1338               	.LBB87:
+ 355:main.c        **** 	uint32_t baddr = pagestart;
+ 1340               	.LM172:
+ 1341 011a 90E0      		ldi r25,0
+ 1342 011c A0E0      		ldi r26,0
+ 1343 011e B0E0      		ldi r27,0
+ 1344 0120 2C01      		movw r4,r24
+ 1345 0122 3D01      		movw r6,r26
+ 1346 0124 440C      		lsl r4
+ 1347 0126 551C      		rol r5
+ 1348 0128 661C      		rol r6
+ 1349 012a 771C      		rol r7
+ 358:main.c        **** 
+ 1351               	.LM173:
+ 1352 012c 2091 0000 		lds r18,gBuffer
+ 1353 0130 A0E0      		ldi r26,lo8(gBuffer)
+ 1354 0132 B0E0      		ldi r27,hi8(gBuffer)
+ 1355 0134 A201      		movw r20,r4
+ 364:main.c        **** 
+ 1357               	.LM174:
+ 1358 0136 C201      		movw r24,r4
+ 1359 0138 8050      		subi r24,lo8(gBuffer)
+ 1360 013a 9040      		sbci r25,hi8(gBuffer)
+ 1361               	.L53:
+ 1362 013c FC01      		movw r30,r24
+ 1363 013e EA0F      		add r30,r26
+ 1364 0140 FB1F      		adc r31,r27
+ 1365 0142 1196      		adiw r26,1
+ 1366 0144 7C91      		ld r23,X
+ 1367 0146 1197      		sbiw r26,1
+ 1368 0148 30E0      		ldi r19,0
+ 1369 014a 372B      		or r19,r23
+ 1370               	/* #APP */
+ 1371               	 ;  364 "main.c" 1
+ 1372 014c 0901      		movw  r0, r18
+ 1373 014e 9092 5700 		sts 87, r9
+ 1374 0152 E895      		spm
+ 1375 0154 1124      		clr  r1
+ 1376               		
+ 1377               	 ;  0 "" 2
+ 367:main.c        **** 		} 
+ 1379               	.LM175:
+ 1380               	/* #NOAPP */
+ 1381 0156 6250      		subi r22,lo8(-(-2))
+ 1382 0158 1296      		adiw r26,2
+ 369:main.c        **** 
+ 1384               	.LM176:
+ 1385 015a 6623      		tst r22
+ 1386 015c 01F0      		breq .L52
+ 363:main.c        **** 		boot_page_fill(baddr, data);	// call asm routine.
+ 1388               	.LM177:
+ 1389 015e 2C91      		ld r18,X
+ 1390 0160 00C0      		rjmp .L53
+ 1391               	.L52:
+ 371:main.c        **** 	boot_spm_busy_wait();
+ 1393               	.LM178:
+ 1394 0162 FA01      		movw r30,r20
+ 1395               	/* #APP */
+ 1396               	 ;  371 "main.c" 1
+ 1397 0164 A092 5700 		sts 87, r10
+ 1398 0168 E895      		spm
+ 1399               		
+ 1400               	 ;  0 "" 2
+ 1401               	/* #NOAPP */
+ 1402               	.L54:
+ 372:main.c        **** 	boot_rww_enable();		// Re-enable the RWW section
+ 1404               	.LM179:
+ 1405 016a 07B6      		in __tmp_reg__,0x37
+ 1406 016c 00FC      		sbrc __tmp_reg__,0
+ 1407 016e 00C0      		rjmp .L54
+ 373:main.c        **** 
+ 1409               	.LM180:
+ 1410               	/* #APP */
+ 1411               	 ;  373 "main.c" 1
+ 1412 0170 1093 5700 		sts 87, r17
+ 1413 0174 E895      		spm
+ 1414               		
+ 1415               	 ;  0 "" 2
+ 1416               	/* #NOAPP */
+ 1417               	.LBE87:
+ 1418               	.LBE90:
+ 456:main.c        **** 					tx_buf[1] = 'N';
+ 1420               	.LM181:
+ 1421 0176 0093 0000 		sts tx_buf,r16
+ 1423               	.LM182:
+ 1424 017a B092 0000 		sts tx_buf+1,r11
+ 458:main.c        **** 					NRF24L01_Send(tx_buf);
+ 1426               	.LM183:
+ 1427 017e 80E0      		ldi r24,lo8(tx_buf)
+ 1428 0180 90E0      		ldi r25,hi8(tx_buf)
+ 1429 0182 00D0      		rcall NRF24L01_Send
+ 1430               	.L43:
+ 1431               	.LBE96:
+ 459:main.c        **** 				}
+ 460:main.c        **** 
+ 461:main.c        **** 			}
+ 462:main.c        **** 
+ 463:main.c        **** 			f_rx = 0;						//опускаем флаг приема
+ 1433               	.LM184:
+ 1434 0184 1092 0000 		sts f_rx,__zero_reg__
+ 1435               	.L41:
+ 464:main.c        **** 		}
+ 465:main.c        **** 
+ 466:main.c        **** 		wdt_reset();
+ 1437               	.LM185:
+ 1438               	/* #APP */
+ 1439               	 ;  466 "main.c" 1
+ 1440 0188 A895      		wdr
+ 1441               	 ;  0 "" 2
+ 467:main.c        **** 
+ 468:main.c        **** 		if (!f_wait)
+ 1443               	.LM186:
+ 1444               	/* #NOAPP */
+ 1445 018a 8091 0000 		lds r24,f_wait
+ 1446 018e 8111      		cpse r24,__zero_reg__
+ 1447 0190 00C0      		rjmp .L55
+ 469:main.c        **** 		{
+ 470:main.c        **** 			if (cnt++ >= WAIT_VALUE) 
+ 1449               	.LM187:
+ 1450 0192 C83E      		cpi r28,-24
+ 1451 0194 F3E0      		ldi r31,3
+ 1452 0196 DF07      		cpc r29,r31
+ 1453 0198 00F0      		brlo .L56
+ 471:main.c        **** 			{
+ 472:main.c        **** 				jump_to_app();			// Jump to application sector
+ 1455               	.LM188:
+ 1456 019a F701      		movw r30,r14
+ 1457 019c 0995      		icall
+ 1458               	.L56:
+ 1459               	.LBB97:
+ 1460               	.LBB98:
+ 1462               	.Ltext31:
+ 187:d:\ide\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h **** 
+ 1464               	.LM189:
+ 1465 019e 8FEC      		ldi r24,lo8(1999)
+ 1466 01a0 97E0      		ldi r25,hi8(1999)
+ 1467 01a2 0197      	1:	sbiw r24,1
+ 1468 01a4 01F4      		brne 1b
+ 1469 01a6 00C0      		rjmp .
+ 1470 01a8 0000      		nop
+ 1471 01aa 2196      		adiw r28,1
+ 1472 01ac 00C0      		rjmp .L57
+ 1473               	.LBE98:
+ 1474               	.LBE97:
+ 1497               	.Lscope18:
+ 1498               		.comm	gBuffer,64,1
+ 1499               	.global	f_wait
+ 1500               		.section .bss
+ 1503               	f_wait:
+ 1504 0000 00        		.zero	1
+ 1505               		.comm	val,1,1
+ 1506               	.global	device
+ 1509               	device:
+ 1510 0001 00        		.zero	1
+ 1511               	.global	address
+ 1514               	address:
+ 1515 0002 0000      		.zero	2
+ 1516               		.comm	buf,20,1
+ 1517               		.comm	f_send,1,1
+ 1518               	.global	f_tx
+ 1521               	f_tx:
+ 1522 0004 00        		.zero	1
+ 1523               	.global	f_rx
+ 1526               	f_rx:
+ 1527 0005 00        		.zero	1
+ 1528               	.global	tx_buf
+ 1531               	tx_buf:
+ 1532 0006 0000 0000 		.zero	32
+ 1532      0000 0000 
+ 1532      0000 0000 
+ 1532      0000 0000 
+ 1532      0000 0000 
+ 1533               	.global	rx_buf
+ 1536               	rx_buf:
+ 1537 0026 0000 0000 		.zero	32
+ 1537      0000 0000 
+ 1537      0000 0000 
+ 1537      0000 0000 
+ 1537      0000 0000 
+ 1538               	.global	TX_ADDRESS1
+ 1539               		.data
+ 1542               	TX_ADDRESS1:
+ 1543 0000 B7        		.byte	-73
+ 1544 0001 B5        		.byte	-75
+ 1545 0002 A1        		.byte	-95
+ 1546               	.global	TX_ADDRESS0
+ 1549               	TX_ADDRESS0:
+ 1550 0003 B5        		.byte	-75
+ 1551 0004 B5        		.byte	-75
+ 1552 0005 A1        		.byte	-95
+ 1566               		.text
+ 1568               	.Letext0:
+ 1569               		.ident	"GCC: (AVR_8_bit_GNU_Toolchain_3.6.2_1778) 5.4.0"
+ 1570               	.global __do_copy_data
+ 1571               	.global __do_clear_bss
 DEFINED SYMBOLS
                             *ABS*:00000000 main.c
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:2      *ABS*:0000003e __SP_H__
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:3      *ABS*:0000003d __SP_L__
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:4      *ABS*:0000003f __SREG__
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:5      *ABS*:00000000 __tmp_reg__
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:6      *ABS*:00000001 __zero_reg__
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:136    .text:00000000 port_init
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:172    .text:00000016 spi_init
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:201    .text:00000028 spi_sendByte
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:227    .text:00000030 spi_changeByte
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:255    .text:0000003a NRF24_ReadReg
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:298    .text:00000050 NRF24_WriteReg
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:332    .text:00000064 NRF24_ToggleFeatures
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:376    .text:0000007a NRF24_Read_Buf
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:441    .text:000000bc NRF24_Write_Buf
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:515    .text:00000100 NRF24_FlushRX
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:553    .text:00000112 NRF24_FlushTX
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:591    .text:00000124 NRF24L01_RX_Mode
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1420   .data:00000000 TX_ADDRESS1
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:654    .text:00000156 NRF24L01_TX_Mode
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1427   .data:00000003 TX_ADDRESS0
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:692    .text:00000170 NRF24_Transmit
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:772    .text:000001b6 NRF24L01_Send
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:853    .text:000001f4 nrf24_init
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:980    .text:0000026c nrf24_receive
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1414   .bss:00000026 rx_buf
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1404   .bss:00000005 f_rx
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1024   .text.startup:00000000 main
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1381   .bss:00000000 f_wait
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1409   .bss:00000006 tx_buf
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1392   .bss:00000002 address
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:2      *ABS*:0000003e __SP_H__
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:3      *ABS*:0000003d __SP_L__
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:4      *ABS*:0000003f __SREG__
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:5      *ABS*:00000000 __tmp_reg__
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:6      *ABS*:00000001 __zero_reg__
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:136    .text:00000000 port_init
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:172    .text:00000016 spi_init
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:201    .text:00000028 spi_sendByte
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:227    .text:00000030 spi_changeByte
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:255    .text:0000003a NRF24_ReadReg
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:298    .text:00000050 NRF24_WriteReg
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:332    .text:00000064 NRF24_ToggleFeatures
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:376    .text:0000007a NRF24_Read_Buf
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:441    .text:000000bc NRF24_Write_Buf
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:515    .text:00000100 NRF24_FlushRX
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:553    .text:00000112 NRF24_FlushTX
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:591    .text:00000124 NRF24L01_RX_Mode
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1542   .data:00000000 TX_ADDRESS1
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:654    .text:00000156 NRF24L01_TX_Mode
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1549   .data:00000003 TX_ADDRESS0
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:692    .text:00000170 NRF24_Transmit
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:772    .text:000001b6 NRF24L01_Send
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:869    .text:00000200 nrf24_init
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:996    .text:00000278 nrf24_receive
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1536   .bss:00000026 rx_buf
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1526   .bss:00000005 f_rx
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1040   .text.startup:00000000 main
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1503   .bss:00000000 f_wait
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1531   .bss:00000006 tx_buf
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1514   .bss:00000002 address
                             *COM*:00000040 gBuffer
                             *COM*:00000001 val
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1387   .bss:00000001 device
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1509   .bss:00000001 device
                             *COM*:00000014 buf
                             *COM*:00000001 f_send
-C:\Users\vmelehin\AppData\Local\Temp\ccp43vnD.s:1399   .bss:00000004 f_tx
+C:\Users\vmelehin\AppData\Local\Temp\ccvX1GN5.s:1521   .bss:00000004 f_tx
 
 UNDEFINED SYMBOLS
 __do_copy_data

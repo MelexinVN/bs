@@ -21,6 +21,8 @@ extern uint8_t f_receive;
 extern uint32_t but_times[NUM_OF_BUTS];
 extern uint8_t but_addrs[];
 extern uint8_t f_rec_proc;														//
+extern uint8_t update_respond;	
+extern uint8_t next_row;
 //самодельная функция микросекундной задержки
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
@@ -218,8 +220,22 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 
 void nrf24l01_receive(void)
 {//Обработка приема радиомодуля
+	
 	if(rx_flag == 1)				//если флаг приема поднят
 	{
+		
+		if (rx_buf[0] == 0x07)
+		{
+			if (rx_buf[1] == 'W')
+			{
+				update_respond = 1;
+			}
+			if (rx_buf[1] == 'N')
+			{
+				next_row = 1;
+			}
+		}
+		/*
 		if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
 		{//если время, присланное кнопкой не максимально возможное (кнопка нажата)
 			sprintf(str," %X\t",rx_buf[0]);				//
@@ -251,7 +267,7 @@ void nrf24l01_receive(void)
 					but_times[i] = MAX_TIME;			 	//записываем максимальное время в массив времен
 				}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
 			}
-		}
+		}*/
 		rx_flag = 0;		//опускаем флаг приема
 	}
 }

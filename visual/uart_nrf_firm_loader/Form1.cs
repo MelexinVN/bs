@@ -142,7 +142,7 @@ namespace WindowsFormsApp1
                 s_input += Convert.ToChar(temp_input[i]);
             }
             rec_string += s_input;
-            if (rec_string.Length >= 10) rec_string = "";
+            if (((rec_string[0] != 0x52) && (rec_string[0] != 0x5A) && (rec_string[0] != 0x41)) || (rec_string.Length >= 10)) rec_string = "";
 
             if (((rec_string.Length > 1)) && (rec_string[rec_string.Length - 1] == '!'))
             {

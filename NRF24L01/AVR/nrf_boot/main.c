@@ -30,16 +30,17 @@
 
 #define EXIT_WDT_TIME   WDTO_250MS
 
-#define WAIT_VALUE 500 //в мс
+#define WAIT_VALUE 1000 //в мс
 
 //------------------------------------------------
 #define CS_ON()			CSN_GPIO_Port&=~(1<<CSN_Pin)
 #define CS_OFF()		CSN_GPIO_Port|=(1<<CSN_Pin)
 #define CE_RESET()		CE_GPIO_Port&=~(1<<CE_Pin)
 #define CE_SET()		CE_GPIO_Port|=(1<<CE_Pin)
-#define IRQ()			IRQ_Pin&(1<<IRQ_Pin)
+
 #define LED_ON()		LED_GPIO_Port|=(1<<LED_Pin)
 #define LED_OFF()		LED_GPIO_Port&=~(1<<LED_Pin)
+#define LED_TGL()		LED_GPIO_Port^=(1<<LED_Pin)
 //------------------------------------------------
 #define ACTIVATE 		0x50 //
 #define RD_RX_PLOAD		0x61 // Define RX payload register address
@@ -97,7 +98,6 @@ uint8_t NRF24_ReadReg(uint8_t addr);
 void NRF24_Read_Buf(uint8_t addr,uint8_t *pBuf,uint8_t bytes);
 uint8_t NRF24L01_Send(uint8_t *pBuf);
 void nrf24l01_receive(void);
-void IRQ_Callback(void);
 
 uint8_t gBuffer[SPM_PAGESIZE];
 uint16_t address = 0;
@@ -293,6 +293,7 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	CE_SET();
 	_delay_us(15); //minimum 10us high pulse (Page 21)
 	CE_RESET();
+	_delay_us(500);
 	NRF24L01_RX_Mode();				//переход в режим приема
 	return 0;
 }
@@ -419,7 +420,11 @@ int main(void)
 		{
 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
 			{
-				
+				if (rx_buf[1] == 'J')
+				{
+					jump_to_app();
+				}
+
 				if (rx_buf[1] == 'E')	
 				{
 					eraseFlash();
@@ -427,14 +432,16 @@ int main(void)
 
 				if (rx_buf[1] == 'W')	
 				{
+					LED_ON();
 					f_wait = 1;
-					tx_buf[0] = 'W';
+					tx_buf[0] = BUT_ADDR;
+					tx_buf[1] = 'W';
 					NRF24L01_Send(tx_buf);
 				}
 
 				if (rx_buf[1] == 'F')		//
 				{
-					LED_ON();
+					LED_TGL();
 					pagebuf_t size;
 					size = rx_buf[2];
 					address = rx_buf[3]; //
@@ -443,23 +450,28 @@ int main(void)
 					{
 						gBuffer[i] = rx_buf[i+4];
 					}
-					
+
 					writeFlashPage(address, size);
+					//_delay_ms(100);
+					tx_buf[0] = BUT_ADDR;
+					tx_buf[1] = 'N';
+					NRF24L01_Send(tx_buf);
 				}
 
 			}
 
 			f_rx = 0;						//опускаем флаг приема
 		}
-		/*
+
+		wdt_reset();
+
 		if (!f_wait)
 		{
 			if (cnt++ >= WAIT_VALUE) 
 			{
-				//jump_to_app();			// Jump to application sector
+				jump_to_app();			// Jump to application sector
 			}
 			_delay_ms(1);		
 		}
-		*/
 	}
 }

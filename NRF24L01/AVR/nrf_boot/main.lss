@@ -3,27 +3,27 @@ main.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000436  00001800  00001800  00000094  2**1
+  0 .text         000004a8  00001800  00001800  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000006  00800060  00001c36  000004ca  2**0
+  1 .data         00000006  00800060  00001ca8  0000053c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          0000009c  00800066  00800066  000004d0  2**0
+  2 .bss          0000009c  00800066  00800066  00000542  2**0
                   ALLOC
-  3 .stab         00001230  00000000  00000000  000004d0  2**2
+  3 .stab         00001374  00000000  00000000  00000544  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      0000140b  00000000  00000000  00001700  2**0
+  4 .stabstr      0000140b  00000000  00000000  000018b8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .comment      00000030  00000000  00000000  00002b0b  2**0
+  5 .comment      00000030  00000000  00000000  00002cc3  2**0
                   CONTENTS, READONLY
-  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002b3c  2**2
+  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002cf4  2**2
                   CONTENTS, READONLY
-  7 .debug_info   0000048c  00000000  00000000  00002b78  2**0
+  7 .debug_info   0000048c  00000000  00000000  00002d30  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000044e  00000000  00000000  00003004  2**0
+  8 .debug_abbrev 0000044e  00000000  00000000  000031bc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   0000001a  00000000  00000000  00003452  2**0
+  9 .debug_line   0000001a  00000000  00000000  0000360a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000017a  00000000  00000000  0000346c  2**0
+ 10 .debug_str    0000017a  00000000  00000000  00003624  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -61,7 +61,7 @@ Disassembly of section .text:
     1832:	10 e0       	ldi	r17, 0x00	; 0
     1834:	a0 e6       	ldi	r26, 0x60	; 96
     1836:	b0 e0       	ldi	r27, 0x00	; 0
-    1838:	e6 e3       	ldi	r30, 0x36	; 54
+    1838:	e8 ea       	ldi	r30, 0xA8	; 168
     183a:	fc e1       	ldi	r31, 0x1C	; 28
     183c:	02 c0       	rjmp	.+4      	; 0x1842 <__do_copy_data+0x10>
     183e:	05 90       	lpm	r0, Z+
@@ -83,8 +83,8 @@ Disassembly of section .text:
     1852:	a2 30       	cpi	r26, 0x02	; 2
     1854:	b2 07       	cpc	r27, r18
     1856:	e1 f7       	brne	.-8      	; 0x1850 <.do_clear_bss_loop>
-    1858:	48 d1       	rcall	.+656    	; 0x1aea <main>
-    185a:	eb c1       	rjmp	.+982    	; 0x1c32 <_exit>
+    1858:	4e d1       	rcall	.+668    	; 0x1af6 <main>
+    185a:	24 c2       	rjmp	.+1096   	; 0x1ca4 <_exit>
 
 0000185c <__bad_interrupt>:
     185c:	d1 cf       	rjmp	.-94     	; 0x1800 <__vectors>
@@ -557,430 +557,530 @@ uint8_t NRF24L01_Send(uint8_t *pBuf)
 	_delay_us(15); //minimum 10us high pulse (Page 21)
 	CE_RESET();
     1a46:	c0 98       	cbi	0x18, 0	; 24
+    1a48:	87 ee       	ldi	r24, 0xE7	; 231
+    1a4a:	93 e0       	ldi	r25, 0x03	; 3
+    1a4c:	01 97       	sbiw	r24, 0x01	; 1
+    1a4e:	f1 f7       	brne	.-4      	; 0x1a4c <NRF24L01_Send+0x38>
+    1a50:	00 c0       	rjmp	.+0      	; 0x1a52 <NRF24L01_Send+0x3e>
+    1a52:	00 00       	nop
+	_delay_us(500);
 	NRF24L01_RX_Mode();				//переход в режим приема
-    1a48:	9c df       	rcall	.-200    	; 0x1982 <NRF24L01_RX_Mode>
+    1a54:	96 df       	rcall	.-212    	; 0x1982 <NRF24L01_RX_Mode>
 	return 0;
 }
-    1a4a:	80 e0       	ldi	r24, 0x00	; 0
-    1a4c:	df 91       	pop	r29
-    1a4e:	cf 91       	pop	r28
-    1a50:	08 95       	ret
+    1a56:	80 e0       	ldi	r24, 0x00	; 0
+    1a58:	df 91       	pop	r29
+    1a5a:	cf 91       	pop	r28
+    1a5c:	08 95       	ret
 
-00001a52 <nrf24_init>:
+00001a5e <nrf24_init>:
 
 //------------------------------------------------
 void nrf24_init(void)
 {//инициализация
 	CE_RESET();							//опускаем к земле вывод ce
-    1a52:	c0 98       	cbi	0x18, 0	; 24
-    1a54:	8f e0       	ldi	r24, 0x0F	; 15
-    1a56:	97 e2       	ldi	r25, 0x27	; 39
-    1a58:	01 97       	sbiw	r24, 0x01	; 1
-    1a5a:	f1 f7       	brne	.-4      	; 0x1a58 <nrf24_init+0x6>
-    1a5c:	00 c0       	rjmp	.+0      	; 0x1a5e <nrf24_init+0xc>
-    1a5e:	00 00       	nop
+    1a5e:	c0 98       	cbi	0x18, 0	; 24
+    1a60:	8f e0       	ldi	r24, 0x0F	; 15
+    1a62:	97 e2       	ldi	r25, 0x27	; 39
+    1a64:	01 97       	sbiw	r24, 0x01	; 1
+    1a66:	f1 f7       	brne	.-4      	; 0x1a64 <nrf24_init+0x6>
+    1a68:	00 c0       	rjmp	.+0      	; 0x1a6a <nrf24_init+0xc>
+    1a6a:	00 00       	nop
 	_delay_us(5000);					//задержка 5 мс
 	//записываем конфигурационный байт,
 	NRF24_WriteReg(CONFIG, 0x0a);		// Set PWR_UP bit, enable CRC(1 byte) &Prim_RX:0 (Transmitter)
-    1a60:	6a e0       	ldi	r22, 0x0A	; 10
-    1a62:	80 e0       	ldi	r24, 0x00	; 0
-    1a64:	24 df       	rcall	.-440    	; 0x18ae <NRF24_WriteReg>
-    1a66:	8f e0       	ldi	r24, 0x0F	; 15
-    1a68:	97 e2       	ldi	r25, 0x27	; 39
-    1a6a:	01 97       	sbiw	r24, 0x01	; 1
-    1a6c:	f1 f7       	brne	.-4      	; 0x1a6a <nrf24_init+0x18>
-    1a6e:	00 c0       	rjmp	.+0      	; 0x1a70 <nrf24_init+0x1e>
-    1a70:	00 00       	nop
+    1a6c:	6a e0       	ldi	r22, 0x0A	; 10
+    1a6e:	80 e0       	ldi	r24, 0x00	; 0
+    1a70:	1e df       	rcall	.-452    	; 0x18ae <NRF24_WriteReg>
+    1a72:	8f e0       	ldi	r24, 0x0F	; 15
+    1a74:	97 e2       	ldi	r25, 0x27	; 39
+    1a76:	01 97       	sbiw	r24, 0x01	; 1
+    1a78:	f1 f7       	brne	.-4      	; 0x1a76 <nrf24_init+0x18>
+    1a7a:	00 c0       	rjmp	.+0      	; 0x1a7c <nrf24_init+0x1e>
+    1a7c:	00 00       	nop
 	_delay_us(5000);
 	NRF24_WriteReg(EN_AA, 0x00);		// Enable Pipe0
-    1a72:	60 e0       	ldi	r22, 0x00	; 0
-    1a74:	81 e0       	ldi	r24, 0x01	; 1
-    1a76:	1b df       	rcall	.-458    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
-    1a78:	61 e0       	ldi	r22, 0x01	; 1
-    1a7a:	82 e0       	ldi	r24, 0x02	; 2
-    1a7c:	18 df       	rcall	.-464    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
-    1a7e:	61 e0       	ldi	r22, 0x01	; 1
-    1a80:	83 e0       	ldi	r24, 0x03	; 3
+    1a7e:	60 e0       	ldi	r22, 0x00	; 0
+    1a80:	81 e0       	ldi	r24, 0x01	; 1
     1a82:	15 df       	rcall	.-470    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
-    1a84:	60 e0       	ldi	r22, 0x00	; 0
-    1a86:	84 e0       	ldi	r24, 0x04	; 4
+	NRF24_WriteReg(EN_RXADDR, 0x01);	// Enable Pipe0
+    1a84:	61 e0       	ldi	r22, 0x01	; 1
+    1a86:	82 e0       	ldi	r24, 0x02	; 2
     1a88:	12 df       	rcall	.-476    	; 0x18ae <NRF24_WriteReg>
+	NRF24_WriteReg(SETUP_AW, 0x01);		// Setup address width=3 bytes
+    1a8a:	61 e0       	ldi	r22, 0x01	; 1
+    1a8c:	83 e0       	ldi	r24, 0x03	; 3
+    1a8e:	0f df       	rcall	.-482    	; 0x18ae <NRF24_WriteReg>
+	NRF24_WriteReg(SETUP_RETR, 0x00);	// 1500us, 15 retrans
+    1a90:	60 e0       	ldi	r22, 0x00	; 0
+    1a92:	84 e0       	ldi	r24, 0x04	; 4
+    1a94:	0c df       	rcall	.-488    	; 0x18ae <NRF24_WriteReg>
 	NRF24_ToggleFeatures();				//активация команд
-    1a8a:	1b df       	rcall	.-458    	; 0x18c2 <NRF24_ToggleFeatures>
+    1a96:	15 df       	rcall	.-470    	; 0x18c2 <NRF24_ToggleFeatures>
 	NRF24_WriteReg(FEATURE, 0x07);			//установка стандартных значений регистра FEATURE
-    1a8c:	67 e0       	ldi	r22, 0x07	; 7
-    1a8e:	8d e1       	ldi	r24, 0x1D	; 29
-    1a90:	0e df       	rcall	.-484    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
-    1a92:	60 e0       	ldi	r22, 0x00	; 0
-    1a94:	8c e1       	ldi	r24, 0x1C	; 28
-    1a96:	0b df       	rcall	.-490    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
-    1a98:	60 e7       	ldi	r22, 0x70	; 112
-    1a9a:	87 e0       	ldi	r24, 0x07	; 7
+    1a98:	67 e0       	ldi	r22, 0x07	; 7
+    1a9a:	8d e1       	ldi	r24, 0x1D	; 29
     1a9c:	08 df       	rcall	.-496    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
-    1a9e:	6c e4       	ldi	r22, 0x4C	; 76
-    1aa0:	85 e0       	ldi	r24, 0x05	; 5
+	NRF24_WriteReg(DYNPD, 0);			//отключение динамического размера полезной нагрузки
+    1a9e:	60 e0       	ldi	r22, 0x00	; 0
+    1aa0:	8c e1       	ldi	r24, 0x1C	; 28
     1aa2:	05 df       	rcall	.-502    	; 0x18ae <NRF24_WriteReg>
-	NRF24_WriteReg(RF_SETUP, 0x06);		//TX_PWR:0dBm, Datarate:1Mbps
-    1aa4:	66 e0       	ldi	r22, 0x06	; 6
-    1aa6:	86 e0       	ldi	r24, 0x06	; 6
+	NRF24_WriteReg(STATUS, 0x70);		//Reset flags for IRQ
+    1aa4:	60 e7       	ldi	r22, 0x70	; 112
+    1aa6:	87 e0       	ldi	r24, 0x07	; 7
     1aa8:	02 df       	rcall	.-508    	; 0x18ae <NRF24_WriteReg>
+	NRF24_WriteReg(RF_CH, 76);			// частота 2476 MHz
+    1aaa:	6c e4       	ldi	r22, 0x4C	; 76
+    1aac:	85 e0       	ldi	r24, 0x05	; 5
+    1aae:	ff de       	rcall	.-514    	; 0x18ae <NRF24_WriteReg>
+	NRF24_WriteReg(RF_SETUP, 0x06);		//TX_PWR:0dBm, Datarate:1Mbps
+    1ab0:	66 e0       	ldi	r22, 0x06	; 6
+    1ab2:	86 e0       	ldi	r24, 0x06	; 6
+    1ab4:	fc de       	rcall	.-520    	; 0x18ae <NRF24_WriteReg>
 	NRF24_Write_Buf(TX_ADDR, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса передачи
-    1aaa:	43 e0       	ldi	r20, 0x03	; 3
-    1aac:	63 e6       	ldi	r22, 0x63	; 99
-    1aae:	70 e0       	ldi	r23, 0x00	; 0
-    1ab0:	80 e1       	ldi	r24, 0x10	; 16
-    1ab2:	33 df       	rcall	.-410    	; 0x191a <NRF24_Write_Buf>
+    1ab6:	43 e0       	ldi	r20, 0x03	; 3
+    1ab8:	63 e6       	ldi	r22, 0x63	; 99
+    1aba:	70 e0       	ldi	r23, 0x00	; 0
+    1abc:	80 e1       	ldi	r24, 0x10	; 16
+    1abe:	2d df       	rcall	.-422    	; 0x191a <NRF24_Write_Buf>
 	NRF24_Write_Buf(RX_ADDR_P1, TX_ADDRESS0, TX_ADR_WIDTH);//запись адреса приема
-    1ab4:	43 e0       	ldi	r20, 0x03	; 3
-    1ab6:	63 e6       	ldi	r22, 0x63	; 99
-    1ab8:	70 e0       	ldi	r23, 0x00	; 0
-    1aba:	8b e0       	ldi	r24, 0x0B	; 11
-    1abc:	2e df       	rcall	.-420    	; 0x191a <NRF24_Write_Buf>
+    1ac0:	43 e0       	ldi	r20, 0x03	; 3
+    1ac2:	63 e6       	ldi	r22, 0x63	; 99
+    1ac4:	70 e0       	ldi	r23, 0x00	; 0
+    1ac6:	8b e0       	ldi	r24, 0x0B	; 11
+    1ac8:	28 df       	rcall	.-432    	; 0x191a <NRF24_Write_Buf>
 	NRF24_WriteReg(RX_PW_P0, TX_PLOAD_WIDTH); //Number of bytes in RX payload in data pipe 1
-    1abe:	60 e2       	ldi	r22, 0x20	; 32
-    1ac0:	81 e1       	ldi	r24, 0x11	; 17
-    1ac2:	f5 de       	rcall	.-534    	; 0x18ae <NRF24_WriteReg>
+    1aca:	60 e2       	ldi	r22, 0x20	; 32
+    1acc:	81 e1       	ldi	r24, 0x11	; 17
+    1ace:	ef de       	rcall	.-546    	; 0x18ae <NRF24_WriteReg>
 	//пока уходим в режим приёмника
 	NRF24L01_RX_Mode();					//режим приема
-    1ac4:	5e df       	rcall	.-324    	; 0x1982 <NRF24L01_RX_Mode>
+    1ad0:	58 df       	rcall	.-336    	; 0x1982 <NRF24L01_RX_Mode>
 	LED_OFF();
-    1ac6:	96 98       	cbi	0x12, 6	; 18
-    1ac8:	08 95       	ret
+    1ad2:	96 98       	cbi	0x12, 6	; 18
+    1ad4:	08 95       	ret
 
-00001aca <nrf24_receive>:
+00001ad6 <nrf24_receive>:
 
 //--------------------------------------------------
 void nrf24_receive(void)
 {
 	uint8_t status = 0x01;	//переменная статус
 	status = NRF24_ReadReg(STATUS);	//чтение значения регистра статуса
-    1aca:	87 e0       	ldi	r24, 0x07	; 7
-    1acc:	e5 de       	rcall	.-566    	; 0x1898 <NRF24_ReadReg>
+    1ad6:	87 e0       	ldi	r24, 0x07	; 7
+    1ad8:	df de       	rcall	.-578    	; 0x1898 <NRF24_ReadReg>
 	if(status & RX_DR)				//если есть данные на прием
-    1ace:	86 ff       	sbrs	r24, 6
-    1ad0:	0b c0       	rjmp	.+22     	; 0x1ae8 <nrf24_receive+0x1e>
+    1ada:	86 ff       	sbrs	r24, 6
+    1adc:	0b c0       	rjmp	.+22     	; 0x1af4 <nrf24_receive+0x1e>
 	{
 		NRF24_Read_Buf(RD_RX_PLOAD,rx_buf,TX_PLOAD_WIDTH);//чтение буфера
-    1ad2:	40 e2       	ldi	r20, 0x20	; 32
-    1ad4:	6c e8       	ldi	r22, 0x8C	; 140
-    1ad6:	70 e0       	ldi	r23, 0x00	; 0
-    1ad8:	81 e6       	ldi	r24, 0x61	; 97
-    1ada:	fe de       	rcall	.-516    	; 0x18d8 <NRF24_Read_Buf>
+    1ade:	40 e2       	ldi	r20, 0x20	; 32
+    1ae0:	6c e8       	ldi	r22, 0x8C	; 140
+    1ae2:	70 e0       	ldi	r23, 0x00	; 0
+    1ae4:	81 e6       	ldi	r24, 0x61	; 97
+    1ae6:	f8 de       	rcall	.-528    	; 0x18d8 <NRF24_Read_Buf>
 		NRF24_WriteReg(STATUS, 0x40);	//запись в регистр статуса 1 в шестой бит, обнуление остальных
-    1adc:	60 e4       	ldi	r22, 0x40	; 64
-    1ade:	87 e0       	ldi	r24, 0x07	; 7
-    1ae0:	e6 de       	rcall	.-564    	; 0x18ae <NRF24_WriteReg>
+    1ae8:	60 e4       	ldi	r22, 0x40	; 64
+    1aea:	87 e0       	ldi	r24, 0x07	; 7
+    1aec:	e0 de       	rcall	.-576    	; 0x18ae <NRF24_WriteReg>
 		f_rx = 1;						//поднимаем флаг приема
-    1ae2:	81 e0       	ldi	r24, 0x01	; 1
-    1ae4:	80 93 6b 00 	sts	0x006B, r24	; 0x80006b <f_rx>
-    1ae8:	08 95       	ret
+    1aee:	81 e0       	ldi	r24, 0x01	; 1
+    1af0:	80 93 6b 00 	sts	0x006B, r24	; 0x80006b <f_rx>
+    1af4:	08 95       	ret
 
-00001aea <main>:
+00001af6 <main>:
 
 static void (*jump_to_app)(void) = 0x0000;
 
 int main(void)
 {
 	port_init();							//инициализация портов
-    1aea:	b9 de       	rcall	.-654    	; 0x185e <port_init>
+    1af6:	b3 de       	rcall	.-666    	; 0x185e <port_init>
 	spi_init();								//инициализация SPI
-    1aec:	c3 de       	rcall	.-634    	; 0x1874 <spi_init>
+    1af8:	bd de       	rcall	.-646    	; 0x1874 <spi_init>
 	nrf24_init();
-    1aee:	b1 df       	rcall	.-158    	; 0x1a52 <nrf24_init>
+    1afa:	b1 df       	rcall	.-158    	; 0x1a5e <nrf24_init>
 
 	uint8_t blink_counter = 2;
 	while (blink_counter)
 	{
 		LED_ON();
-    1af0:	96 9a       	sbi	0x12, 6	; 18
+    1afc:	96 9a       	sbi	0x12, 6	; 18
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
-    1af2:	2f ef       	ldi	r18, 0xFF	; 255
-    1af4:	80 e7       	ldi	r24, 0x70	; 112
-    1af6:	92 e0       	ldi	r25, 0x02	; 2
-    1af8:	21 50       	subi	r18, 0x01	; 1
-    1afa:	80 40       	sbci	r24, 0x00	; 0
-    1afc:	90 40       	sbci	r25, 0x00	; 0
-    1afe:	e1 f7       	brne	.-8      	; 0x1af8 <main+0xe>
-    1b00:	00 c0       	rjmp	.+0      	; 0x1b02 <main+0x18>
-    1b02:	00 00       	nop
+    1afe:	2f ef       	ldi	r18, 0xFF	; 255
+    1b00:	80 e7       	ldi	r24, 0x70	; 112
+    1b02:	92 e0       	ldi	r25, 0x02	; 2
+    1b04:	21 50       	subi	r18, 0x01	; 1
+    1b06:	80 40       	sbci	r24, 0x00	; 0
+    1b08:	90 40       	sbci	r25, 0x00	; 0
+    1b0a:	e1 f7       	brne	.-8      	; 0x1b04 <main+0xe>
+    1b0c:	00 c0       	rjmp	.+0      	; 0x1b0e <main+0x18>
+    1b0e:	00 00       	nop
 		_delay_ms(100);
 		LED_OFF();
-    1b04:	96 98       	cbi	0x12, 6	; 18
-    1b06:	af ef       	ldi	r26, 0xFF	; 255
-    1b08:	b0 e7       	ldi	r27, 0x70	; 112
-    1b0a:	e2 e0       	ldi	r30, 0x02	; 2
-    1b0c:	a1 50       	subi	r26, 0x01	; 1
-    1b0e:	b0 40       	sbci	r27, 0x00	; 0
-    1b10:	e0 40       	sbci	r30, 0x00	; 0
-    1b12:	e1 f7       	brne	.-8      	; 0x1b0c <main+0x22>
-    1b14:	00 c0       	rjmp	.+0      	; 0x1b16 <main+0x2c>
-    1b16:	00 00       	nop
+    1b10:	96 98       	cbi	0x12, 6	; 18
+    1b12:	ef ef       	ldi	r30, 0xFF	; 255
+    1b14:	f0 e7       	ldi	r31, 0x70	; 112
+    1b16:	22 e0       	ldi	r18, 0x02	; 2
+    1b18:	e1 50       	subi	r30, 0x01	; 1
+    1b1a:	f0 40       	sbci	r31, 0x00	; 0
+    1b1c:	20 40       	sbci	r18, 0x00	; 0
+    1b1e:	e1 f7       	brne	.-8      	; 0x1b18 <main+0x22>
+    1b20:	00 c0       	rjmp	.+0      	; 0x1b22 <main+0x2c>
+    1b22:	00 00       	nop
 	nrf24_init();
 
 	uint8_t blink_counter = 2;
 	while (blink_counter)
 	{
 		LED_ON();
-    1b18:	96 9a       	sbi	0x12, 6	; 18
-    1b1a:	ff ef       	ldi	r31, 0xFF	; 255
-    1b1c:	20 e7       	ldi	r18, 0x70	; 112
-    1b1e:	82 e0       	ldi	r24, 0x02	; 2
-    1b20:	f1 50       	subi	r31, 0x01	; 1
-    1b22:	20 40       	sbci	r18, 0x00	; 0
-    1b24:	80 40       	sbci	r24, 0x00	; 0
-    1b26:	e1 f7       	brne	.-8      	; 0x1b20 <main+0x36>
-    1b28:	00 c0       	rjmp	.+0      	; 0x1b2a <main+0x40>
-    1b2a:	00 00       	nop
+    1b24:	96 9a       	sbi	0x12, 6	; 18
+    1b26:	8f ef       	ldi	r24, 0xFF	; 255
+    1b28:	90 e7       	ldi	r25, 0x70	; 112
+    1b2a:	e2 e0       	ldi	r30, 0x02	; 2
+    1b2c:	81 50       	subi	r24, 0x01	; 1
+    1b2e:	90 40       	sbci	r25, 0x00	; 0
+    1b30:	e0 40       	sbci	r30, 0x00	; 0
+    1b32:	e1 f7       	brne	.-8      	; 0x1b2c <main+0x36>
+    1b34:	00 c0       	rjmp	.+0      	; 0x1b36 <main+0x40>
+    1b36:	00 00       	nop
 		_delay_ms(100);
 		LED_OFF();
-    1b2c:	96 98       	cbi	0x12, 6	; 18
-    1b2e:	9f ef       	ldi	r25, 0xFF	; 255
-    1b30:	a0 e7       	ldi	r26, 0x70	; 112
-    1b32:	b2 e0       	ldi	r27, 0x02	; 2
-    1b34:	91 50       	subi	r25, 0x01	; 1
-    1b36:	a0 40       	sbci	r26, 0x00	; 0
-    1b38:	b0 40       	sbci	r27, 0x00	; 0
-    1b3a:	e1 f7       	brne	.-8      	; 0x1b34 <main+0x4a>
-    1b3c:	00 c0       	rjmp	.+0      	; 0x1b3e <main+0x54>
-    1b3e:	00 00       	nop
+    1b38:	96 98       	cbi	0x12, 6	; 18
+    1b3a:	ff ef       	ldi	r31, 0xFF	; 255
+    1b3c:	20 e7       	ldi	r18, 0x70	; 112
+    1b3e:	82 e0       	ldi	r24, 0x02	; 2
+    1b40:	f1 50       	subi	r31, 0x01	; 1
+    1b42:	20 40       	sbci	r18, 0x00	; 0
+    1b44:	80 40       	sbci	r24, 0x00	; 0
+    1b46:	e1 f7       	brne	.-8      	; 0x1b40 <main+0x4a>
+    1b48:	00 c0       	rjmp	.+0      	; 0x1b4a <main+0x54>
+    1b4a:	00 00       	nop
+    1b4c:	c0 e0       	ldi	r28, 0x00	; 0
+    1b4e:	d0 e0       	ldi	r29, 0x00	; 0
+					NRF24L01_Send(tx_buf);
+				}
+
+				if (rx_buf[1] == 'F')		//
+				{
+					LED_TGL();
+    1b50:	20 e4       	ldi	r18, 0x40	; 64
+    1b52:	82 2e       	mov	r8, r18
 
 	do 
 		{
 		data = *tmp++;
 		data |= *tmp++ << 8;
 		boot_page_fill(baddr, data);	// call asm routine.
-    1b40:	d1 e0       	ldi	r29, 0x01	; 1
+    1b54:	99 24       	eor	r9, r9
+    1b56:	93 94       	inc	r9
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
 		} 
 	while (size);				// Loop until all bytes written
 
 	boot_page_write(pagestart);
-    1b42:	15 e0       	ldi	r17, 0x05	; 5
+    1b58:	35 e0       	ldi	r19, 0x05	; 5
+    1b5a:	a3 2e       	mov	r10, r19
 	boot_spm_busy_wait();
 	boot_rww_enable();		// Re-enable the RWW section
-    1b44:	c1 e1       	ldi	r28, 0x11	; 17
+    1b5c:	11 e1       	ldi	r17, 0x11	; 17
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
 	{
 		boot_page_erase(addr);		// Perform page erase
-    1b46:	03 e0       	ldi	r16, 0x03	; 3
+    1b5e:	43 e0       	ldi	r20, 0x03	; 3
+    1b60:	d4 2e       	mov	r13, r20
+		{
+			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
+			{
+				if (rx_buf[1] == 'J')
+				{
+					jump_to_app();
+    1b62:	e1 2c       	mov	r14, r1
+    1b64:	f1 2c       	mov	r15, r1
+
+	do 
+		{
+		data = *tmp++;
+		data |= *tmp++ << 8;
+		boot_page_fill(baddr, data);	// call asm routine.
+    1b66:	cc 24       	eor	r12, r12
+    1b68:	c3 94       	inc	r12
+						gBuffer[i] = rx_buf[i+4];
+					}
+
+					writeFlashPage(address, size);
+					//_delay_ms(100);
+					tx_buf[0] = BUT_ADDR;
+    1b6a:	07 e0       	ldi	r16, 0x07	; 7
+					tx_buf[1] = 'N';
+    1b6c:	9e e4       	ldi	r25, 0x4E	; 78
+    1b6e:	b9 2e       	mov	r11, r25
 
 	uint16_t cnt = 0;
 
 	while (1) 
 	{
 		nrf24_receive();
-    1b48:	c0 df       	rcall	.-128    	; 0x1aca <nrf24_receive>
+    1b70:	b2 df       	rcall	.-156    	; 0x1ad6 <nrf24_receive>
 
 		if(f_rx == 1)						//если флаг приема поднят
-    1b4a:	90 91 6b 00 	lds	r25, 0x006B	; 0x80006b <f_rx>
-    1b4e:	91 30       	cpi	r25, 0x01	; 1
-    1b50:	d9 f7       	brne	.-10     	; 0x1b48 <main+0x5e>
+    1b72:	80 91 6b 00 	lds	r24, 0x006B	; 0x80006b <f_rx>
+    1b76:	81 30       	cpi	r24, 0x01	; 1
+    1b78:	09 f0       	breq	.+2      	; 0x1b7c <main+0x86>
+    1b7a:	81 c0       	rjmp	.+258    	; 0x1c7e <main+0x188>
 		{
 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
-    1b52:	80 91 8c 00 	lds	r24, 0x008C	; 0x80008c <rx_buf>
-    1b56:	87 30       	cpi	r24, 0x07	; 7
-    1b58:	09 f0       	breq	.+2      	; 0x1b5c <main+0x72>
-    1b5a:	68 c0       	rjmp	.+208    	; 0x1c2c <main+0x142>
+    1b7c:	80 91 8c 00 	lds	r24, 0x008C	; 0x80008c <rx_buf>
+    1b80:	87 30       	cpi	r24, 0x07	; 7
+    1b82:	09 f0       	breq	.+2      	; 0x1b86 <main+0x90>
+    1b84:	7a c0       	rjmp	.+244    	; 0x1c7a <main+0x184>
 			{
-				
+				if (rx_buf[1] == 'J')
+    1b86:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1b8a:	8a 34       	cpi	r24, 0x4A	; 74
+    1b8c:	11 f4       	brne	.+4      	; 0x1b92 <main+0x9c>
+				{
+					jump_to_app();
+    1b8e:	f7 01       	movw	r30, r14
+    1b90:	09 95       	icall
+				}
+
 				if (rx_buf[1] == 'E')	
-    1b5c:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
-    1b60:	85 34       	cpi	r24, 0x45	; 69
-    1b62:	91 f4       	brne	.+36     	; 0x1b88 <main+0x9e>
-    1b64:	e0 e0       	ldi	r30, 0x00	; 0
-    1b66:	f0 e0       	ldi	r31, 0x00	; 0
+    1b92:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1b96:	85 34       	cpi	r24, 0x45	; 69
+    1b98:	91 f4       	brne	.+36     	; 0x1bbe <main+0xc8>
+    1b9a:	e0 e0       	ldi	r30, 0x00	; 0
+    1b9c:	f0 e0       	ldi	r31, 0x00	; 0
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
 	{
 		boot_page_erase(addr);		// Perform page erase
-    1b68:	00 93 57 00 	sts	0x0057, r16	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1b6c:	e8 95       	spm
+    1b9e:	d0 92 57 00 	sts	0x0057, r13	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1ba2:	e8 95       	spm
 		boot_spm_busy_wait();		// Wait until the memory is erased.
-    1b6e:	07 b6       	in	r0, 0x37	; 55
-    1b70:	00 fc       	sbrc	r0, 0
-    1b72:	fd cf       	rjmp	.-6      	; 0x1b6e <main+0x84>
-    1b74:	e0 5c       	subi	r30, 0xC0	; 192
-    1b76:	ff 4f       	sbci	r31, 0xFF	; 255
+    1ba4:	07 b6       	in	r0, 0x37	; 55
+    1ba6:	00 fc       	sbrc	r0, 0
+    1ba8:	fd cf       	rjmp	.-6      	; 0x1ba4 <main+0xae>
+    1baa:	e0 5c       	subi	r30, 0xC0	; 192
+    1bac:	ff 4f       	sbci	r31, 0xFF	; 255
 
 static inline void eraseFlash(void)
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
-    1b78:	e1 15       	cp	r30, r1
-    1b7a:	28 e1       	ldi	r18, 0x18	; 24
-    1b7c:	f2 07       	cpc	r31, r18
-    1b7e:	a1 f7       	brne	.-24     	; 0x1b68 <main+0x7e>
+    1bae:	e1 15       	cp	r30, r1
+    1bb0:	28 e1       	ldi	r18, 0x18	; 24
+    1bb2:	f2 07       	cpc	r31, r18
+    1bb4:	a1 f7       	brne	.-24     	; 0x1b9e <main+0xa8>
 	{
 		boot_page_erase(addr);		// Perform page erase
 		boot_spm_busy_wait();		// Wait until the memory is erased.
 		addr += SPM_PAGESIZE;
 	}
 	boot_rww_enable();
-    1b80:	c0 93 57 00 	sts	0x0057, r28	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1b84:	e8 95       	spm
-    1b86:	09 c0       	rjmp	.+18     	; 0x1b9a <main+0xb0>
+    1bb6:	10 93 57 00 	sts	0x0057, r17	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1bba:	e8 95       	spm
+    1bbc:	0c c0       	rjmp	.+24     	; 0x1bd6 <main+0xe0>
 				if (rx_buf[1] == 'E')	
 				{
 					eraseFlash();
 				}
 
 				if (rx_buf[1] == 'W')	
-    1b88:	87 35       	cpi	r24, 0x57	; 87
-    1b8a:	39 f4       	brne	.+14     	; 0x1b9a <main+0xb0>
+    1bbe:	87 35       	cpi	r24, 0x57	; 87
+    1bc0:	51 f4       	brne	.+20     	; 0x1bd6 <main+0xe0>
 				{
+					LED_ON();
+    1bc2:	96 9a       	sbi	0x12, 6	; 18
 					f_wait = 1;
-    1b8c:	90 93 66 00 	sts	0x0066, r25	; 0x800066 <__data_end>
-					tx_buf[0] = 'W';
-    1b90:	80 93 6c 00 	sts	0x006C, r24	; 0x80006c <tx_buf>
+    1bc4:	c0 92 66 00 	sts	0x0066, r12	; 0x800066 <__data_end>
+					tx_buf[0] = BUT_ADDR;
+    1bc8:	00 93 6c 00 	sts	0x006C, r16	; 0x80006c <tx_buf>
+					tx_buf[1] = 'W';
+    1bcc:	80 93 6d 00 	sts	0x006D, r24	; 0x80006d <tx_buf+0x1>
 					NRF24L01_Send(tx_buf);
-    1b94:	8c e6       	ldi	r24, 0x6C	; 108
-    1b96:	90 e0       	ldi	r25, 0x00	; 0
-    1b98:	3d df       	rcall	.-390    	; 0x1a14 <NRF24L01_Send>
+    1bd0:	8c e6       	ldi	r24, 0x6C	; 108
+    1bd2:	90 e0       	ldi	r25, 0x00	; 0
+    1bd4:	1f df       	rcall	.-450    	; 0x1a14 <NRF24L01_Send>
 				}
 
 				if (rx_buf[1] == 'F')		//
-    1b9a:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
-    1b9e:	86 34       	cpi	r24, 0x46	; 70
-    1ba0:	09 f0       	breq	.+2      	; 0x1ba4 <main+0xba>
-    1ba2:	44 c0       	rjmp	.+136    	; 0x1c2c <main+0x142>
+    1bd6:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1bda:	86 34       	cpi	r24, 0x46	; 70
+    1bdc:	09 f0       	breq	.+2      	; 0x1be0 <main+0xea>
+    1bde:	4d c0       	rjmp	.+154    	; 0x1c7a <main+0x184>
 				{
-					LED_ON();
-    1ba4:	96 9a       	sbi	0x12, 6	; 18
+					LED_TGL();
+    1be0:	82 b3       	in	r24, 0x12	; 18
+    1be2:	88 25       	eor	r24, r8
+    1be4:	82 bb       	out	0x12, r24	; 18
 					pagebuf_t size;
 					size = rx_buf[2];
-    1ba6:	f0 90 8e 00 	lds	r15, 0x008E	; 0x80008e <rx_buf+0x2>
+    1be6:	60 91 8e 00 	lds	r22, 0x008E	; 0x80008e <rx_buf+0x2>
 					address = rx_buf[3]; //
-    1baa:	80 91 8f 00 	lds	r24, 0x008F	; 0x80008f <rx_buf+0x3>
-    1bae:	28 2f       	mov	r18, r24
-    1bb0:	30 e0       	ldi	r19, 0x00	; 0
-    1bb2:	30 93 69 00 	sts	0x0069, r19	; 0x800069 <address+0x1>
-    1bb6:	20 93 68 00 	sts	0x0068, r18	; 0x800068 <address>
-    1bba:	a0 e9       	ldi	r26, 0x90	; 144
-    1bbc:	b0 e0       	ldi	r27, 0x00	; 0
+    1bea:	80 91 8f 00 	lds	r24, 0x008F	; 0x80008f <rx_buf+0x3>
+    1bee:	28 2f       	mov	r18, r24
+    1bf0:	30 e0       	ldi	r19, 0x00	; 0
+    1bf2:	30 93 69 00 	sts	0x0069, r19	; 0x800069 <address+0x1>
+    1bf6:	20 93 68 00 	sts	0x0068, r18	; 0x800068 <address>
+    1bfa:	a0 e9       	ldi	r26, 0x90	; 144
+    1bfc:	b0 e0       	ldi	r27, 0x00	; 0
 
 					for (uint8_t i = 0; i < size; i++)
-    1bbe:	ec ea       	ldi	r30, 0xAC	; 172
-    1bc0:	f0 e0       	ldi	r31, 0x00	; 0
-    1bc2:	90 e0       	ldi	r25, 0x00	; 0
-    1bc4:	9f 15       	cp	r25, r15
-    1bc6:	21 f0       	breq	.+8      	; 0x1bd0 <main+0xe6>
+    1bfe:	ec ea       	ldi	r30, 0xAC	; 172
+    1c00:	f0 e0       	ldi	r31, 0x00	; 0
+    1c02:	90 e0       	ldi	r25, 0x00	; 0
+    1c04:	96 17       	cp	r25, r22
+    1c06:	21 f0       	breq	.+8      	; 0x1c10 <main+0x11a>
 					{
 						gBuffer[i] = rx_buf[i+4];
-    1bc8:	2d 91       	ld	r18, X+
-    1bca:	21 93       	st	Z+, r18
-					LED_ON();
+    1c08:	2d 91       	ld	r18, X+
+    1c0a:	21 93       	st	Z+, r18
+					LED_TGL();
 					pagebuf_t size;
 					size = rx_buf[2];
 					address = rx_buf[3]; //
 
 					for (uint8_t i = 0; i < size; i++)
-    1bcc:	9f 5f       	subi	r25, 0xFF	; 255
-    1bce:	fa cf       	rjmp	.-12     	; 0x1bc4 <main+0xda>
+    1c0c:	9f 5f       	subi	r25, 0xFF	; 255
+    1c0e:	fa cf       	rjmp	.-12     	; 0x1c04 <main+0x10e>
 	boot_rww_enable();
 }
 
 static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
 {
 	uint32_t pagestart = (uint32_t)waddr<<1;
-    1bd0:	90 e0       	ldi	r25, 0x00	; 0
-    1bd2:	a0 e0       	ldi	r26, 0x00	; 0
-    1bd4:	b0 e0       	ldi	r27, 0x00	; 0
-    1bd6:	88 0f       	add	r24, r24
-    1bd8:	99 1f       	adc	r25, r25
-    1bda:	aa 1f       	adc	r26, r26
-    1bdc:	bb 1f       	adc	r27, r27
+    1c10:	90 e0       	ldi	r25, 0x00	; 0
+    1c12:	a0 e0       	ldi	r26, 0x00	; 0
+    1c14:	b0 e0       	ldi	r27, 0x00	; 0
+    1c16:	2c 01       	movw	r4, r24
+    1c18:	3d 01       	movw	r6, r26
+    1c1a:	44 0c       	add	r4, r4
+    1c1c:	55 1c       	adc	r5, r5
+    1c1e:	66 1c       	adc	r6, r6
+    1c20:	77 1c       	adc	r7, r7
 	uint32_t baddr = pagestart;
 	uint16_t data;
 	uint8_t *tmp = gBuffer;
-    1bde:	20 91 ac 00 	lds	r18, 0x00AC	; 0x8000ac <gBuffer>
-    1be2:	4c ea       	ldi	r20, 0xAC	; 172
-    1be4:	50 e0       	ldi	r21, 0x00	; 0
-    1be6:	bc 01       	movw	r22, r24
+    1c22:	20 91 ac 00 	lds	r18, 0x00AC	; 0x8000ac <gBuffer>
+    1c26:	ac ea       	ldi	r26, 0xAC	; 172
+    1c28:	b0 e0       	ldi	r27, 0x00	; 0
+    1c2a:	a2 01       	movw	r20, r4
 
 	do 
 		{
 		data = *tmp++;
 		data |= *tmp++ << 8;
 		boot_page_fill(baddr, data);	// call asm routine.
-    1be8:	8c 5a       	subi	r24, 0xAC	; 172
-    1bea:	90 40       	sbci	r25, 0x00	; 0
-    1bec:	fc 01       	movw	r30, r24
-    1bee:	e4 0f       	add	r30, r20
-    1bf0:	f5 1f       	adc	r31, r21
-    1bf2:	da 01       	movw	r26, r20
-    1bf4:	11 96       	adiw	r26, 0x01	; 1
-    1bf6:	ec 90       	ld	r14, X
-    1bf8:	30 e0       	ldi	r19, 0x00	; 0
-    1bfa:	3e 29       	or	r19, r14
-    1bfc:	09 01       	movw	r0, r18
-    1bfe:	d0 93 57 00 	sts	0x0057, r29	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c02:	e8 95       	spm
-    1c04:	11 24       	eor	r1, r1
+    1c2c:	c2 01       	movw	r24, r4
+    1c2e:	8c 5a       	subi	r24, 0xAC	; 172
+    1c30:	90 40       	sbci	r25, 0x00	; 0
+    1c32:	fc 01       	movw	r30, r24
+    1c34:	ea 0f       	add	r30, r26
+    1c36:	fb 1f       	adc	r31, r27
+    1c38:	11 96       	adiw	r26, 0x01	; 1
+    1c3a:	7c 91       	ld	r23, X
+    1c3c:	11 97       	sbiw	r26, 0x01	; 1
+    1c3e:	30 e0       	ldi	r19, 0x00	; 0
+    1c40:	37 2b       	or	r19, r23
+    1c42:	09 01       	movw	r0, r18
+    1c44:	90 92 57 00 	sts	0x0057, r9	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c48:	e8 95       	spm
+    1c4a:	11 24       	eor	r1, r1
 
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
-    1c06:	fa 94       	dec	r15
-    1c08:	fa 94       	dec	r15
-    1c0a:	4e 5f       	subi	r20, 0xFE	; 254
-    1c0c:	5f 4f       	sbci	r21, 0xFF	; 255
+    1c4c:	62 50       	subi	r22, 0x02	; 2
+    1c4e:	12 96       	adiw	r26, 0x02	; 2
 		} 
 	while (size);				// Loop until all bytes written
-    1c0e:	ff 20       	and	r15, r15
-    1c10:	19 f0       	breq	.+6      	; 0x1c18 <main+0x12e>
+    1c50:	66 23       	and	r22, r22
+    1c52:	11 f0       	breq	.+4      	; 0x1c58 <main+0x162>
 	uint8_t *tmp = gBuffer;
 
 	do 
 		{
 		data = *tmp++;
 		data |= *tmp++ << 8;
-    1c12:	fa 01       	movw	r30, r20
-    1c14:	20 81       	ld	r18, Z
-    1c16:	ea cf       	rjmp	.-44     	; 0x1bec <main+0x102>
+    1c54:	2c 91       	ld	r18, X
+    1c56:	ed cf       	rjmp	.-38     	; 0x1c32 <main+0x13c>
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
 		} 
 	while (size);				// Loop until all bytes written
 
 	boot_page_write(pagestart);
-    1c18:	fb 01       	movw	r30, r22
-    1c1a:	10 93 57 00 	sts	0x0057, r17	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c1e:	e8 95       	spm
+    1c58:	fa 01       	movw	r30, r20
+    1c5a:	a0 92 57 00 	sts	0x0057, r10	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c5e:	e8 95       	spm
 	boot_spm_busy_wait();
-    1c20:	07 b6       	in	r0, 0x37	; 55
-    1c22:	00 fc       	sbrc	r0, 0
-    1c24:	fd cf       	rjmp	.-6      	; 0x1c20 <main+0x136>
+    1c60:	07 b6       	in	r0, 0x37	; 55
+    1c62:	00 fc       	sbrc	r0, 0
+    1c64:	fd cf       	rjmp	.-6      	; 0x1c60 <main+0x16a>
 	boot_rww_enable();		// Re-enable the RWW section
-    1c26:	c0 93 57 00 	sts	0x0057, r28	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c2a:	e8 95       	spm
+    1c66:	10 93 57 00 	sts	0x0057, r17	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c6a:	e8 95       	spm
+						gBuffer[i] = rx_buf[i+4];
+					}
+
 					writeFlashPage(address, size);
+					//_delay_ms(100);
+					tx_buf[0] = BUT_ADDR;
+    1c6c:	00 93 6c 00 	sts	0x006C, r16	; 0x80006c <tx_buf>
+					tx_buf[1] = 'N';
+    1c70:	b0 92 6d 00 	sts	0x006D, r11	; 0x80006d <tx_buf+0x1>
+					NRF24L01_Send(tx_buf);
+    1c74:	8c e6       	ldi	r24, 0x6C	; 108
+    1c76:	90 e0       	ldi	r25, 0x00	; 0
+    1c78:	cd de       	rcall	.-614    	; 0x1a14 <NRF24L01_Send>
 				}
 
 			}
 
 			f_rx = 0;						//опускаем флаг приема
-    1c2c:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <f_rx>
-    1c30:	8b cf       	rjmp	.-234    	; 0x1b48 <main+0x5e>
+    1c7a:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <f_rx>
+		}
 
-00001c32 <_exit>:
-    1c32:	f8 94       	cli
+		wdt_reset();
+    1c7e:	a8 95       	wdr
 
-00001c34 <__stop_program>:
-    1c34:	ff cf       	rjmp	.-2      	; 0x1c34 <__stop_program>
+		if (!f_wait)
+    1c80:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <__data_end>
+    1c84:	81 11       	cpse	r24, r1
+    1c86:	74 cf       	rjmp	.-280    	; 0x1b70 <main+0x7a>
+		{
+			if (cnt++ >= WAIT_VALUE) 
+    1c88:	c8 3e       	cpi	r28, 0xE8	; 232
+    1c8a:	f3 e0       	ldi	r31, 0x03	; 3
+    1c8c:	df 07       	cpc	r29, r31
+    1c8e:	10 f0       	brcs	.+4      	; 0x1c94 <main+0x19e>
+			{
+				jump_to_app();			// Jump to application sector
+    1c90:	f7 01       	movw	r30, r14
+    1c92:	09 95       	icall
+    1c94:	8f ec       	ldi	r24, 0xCF	; 207
+    1c96:	97 e0       	ldi	r25, 0x07	; 7
+    1c98:	01 97       	sbiw	r24, 0x01	; 1
+    1c9a:	f1 f7       	brne	.-4      	; 0x1c98 <main+0x1a2>
+    1c9c:	00 c0       	rjmp	.+0      	; 0x1c9e <main+0x1a8>
+    1c9e:	00 00       	nop
+    1ca0:	21 96       	adiw	r28, 0x01	; 1
+    1ca2:	63 cf       	rjmp	.-314    	; 0x1b6a <main+0x74>
+
+00001ca4 <_exit>:
+    1ca4:	f8 94       	cli
+
+00001ca6 <__stop_program>:
+    1ca6:	ff cf       	rjmp	.-2      	; 0x1ca6 <__stop_program>

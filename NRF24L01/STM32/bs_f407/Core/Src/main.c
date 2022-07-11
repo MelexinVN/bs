@@ -69,7 +69,7 @@ uint16_t address_data;										//младшие 16 бит адреса
 uint8_t calculation_check_sum = 0;				//чек-сумма
 uint32_t extented_linear_adress = 0;			//дополнительный адрес
 uint8_t update_respond = 0;								//ответ от модуля о готовности к загрузке	
-	
+uint8_t next_row = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -120,7 +120,6 @@ void update_receive(void)
 	{					
 		if (firm_update)
 		{
-
 			/*читаем 8 симовлов с метаданными*/
 			for (uint8_t i = 0; i < 8; i++)
 			{
@@ -137,7 +136,7 @@ void update_receive(void)
 			
 			uint8_t cs_index = size_data*2 + 8;
 			
-			calculation_check_sum = size_data/2 + (uint8_t)address_data_calc + (uint8_t)((address_data_calc)>>8) + type_data;//считаем чек сумму
+			calculation_check_sum = size_data + (uint8_t)address_data_calc + (uint8_t)((address_data_calc)>>8) + type_data;//считаем чек сумму
 			
 			if(type_data == 0x00)	//если пришли данные для записи
 			{
@@ -145,19 +144,19 @@ void update_receive(void)
 				tx_buf[1] = 'F';	//команда записи flash
 				tx_buf[2] = size_data;
 				tx_buf[3] = address_data;
-				for (uint8_t i = 8; i < 40; i++)
+				for (uint8_t i = 8; i < cs_index; i++)
 				{
 					buff[i - 8] = rx_str[i];	//сохраняем символ
 				}
 				
-				Ascii_To_Hex(buff, 32);//переводим в хекс	
+				Ascii_To_Hex(buff, size_data*2);//переводим в хекс	
 					
-				for (uint8_t i = 0; i < 32; i += 2)
+				for (uint8_t i = 0; i < size_data*2; i += 2)
 				{
 					buff[i] <<= 4;
 					buff[i] = buff[i] | buff[i+1];
 					tx_buf[4 + i/2] = buff[i];
-					calculation_check_sum += buff[i];
+					calculation_check_sum += (uint8_t)buff[i];
 				}
 			
 				calculation_check_sum =  ~(calculation_check_sum) + 1;
@@ -175,8 +174,9 @@ void update_receive(void)
 				}
 				else
 				{
+					while (!next_row) {} //ждем запроса следующей строки от МК
 					NRF24L01_Send(tx_buf);
-					LL_mDelay(400);
+					next_row = 0;
 				}
 				calculation_check_sum = 0;//обнуляем чек сумму
 				string_counter++;		
@@ -222,9 +222,13 @@ void update_receive(void)
 				
 			else if(type_data == 0x01)//конец файла
 			{
-				sprintf(str,"AOK");	
+				sprintf(str,"AOK!");	
 				USART_TX((uint8_t*)str,strlen(str));
 				f_update_rec = 0;
+				tx_buf[0] = 0x07;	//адрес устройства
+				tx_buf[1] = 'J';	//команда
+				NRF24L01_Send(tx_buf);
+				LL_mDelay(100);
 			}
 			
 			if(f_update_rec)
@@ -254,24 +258,30 @@ void update_receive(void)
 			//tx_buf[0] = but_addrs[rx_str[1]];
 			//tx_buf[0] = RESET_BUTTONS;
 			//NRF24L01_Send(tx_buf);
-			//if (update_respond)
-			//{
-				//tx_buf[0] = but_addrs[rx_str[1]];
-				//tx_buf[0] = 'W';
-				//NRF24L01_Send(tx_buf);
-				sprintf(str,"RTL!");	
-				USART_TX((uint8_t*)str,strlen(str));
-				ready_to_update = 1;
 			
-				tx_buf[0] = 0x07;	//адрес устройства
-				tx_buf[1] = 'E';	//команда
-				NRF24L01_Send(tx_buf);
-				LL_mDelay(100);
-			
-			//}
+			tx_buf[0] = 0x07;
+			tx_buf[1] = 'W';
+			NRF24L01_Send(tx_buf);
+			LL_mDelay(100);
 		}
 		f_update_rec = 0;
 	}
+
+	if (update_respond)
+	{
+		sprintf(str,"RTL!");	
+		LL_mDelay(100);
+		USART_TX((uint8_t*)str,strlen(str));
+		ready_to_update = 1;
+		update_respond = 0;
+		LL_mDelay(100);
+		tx_buf[0] = 0x07;	//адрес устройства
+		tx_buf[1] = 'E';	//команда
+		NRF24L01_Send(tx_buf);
+		LL_mDelay(100);
+		next_row = 1;
+	}
+
 }
 
 //Процедура приема данных по уарту
@@ -473,6 +483,7 @@ int main(void)
 	NRF24L01_Send(tx_buf);
 	LL_mDelay(100);
 	*/
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -481,6 +492,9 @@ int main(void)
   {
 
 		update_receive();
+		
+		nrf24l01_receive();			//процедура приема данных радиомодуля
+		
 		/*
 		if ((!firm_update) && (!ready_to_update))
 		{

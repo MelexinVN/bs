@@ -8,14 +8,17 @@
 #include "main.h"
 #include "spi.h"
 
-//char str[STRING_SIZE] = {0x00};
-//uint8_t dt_reg = 0;
-//uint8_t buf[5]={0};						
+char str[STRING_SIZE] = {0};
+uint8_t dt_reg = 0;
+uint8_t buf[5]={0};					
+
 volatile uint32_t miliseconds = 0;		//счетчик милисекунд
 volatile uint8_t f_pushed = 0;			//флаг нажатия
 volatile uint32_t time_ms = 0;			//сохраненное время мс
 volatile uint8_t f_reset = 0;			//сохраненное время мс
 volatile uint8_t adc_res = 0;			//сохраненное время мс
+
+extern uint8_t tx_buf[TX_PLOAD_WIDTH];
 
 void port_init(void)//Инициализация портов 
 {
@@ -93,6 +96,7 @@ void interrupt_init(void)
 
 // Read the 8 most significant bits
 // of the AD conversion result
+
 unsigned char read_adc(unsigned char adc_input)
 {
 	ADMUX=adc_input | ADC_VREF_TYPE;
@@ -131,11 +135,10 @@ ISR(TIMER1_COMPA_vect)
 	if (!(miliseconds % 100)) 
 	{
 		adc_res = read_adc(6);
-		/* для расчета процентов заряда для LiPo аккумуляторов
-		if (adc_res >= 170) adc_res = (adc_res - 170)*100/40 //расчет в процентах для LiPo
-		else adc_res = 0;
-		*/
+		// для расчета процентов заряда для LiPo аккумуляторов
+		//if (adc_res >= 170) adc_res = (adc_res - 170)*100/40 //расчет в процентах для LiPo
 	}
+	else adc_res = 0;
 }
 
 int main(void)
@@ -147,7 +150,7 @@ int main(void)
 	USART_Init (8);							//инициализация USART 115200 бод
 	nrf24_init();							//инициализация радиомодуля
 	adc_init();
-    sei();									//глобальное разрешение прерываний
+	sei();									//глобальное разрешение прерываний
 	usart_println("start");					//отправка стартовой строки в порт
 
 	uint8_t blink_counter = 5;
@@ -160,11 +163,17 @@ int main(void)
 		blink_counter--;
 	}
 
+	tx_buf[0] = BUT_ADDR;
+	tx_buf[1] = 'W';
+	NRF24L01_Send(tx_buf);
+
 	wdt_enable(WDTO_120MS);
     while (1) 
     {
 		nrf24l01_receive();			//процедура приема радиомодуля
 		if (!f_reset) wdt_reset();
+		//LED_TGL();
+		//_delay_ms(500);
     }
 }
 
