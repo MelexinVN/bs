@@ -174,7 +174,10 @@ void update_receive(void)
 				}
 				else
 				{
-					while (!next_row) {} //ждем запроса следующей строки от МК
+					while (!next_row) 
+					{
+						nrf24l01_receive();	
+					} //ждем запроса следующей строки от МК
 					NRF24L01_Send(tx_buf);
 					next_row = 0;
 				}
@@ -225,6 +228,7 @@ void update_receive(void)
 				sprintf(str,"AOK!");	
 				USART_TX((uint8_t*)str,strlen(str));
 				f_update_rec = 0;
+				LL_mDelay(100);
 				tx_buf[0] = 0x07;	//адрес устройства
 				tx_buf[1] = 'J';	//команда
 				NRF24L01_Send(tx_buf);
@@ -262,7 +266,7 @@ void update_receive(void)
 			tx_buf[0] = 0x07;
 			tx_buf[1] = 'W';
 			NRF24L01_Send(tx_buf);
-			LL_mDelay(100);
+			//LL_mDelay(100);
 		}
 		f_update_rec = 0;
 	}

@@ -14,7 +14,6 @@
 #include <avr/eeprom.h>
 #include "chipdef.h"
 
-#define DISABLE_WDT_AT_STARTUP
 #define BUT_ADDR 		0x07				//адрес кнопки
 #define RESET 			0xFF				//команда сброса
 #define NOT_PUSHED 		0xFFFFFFFF			//сообщение "кнопка не нажата"
@@ -27,8 +26,6 @@
 #define CE_GPIO_Port PORTB		//порт CE
 #define CSN_Pin PORTD7			//пин CSN
 #define CSN_GPIO_Port PORTD		//порт CSN
-
-#define EXIT_WDT_TIME   WDTO_250MS
 
 #define WAIT_VALUE 1000 //в мс
 
@@ -401,16 +398,20 @@ int main(void)
 	nrf24_init();
 
 	uint8_t blink_counter = 2;
+	uint16_t load_pause = 0;
+
 	while (blink_counter)
 	{
 		LED_ON();
-		_delay_ms(100);
+		_delay_ms(50);
 		LED_OFF();
-		_delay_ms(100);
+		_delay_ms(50);
 		blink_counter--;
 	}
 
 	uint16_t cnt = 0;
+
+	//wdt_enable(WDTO_1S);
 
 	while (1) 
 	{
@@ -433,10 +434,10 @@ int main(void)
 				if (rx_buf[1] == 'W')	
 				{
 					LED_ON();
-					f_wait = 1;
 					tx_buf[0] = BUT_ADDR;
 					tx_buf[1] = 'W';
 					NRF24L01_Send(tx_buf);
+					f_wait = 1;
 				}
 
 				if (rx_buf[1] == 'F')		//
@@ -456,6 +457,7 @@ int main(void)
 					tx_buf[0] = BUT_ADDR;
 					tx_buf[1] = 'N';
 					NRF24L01_Send(tx_buf);
+					load_pause = 0;
 				}
 
 			}
@@ -472,6 +474,18 @@ int main(void)
 				jump_to_app();			// Jump to application sector
 			}
 			_delay_ms(1);		
+		}
+		else
+		{
+			load_pause++;
+			if (load_pause >= 1000)
+			{
+				tx_buf[0] = BUT_ADDR;
+				tx_buf[1] = 'N';
+				NRF24L01_Send(tx_buf);
+				_delay_ms(1);
+				load_pause = 0;
+			}
 		}
 	}
 }

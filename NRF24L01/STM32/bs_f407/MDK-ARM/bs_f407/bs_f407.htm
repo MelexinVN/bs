@@ -3,7 +3,7 @@
 <title>Static Call Graph - [bs_f407\bs_f407.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image bs_f407\bs_f407.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Mon Jul 11 14:30:20 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060960: Last Updated: Tue Jul 12 16:25:15 2022
 <BR><P>
 <H3>Maximum Stack Usage =        248 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -941,16 +941,18 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[9e]"></a>nrf24l01_receive</STRONG> (Thumb, 46 bytes, Stack size 0 bytes, nrf24.o(i.nrf24l01_receive))
-<BR><BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;update_receive
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9d]"></a>update_receive</STRONG> (Thumb, 718 bytes, Stack size 40 bytes, main.o(i.update_receive))
+<P><STRONG><a name="[9d]"></a>update_receive</STRONG> (Thumb, 726 bytes, Stack size 40 bytes, main.o(i.update_receive))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176 + Unknown Stack Size
 <LI>Call Chain = update_receive &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LL_mDelay
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_TX
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Ascii_To_Hex
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nrf24l01_receive
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NRF24L01_Send
 <LI><a href="#[9b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2sprintf
