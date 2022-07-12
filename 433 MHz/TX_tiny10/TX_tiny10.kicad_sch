@@ -1288,7 +1288,7 @@
     (property "Value" "ATtiny10-TS" (id 1) (at 115.57 90.1699 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6" (id 2) (at 129.54 88.9 0)
+    (property "Footprint" "Package_TO_SOT_SMD:SOT-23-6_Handsoldering" (id 2) (at 129.54 88.9 0)
       (effects (font (size 1.27 1.27) italic) hide)
     )
     (property "Datasheet" "http://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-8127-AVR-8-bit-Microcontroller-ATtiny4-ATtiny5-ATtiny9-ATtiny10_Datasheet.pdf" (id 3) (at 129.54 88.9 0)
@@ -1707,7 +1707,7 @@
       (reference "SW1") (unit 1) (value "SW_Push_Dual_x2") (footprint "Button_Switch_THT:SW_PUSH_6mm_H4.3mm")
     )
     (path "/97df36b4-64e2-41e3-92ff-44055cc5a9b6"
-      (reference "U1") (unit 1) (value "ATtiny10-TS") (footprint "Package_TO_SOT_SMD:SOT-23-6")
+      (reference "U1") (unit 1) (value "ATtiny10-TS") (footprint "Package_TO_SOT_SMD:SOT-23-6_Handsoldering")
     )
   )
 )
