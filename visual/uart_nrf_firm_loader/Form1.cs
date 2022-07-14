@@ -141,8 +141,11 @@ namespace WindowsFormsApp1
             {
                 s_input += Convert.ToChar(temp_input[i]);
             }
+
+            label8.Text = s_input;
+
             rec_string += s_input;
-            if (((rec_string[0] != 0x52) && (rec_string[0] != 0x5A) && (rec_string[0] != 0x41)) || (rec_string.Length >= 10)) rec_string = "";
+            if (((rec_string[0] != 0x52) && (rec_string[0] != 0x5A) && (rec_string[0] != 0x41)) || (rec_string.Length >= 12)) rec_string = "";
 
             if (((rec_string.Length > 1)) && (rec_string[rec_string.Length - 1] == '!'))
             {
@@ -173,7 +176,6 @@ namespace WindowsFormsApp1
                         {
                             try_to_load = false;
                             ready_to_load = false;
-                            button14.Text = "Перезагрузка МК";
                             label22.ForeColor = Color.Black;
                             label22.Text = "   ";
                             label21.Text = "   ";
@@ -184,7 +186,6 @@ namespace WindowsFormsApp1
                     {
                         try_to_load = false;
                         ready_to_load = false;
-                        button14.Text = "Перезагрузка МК";
                         label22.ForeColor = Color.Black;
                         label22.Text = "   ";
                         label21.Text = "   ";
@@ -302,6 +303,7 @@ namespace WindowsFormsApp1
             textBox3.Clear();
             textBox1.Clear();
             label14.Text = "  ";
+            label8.Text = "  ";
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -335,6 +337,16 @@ namespace WindowsFormsApp1
         {
             textBox1.SelectionStart = textBox1.Text.Length;
             textBox1.ScrollToCaret();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (serialPort1.IsOpen)
+            {
+                serialPort1.Write(":!;");
+                label14.Text = ":!;";
+                textBox1.Text += ":!;\r\n";
+            }
         }
     }
 }

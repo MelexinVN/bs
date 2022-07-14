@@ -70,6 +70,8 @@ uint8_t calculation_check_sum = 0;				//чек-сумма
 uint32_t extented_linear_adress = 0;			//дополнительный адрес
 uint8_t update_respond = 0;								//ответ от модуля о готовности к загрузке	
 uint8_t next_row = 0;
+
+volatile uint8_t update_mode = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -116,64 +118,71 @@ void Ascii_To_Hex(uint8_t *buff, uint8_t count)
 
 void update_receive(void)
 {
-	if (f_update_rec)					
-	{					
-		if (firm_update)
+	if (firm_update)
+	{
+		if (f_update_rec)					
 		{
-			/*читаем 8 симовлов с метаданными*/
-			for (uint8_t i = 0; i < 8; i++)
+			uint8_t rx_str_size = strlen((char*)rx_str) - 3;
+			
+			uint8_t temp_buff[UART_RX_BUFFER_SIZE] = {0};
+			
+			for (uint8_t i = 0; i < rx_str_size; i++)
 			{
-				buff[i] = rx_str[i];	//сохраняем символ
+				temp_buff[i] = rx_str[i];	//сохраняем символ
 			}
 			
-			Ascii_To_Hex(buff, 8);//переводим символы в хекс
+			Ascii_To_Hex(temp_buff, rx_str_size);//переводим символы в хекс
 			
-			size_data = buff[1] + 16*buff[0];//находим размер данных
-			uint16_t address_data_calc = buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2];//адрес
-			address_data = address_data_calc/2;
-			type_data = buff[7] + 16*buff[6];//и тип
-			//промежуточное значение контрольной суммы
-			
-			uint8_t cs_index = size_data*2 + 8;
-			
-			calculation_check_sum = size_data + (uint8_t)address_data_calc + (uint8_t)((address_data_calc)>>8) + type_data;//считаем чек сумму
-			
-			if(type_data == 0x00)	//если пришли данные для записи
+			for (uint8_t i = 0; i < rx_str_size - 2; i += 2)
 			{
-				tx_buf[0] = 0x07;	//адрес устройства
-				tx_buf[1] = 'F';	//команда записи flash
-				tx_buf[2] = size_data;
-				tx_buf[3] = address_data;
-				for (uint8_t i = 8; i < cs_index; i++)
-				{
-					buff[i - 8] = rx_str[i];	//сохраняем символ
-				}
-				
-				Ascii_To_Hex(buff, size_data*2);//переводим в хекс	
-					
-				for (uint8_t i = 0; i < size_data*2; i += 2)
-				{
-					buff[i] <<= 4;
-					buff[i] = buff[i] | buff[i+1];
-					tx_buf[4 + i/2] = buff[i];
-					calculation_check_sum += (uint8_t)buff[i];
-				}
+				temp_buff[i] = (temp_buff[i]<<4) | temp_buff[i+1];
+				calculation_check_sum += (uint8_t)temp_buff[i];
+			}
 			
-				calculation_check_sum =  ~(calculation_check_sum) + 1;
-				
-				/*читаем 2 байта*/
-				buff[0] = rx_str[cs_index];
-				buff[1] = rx_str[cs_index + 1];
-				
-				Ascii_To_Hex(buff,2);
-				check_sum = buff[1] + 16*buff[0];		
-
-				if(calculation_check_sum != check_sum )
+			calculation_check_sum = ~(calculation_check_sum) + 1;
+			check_sum = temp_buff[rx_str_size - 1] + 16*temp_buff[rx_str_size - 2];
+			
+			if (calculation_check_sum == check_sum)
+			{
+				calculation_check_sum = 0;//обнуляем чек сумму
+				string_counter++;		
+				/*читаем 8 симовлов с метаданными*/
+				for (uint8_t i = 0; i < 8; i++)
 				{
-					string_counter--;
+					buff[i] = rx_str[i];	//
 				}
-				else
+				
+				Ascii_To_Hex(buff, 8);//переводим символы в хекс
+				
+				size_data = buff[1] + 16*buff[0];//находим размер данных
+				address_data = (buff[5] + 16*buff[4] + 256*buff[3] + 4096*buff[2])/2;//адрес
+				type_data = buff[7] + 16*buff[6];//и тип
+				//промежуточное значение контрольной суммы
+				
+				uint8_t cs_index = size_data*2 + 8;
+				
+				if(type_data == 0x00)	//если пришли данные для записи
 				{
+					tx_buf[0] = 0x07;	//адрес устройства
+					tx_buf[1] = 'F';	//команда записи flash
+					tx_buf[2] = size_data;
+					tx_buf[3] = (uint8_t)address_data;
+					tx_buf[4] = (uint8_t)(address_data>>8);
+					
+					for (uint8_t i = 8; i < cs_index; i++)
+					{
+						buff[i - 8] = rx_str[i];	//сохраняем символ
+					}
+					
+					Ascii_To_Hex(buff, size_data*2);//переводим в хекс	
+						
+					for (uint8_t i = 0; i < size_data*2; i += 2)
+					{
+						buff[i] <<= 4;
+						buff[i] = buff[i] | buff[i+1];
+						tx_buf[5 + i/2] = buff[i];
+					}
+				
 					while (!next_row) 
 					{
 						nrf24l01_receive();	
@@ -181,83 +190,70 @@ void update_receive(void)
 					NRF24L01_Send(tx_buf);
 					next_row = 0;
 				}
-				calculation_check_sum = 0;//обнуляем чек сумму
-				string_counter++;		
-			}
 			
-			else if(type_data == 0x04)//если пришел дополнительный адрес
-			{
-				/*читаем 4 байта*/
-				for (uint8_t i = 8; i < 12; i++)
+				else if(type_data == 0x04)//если пришел дополнительный адрес
 				{
-					buff[i - 8] = rx_str[i];
+					/*читаем 4 байта*/
+					for (uint8_t i = 8; i < 12; i++)
+					{
+						buff[i - 8] = rx_str[i];
+					}
+					
+					Ascii_To_Hex(buff, 4);//переводим их в хекс				
+					
+					extented_linear_adress = (uint32_t)(buff[0]<<28 | buff[1]<<24 | buff[2]<<20 | buff[3]<<16 );//считаем адрес
 				}
 				
-				Ascii_To_Hex(buff, 4);//переводим их в хекс				
-				
-				extented_linear_adress = (uint32_t)(buff[0]<<28 | buff[1]<<24 | buff[2]<<20 | buff[3]<<16 );//считаем адрес
-				
-				calculation_check_sum +=  buff[0] + buff[1]+ buff[3] + buff[3];	
-				calculation_check_sum =  ~(calculation_check_sum) + 1;
-						
-				/*читаем 2 байта*/
-				for (uint8_t i = 12; i < 14; i++)
+				else if(type_data == 0x05) 
 				{
-					buff[i - 12] = rx_str[i];
+					string_counter++;
 				}
-				
-				Ascii_To_Hex(buff,2);
-				check_sum = buff[1] + 16*buff[0];		
-				
-				if(calculation_check_sum != check_sum )
+					
+				else if(type_data == 0x01)//конец файла
 				{
-					//тут можно вывести сообщение типо "Ошибка чек суммы"
-					string_counter--;
-				}	
-				calculation_check_sum = 0;//обнуляем чек сумму	
-				string_counter++;
+					sprintf(str,"AOK!");	
+					USART_TX((uint8_t*)str,strlen(str));
+					f_update_rec = 0;
+					firm_update = 0;
+					ready_to_update = 0;
+					string_counter = 0;
+					update_mode = 0;
+					LL_mDelay(100);
+					tx_buf[0] = 0x07;	//адрес устройства
+					tx_buf[1] = 'J';	//команда
+					NRF24L01_Send(tx_buf);
+					LL_mDelay(100);
+				}
 			}
-			
-			else if(type_data == 0x05) 
-			{
-				string_counter++;
-			}
-				
-			else if(type_data == 0x01)//конец файла
-			{
-				sprintf(str,"AOK!");	
-				USART_TX((uint8_t*)str,strlen(str));
-				f_update_rec = 0;
-				LL_mDelay(100);
-				tx_buf[0] = 0x07;	//адрес устройства
-				tx_buf[1] = 'J';	//команда
-				NRF24L01_Send(tx_buf);
-				LL_mDelay(100);
-			}
-			
-			if(f_update_rec)
-			{
-				sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
-				USART_TX((uint8_t*)str,strlen(str));
-			}
+			calculation_check_sum = 0;//обнуляем чек сумму
+			f_update_rec = 0;
 		}
-		else if (ready_to_update)
+		LL_mDelay(10);
+		sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
+		USART_TX((uint8_t*)str,strlen(str));
+	}
+	else if (ready_to_update)
+	{
+		if 	(f_update_rec)	
 		{
 			if (rx_str[0] == '!')	
 			{
 				firm_update = 1;
 				sprintf(str,"ZNS%05u!",string_counter);		//отправляем запрос очередной строки
 				USART_TX((uint8_t*)str,strlen(str));
-				
 				/*
 				tx_buf[0] = 0x07;	//адрес устройства
 				tx_buf[1] = 'E';	//команда
 				NRF24L01_Send(tx_buf);
 				LL_mDelay(100);
 				*/
+				f_update_rec = 0;
 			}
 		}
-		else if (rx_str[0] == '!')	
+	}
+	else if (rx_str[0] == '!')	
+	{
+		if 	(f_update_rec)	
 		{
 			//tx_buf[0] = but_addrs[rx_str[1]];
 			//tx_buf[0] = RESET_BUTTONS;
@@ -267,8 +263,8 @@ void update_receive(void)
 			tx_buf[1] = 'W';
 			NRF24L01_Send(tx_buf);
 			//LL_mDelay(100);
+			f_update_rec = 0;
 		}
-		f_update_rec = 0;
 	}
 
 	if (update_respond)
@@ -285,7 +281,6 @@ void update_receive(void)
 		LL_mDelay(100);
 		next_row = 1;
 	}
-
 }
 
 //Процедура приема данных по уарту
@@ -494,13 +489,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-		update_receive();
+		if (update_mode)
+		{
+			update_receive();
 		
-		nrf24l01_receive();			//процедура приема данных радиомодуля
+			nrf24l01_receive();			//процедура приема данных радиомодуля
+		}
 		
-		/*
-		if ((!firm_update) && (!ready_to_update))
+		else
 		{
 			nrf24l01_receive();			//процедура приема данных радиомодуля
 			//обработка команды сброса
@@ -522,7 +518,7 @@ int main(void)
 			first_push_finding();
 
 			LL_mDelay(5);//подбирается экспериментально 
-		}*/
+		}
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

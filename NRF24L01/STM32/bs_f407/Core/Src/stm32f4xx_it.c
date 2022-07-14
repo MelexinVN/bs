@@ -53,6 +53,9 @@ volatile uint8_t f_update_rec;
 volatile int command = 0;
 volatile int led_st = 0;
 volatile int rec_cmnd = 0;
+extern volatile uint8_t update_mode;
+extern char str[];
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -267,6 +270,12 @@ void USART1_IRQHandler(void)
 			if (in_char == ':') 									//если начало строки
 			{
 				rx_counter = 0;											//обнуляем счетчик 
+				if(!update_mode) 
+				{
+					update_mode = 1;
+					sprintf(str,"update mode!");	
+					USART_TX((uint8_t*)str,strlen(str));
+				}
 			}
 			
 			else 

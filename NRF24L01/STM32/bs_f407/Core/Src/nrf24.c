@@ -23,6 +23,7 @@ extern uint8_t but_addrs[];
 extern uint8_t f_rec_proc;														//
 extern uint8_t update_respond;	
 extern uint8_t next_row;
+extern uint8_t update_mode;
 //самодельная функция микросекундной задержки
 //------------------------------------------------
 __STATIC_INLINE void DelayMicro(__IO uint32_t micros)
@@ -224,51 +225,57 @@ void nrf24l01_receive(void)
 	if(rx_flag == 1)				//если флаг приема поднят
 	{
 		
-		if (rx_buf[0] == 0x07)
+		if (update_mode)
 		{
-			if (rx_buf[1] == 'W')
+			if (rx_buf[0] == 0x07)
 			{
-				update_respond = 1;
-			}
-			if (rx_buf[1] == 'N')
-			{
-				next_row = 1;
-			}
-		}
-		/*
-		if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
-		{//если время, присланное кнопкой не максимально возможное (кнопка нажата)
-			sprintf(str," %X\t",rx_buf[0]);				//
-			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
-			unsigned long time = *(unsigned long*)&rx_buf[1];	//преобразуем оставшиеся байты во время
-			sprintf(str,"%lu\t",time);//передаем принятое в порт
-			USART_TX((uint8_t*)str,strlen(str));
-			sprintf(str,"%d\r\n",rx_buf[5]);				//
-			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
-			//определяем по адресу номер кнопки
-			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
-			{//перебираем все кнопки
-				if (rx_buf[0] == but_addrs[i]) 	//если найден принятый адрес
+				if (rx_buf[1] == 'W')
 				{
-					but_times[i] = time;					//записываем время в массив времен
-				}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
+					update_respond = 1;
+				}
+				if (rx_buf[1] == 'N')
+				{
+					next_row = 1;
+				}
 			}
 		}
 		else
-		{//отправляем в порт, посылка от какой кнопки принята и что она не нажата
-			sprintf(str,"%X\t np\t",rx_buf[0]);				//
-			USART_TX((uint8_t*)str,strlen(str));
-			sprintf(str,"%d\r\n",rx_buf[5]);				//
-			USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
-			for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
-			{//перебираем все кнопки
-				if (rx_buf[0] == but_addrs[i]) 	//если найден принятый адрес
-				{
-					but_times[i] = MAX_TIME;			 	//записываем максимальное время в массив времен
-				}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
+		{
+			if ((*(unsigned long*)&rx_buf[1]) != NOT_PUSH_CMD)
+			{//если время, присланное кнопкой не максимально возможное (кнопка нажата)
+				sprintf(str," %X\t",rx_buf[0]);				//
+				USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
+				unsigned long time = *(unsigned long*)&rx_buf[1];	//преобразуем оставшиеся байты во время
+				sprintf(str,"%lu\t",time);//передаем принятое в порт
+				USART_TX((uint8_t*)str,strlen(str));
+				sprintf(str,"%d\r\n",rx_buf[5]);				//
+				USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
+				//определяем по адресу номер кнопки
+				for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
+				{//перебираем все кнопки
+					if (rx_buf[0] == but_addrs[i]) 	//если найден принятый адрес
+					{
+						but_times[i] = time;					//записываем время в массив времен
+					}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
+				}
 			}
-		}*/
-		rx_flag = 0;		//опускаем флаг приема
+
+			else
+			{//отправляем в порт, посылка от какой кнопки принята и что она не нажата
+				sprintf(str,"%X\tnp\t",rx_buf[0]);				//
+				USART_TX((uint8_t*)str,strlen(str));
+				sprintf(str,"%d\r\n",rx_buf[5]);				//
+				USART_TX((uint8_t*)str,strlen(str));	//отправляем в порт первый байт (адрес кнопки)
+				for (uint8_t i = 0; i < NUM_OF_BUTS; i++)
+				{//перебираем все кнопки
+					if (rx_buf[0] == but_addrs[i]) 	//если найден принятый адрес
+					{
+						but_times[i] = MAX_TIME;			 	//записываем максимальное время в массив времен
+					}//не выходим из цикла при найденной кнопке чтобы для всех обработок были одинаковые тайминги
+				}
+			}
+			rx_flag = 0;		//опускаем флаг приема
+		}
 	}
 }
 

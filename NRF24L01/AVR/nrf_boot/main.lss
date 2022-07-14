@@ -3,27 +3,27 @@ main.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000004e6  00001800  00001800  00000094  2**1
+  0 .text         000004da  00001800  00001800  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         00000006  00800060  00001ce6  0000057a  2**0
+  1 .data         00000006  00800060  00001cda  0000056e  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          0000009c  00800066  00800066  00000580  2**0
+  2 .bss          0000009c  00800066  00800066  00000574  2**0
                   ALLOC
-  3 .stab         000013d4  00000000  00000000  00000580  2**2
+  3 .stab         000013bc  00000000  00000000  00000574  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      0000141d  00000000  00000000  00001954  2**0
+  4 .stabstr      0000141d  00000000  00000000  00001930  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .comment      00000030  00000000  00000000  00002d71  2**0
+  5 .comment      00000030  00000000  00000000  00002d4d  2**0
                   CONTENTS, READONLY
-  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002da4  2**2
+  6 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00002d80  2**2
                   CONTENTS, READONLY
-  7 .debug_info   0000048c  00000000  00000000  00002de0  2**0
+  7 .debug_info   0000048c  00000000  00000000  00002dbc  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_abbrev 0000044e  00000000  00000000  0000326c  2**0
+  8 .debug_abbrev 0000044e  00000000  00000000  00003248  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_line   0000001a  00000000  00000000  000036ba  2**0
+  9 .debug_line   0000001a  00000000  00000000  00003696  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000017a  00000000  00000000  000036d4  2**0
+ 10 .debug_str    0000017a  00000000  00000000  000036b0  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -61,7 +61,7 @@ Disassembly of section .text:
     1832:	10 e0       	ldi	r17, 0x00	; 0
     1834:	a0 e6       	ldi	r26, 0x60	; 96
     1836:	b0 e0       	ldi	r27, 0x00	; 0
-    1838:	e6 ee       	ldi	r30, 0xE6	; 230
+    1838:	ea ed       	ldi	r30, 0xDA	; 218
     183a:	fc e1       	ldi	r31, 0x1C	; 28
     183c:	02 c0       	rjmp	.+4      	; 0x1842 <__do_copy_data+0x10>
     183e:	05 90       	lpm	r0, Z+
@@ -84,7 +84,7 @@ Disassembly of section .text:
     1854:	b2 07       	cpc	r27, r18
     1856:	e1 f7       	brne	.-8      	; 0x1850 <.do_clear_bss_loop>
     1858:	4e d1       	rcall	.+668    	; 0x1af6 <main>
-    185a:	43 c2       	rjmp	.+1158   	; 0x1ce2 <_exit>
+    185a:	3d c2       	rjmp	.+1146   	; 0x1cd6 <_exit>
 
 0000185c <__bad_interrupt>:
     185c:	d1 cf       	rjmp	.-94     	; 0x1800 <__vectors>
@@ -766,365 +766,352 @@ int main(void)
     1b4e:	f1 2c       	mov	r15, r1
     1b50:	c0 e0       	ldi	r28, 0x00	; 0
     1b52:	d0 e0       	ldi	r29, 0x00	; 0
-					f_wait = 1;
-				}
-
-				if (rx_buf[1] == 'F')		//
-				{
-					LED_TGL();
-    1b54:	90 e4       	ldi	r25, 0x40	; 64
-    1b56:	49 2e       	mov	r4, r25
 
 	do 
-		{
+	{
 		data = *tmp++;
 		data |= *tmp++ << 8;
 		boot_page_fill(baddr, data);	// call asm routine.
-    1b58:	55 24       	eor	r5, r5
-    1b5a:	53 94       	inc	r5
-    1b5c:	66 24       	eor	r6, r6
-    1b5e:	63 94       	inc	r6
+    1b54:	55 24       	eor	r5, r5
+    1b56:	53 94       	inc	r5
+    1b58:	66 24       	eor	r6, r6
+    1b5a:	63 94       	inc	r6
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
-		} 
+	} 
 	while (size);				// Loop until all bytes written
 
 	boot_page_write(pagestart);
-    1b60:	25 e0       	ldi	r18, 0x05	; 5
-    1b62:	32 2e       	mov	r3, r18
+    1b5c:	35 e0       	ldi	r19, 0x05	; 5
+    1b5e:	a3 2e       	mov	r10, r19
 	boot_spm_busy_wait();
 	boot_rww_enable();		// Re-enable the RWW section
-    1b64:	31 e1       	ldi	r19, 0x11	; 17
-    1b66:	23 2e       	mov	r2, r19
-						gBuffer[i] = rx_buf[i+4];
-					}
-
+    1b60:	41 e1       	ldi	r20, 0x11	; 17
+    1b62:	b4 2e       	mov	r11, r20
+					//_delay_ms(100);
 					writeFlashPage(address, size);
 					//_delay_ms(100);
+					//VerifyFlashPage(address, size);
+
 					tx_buf[0] = BUT_ADDR;
-    1b68:	17 e0       	ldi	r17, 0x07	; 7
+    1b64:	17 e0       	ldi	r17, 0x07	; 7
 					tx_buf[1] = 'N';
-    1b6a:	0e e4       	ldi	r16, 0x4E	; 78
+    1b66:	0e e4       	ldi	r16, 0x4E	; 78
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
 	{
 		boot_page_erase(addr);		// Perform page erase
-    1b6c:	43 e0       	ldi	r20, 0x03	; 3
-    1b6e:	74 2e       	mov	r7, r20
+    1b68:	53 e0       	ldi	r21, 0x03	; 3
+    1b6a:	75 2e       	mov	r7, r21
 		{
 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
 			{
 				if (rx_buf[1] == 'J')
 				{
 					jump_to_app();
-    1b70:	c1 2c       	mov	r12, r1
-    1b72:	d1 2c       	mov	r13, r1
+    1b6c:	c1 2c       	mov	r12, r1
+    1b6e:	d1 2c       	mov	r13, r1
 
 	//wdt_enable(WDTO_1S);
 
 	while (1) 
 	{
 		nrf24_receive();
-    1b74:	b0 df       	rcall	.-160    	; 0x1ad6 <nrf24_receive>
+    1b70:	b2 df       	rcall	.-156    	; 0x1ad6 <nrf24_receive>
 
 		if(f_rx == 1)						//если флаг приема поднят
-    1b76:	80 91 6b 00 	lds	r24, 0x006B	; 0x80006b <f_rx>
-    1b7a:	81 30       	cpi	r24, 0x01	; 1
-    1b7c:	09 f0       	breq	.+2      	; 0x1b80 <main+0x8a>
-    1b7e:	83 c0       	rjmp	.+262    	; 0x1c86 <main+0x190>
+    1b72:	80 91 6b 00 	lds	r24, 0x006B	; 0x80006b <f_rx>
+    1b76:	81 30       	cpi	r24, 0x01	; 1
+    1b78:	09 f0       	breq	.+2      	; 0x1b7c <main+0x86>
+    1b7a:	7f c0       	rjmp	.+254    	; 0x1c7a <main+0x184>
 		{
 			if (rx_buf[0] == BUT_ADDR)		//если первый принятый байт совпадает с адресом кнопки
-    1b80:	80 91 8c 00 	lds	r24, 0x008C	; 0x80008c <rx_buf>
-    1b84:	87 30       	cpi	r24, 0x07	; 7
-    1b86:	09 f0       	breq	.+2      	; 0x1b8a <main+0x94>
-    1b88:	7c c0       	rjmp	.+248    	; 0x1c82 <main+0x18c>
+    1b7c:	80 91 8c 00 	lds	r24, 0x008C	; 0x80008c <rx_buf>
+    1b80:	87 30       	cpi	r24, 0x07	; 7
+    1b82:	09 f0       	breq	.+2      	; 0x1b86 <main+0x90>
+    1b84:	78 c0       	rjmp	.+240    	; 0x1c76 <main+0x180>
 			{
 				if (rx_buf[1] == 'J')
-    1b8a:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
-    1b8e:	8a 34       	cpi	r24, 0x4A	; 74
-    1b90:	11 f4       	brne	.+4      	; 0x1b96 <main+0xa0>
+    1b86:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1b8a:	8a 34       	cpi	r24, 0x4A	; 74
+    1b8c:	11 f4       	brne	.+4      	; 0x1b92 <main+0x9c>
 				{
 					jump_to_app();
-    1b92:	f6 01       	movw	r30, r12
-    1b94:	09 95       	icall
+    1b8e:	f6 01       	movw	r30, r12
+    1b90:	09 95       	icall
 				}
 
 				if (rx_buf[1] == 'E')	
-    1b96:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
-    1b9a:	85 34       	cpi	r24, 0x45	; 69
-    1b9c:	91 f4       	brne	.+36     	; 0x1bc2 <main+0xcc>
-    1b9e:	e0 e0       	ldi	r30, 0x00	; 0
-    1ba0:	f0 e0       	ldi	r31, 0x00	; 0
+    1b92:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1b96:	85 34       	cpi	r24, 0x45	; 69
+    1b98:	91 f4       	brne	.+36     	; 0x1bbe <main+0xc8>
+    1b9a:	e0 e0       	ldi	r30, 0x00	; 0
+    1b9c:	f0 e0       	ldi	r31, 0x00	; 0
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
 	{
 		boot_page_erase(addr);		// Perform page erase
-    1ba2:	70 92 57 00 	sts	0x0057, r7	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1ba6:	e8 95       	spm
+    1b9e:	70 92 57 00 	sts	0x0057, r7	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1ba2:	e8 95       	spm
 		boot_spm_busy_wait();		// Wait until the memory is erased.
-    1ba8:	07 b6       	in	r0, 0x37	; 55
-    1baa:	00 fc       	sbrc	r0, 0
-    1bac:	fd cf       	rjmp	.-6      	; 0x1ba8 <main+0xb2>
-    1bae:	e0 5c       	subi	r30, 0xC0	; 192
-    1bb0:	ff 4f       	sbci	r31, 0xFF	; 255
+    1ba4:	07 b6       	in	r0, 0x37	; 55
+    1ba6:	00 fc       	sbrc	r0, 0
+    1ba8:	fd cf       	rjmp	.-6      	; 0x1ba4 <main+0xae>
+    1baa:	e0 5c       	subi	r30, 0xC0	; 192
+    1bac:	ff 4f       	sbci	r31, 0xFF	; 255
 
 static inline void eraseFlash(void)
 {
 	// erase only main section (bootloader protection)
 	uint32_t addr = 0;
 	while (APP_END > addr) 
-    1bb2:	e1 15       	cp	r30, r1
-    1bb4:	28 e1       	ldi	r18, 0x18	; 24
-    1bb6:	f2 07       	cpc	r31, r18
-    1bb8:	a1 f7       	brne	.-24     	; 0x1ba2 <main+0xac>
+    1bae:	e1 15       	cp	r30, r1
+    1bb0:	28 e1       	ldi	r18, 0x18	; 24
+    1bb2:	f2 07       	cpc	r31, r18
+    1bb4:	a1 f7       	brne	.-24     	; 0x1b9e <main+0xa8>
 	{
 		boot_page_erase(addr);		// Perform page erase
 		boot_spm_busy_wait();		// Wait until the memory is erased.
 		addr += SPM_PAGESIZE;
 	}
 	boot_rww_enable();
-    1bba:	20 92 57 00 	sts	0x0057, r2	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1bbe:	e8 95       	spm
-    1bc0:	0c c0       	rjmp	.+24     	; 0x1bda <main+0xe4>
+    1bb6:	b0 92 57 00 	sts	0x0057, r11	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1bba:	e8 95       	spm
+    1bbc:	0c c0       	rjmp	.+24     	; 0x1bd6 <main+0xe0>
 				if (rx_buf[1] == 'E')	
 				{
 					eraseFlash();
 				}
 
 				if (rx_buf[1] == 'W')	
-    1bc2:	87 35       	cpi	r24, 0x57	; 87
-    1bc4:	51 f4       	brne	.+20     	; 0x1bda <main+0xe4>
+    1bbe:	87 35       	cpi	r24, 0x57	; 87
+    1bc0:	51 f4       	brne	.+20     	; 0x1bd6 <main+0xe0>
 				{
 					LED_ON();
-    1bc6:	96 9a       	sbi	0x12, 6	; 18
+    1bc2:	96 9a       	sbi	0x12, 6	; 18
 					tx_buf[0] = BUT_ADDR;
-    1bc8:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
+    1bc4:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
 					tx_buf[1] = 'W';
-    1bcc:	80 93 6d 00 	sts	0x006D, r24	; 0x80006d <tx_buf+0x1>
+    1bc8:	80 93 6d 00 	sts	0x006D, r24	; 0x80006d <tx_buf+0x1>
 					NRF24L01_Send(tx_buf);
-    1bd0:	8c e6       	ldi	r24, 0x6C	; 108
-    1bd2:	90 e0       	ldi	r25, 0x00	; 0
-    1bd4:	1f df       	rcall	.-450    	; 0x1a14 <NRF24L01_Send>
+    1bcc:	8c e6       	ldi	r24, 0x6C	; 108
+    1bce:	90 e0       	ldi	r25, 0x00	; 0
+    1bd0:	21 df       	rcall	.-446    	; 0x1a14 <NRF24L01_Send>
 					f_wait = 1;
-    1bd6:	60 92 66 00 	sts	0x0066, r6	; 0x800066 <__data_end>
+    1bd2:	60 92 68 00 	sts	0x0068, r6	; 0x800068 <f_wait>
 				}
 
 				if (rx_buf[1] == 'F')		//
-    1bda:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
-    1bde:	86 34       	cpi	r24, 0x46	; 70
-    1be0:	09 f0       	breq	.+2      	; 0x1be4 <main+0xee>
-    1be2:	4f c0       	rjmp	.+158    	; 0x1c82 <main+0x18c>
+    1bd6:	80 91 8d 00 	lds	r24, 0x008D	; 0x80008d <rx_buf+0x1>
+    1bda:	86 34       	cpi	r24, 0x46	; 70
+    1bdc:	09 f0       	breq	.+2      	; 0x1be0 <main+0xea>
+    1bde:	4b c0       	rjmp	.+150    	; 0x1c76 <main+0x180>
 				{
-					LED_TGL();
-    1be4:	82 b3       	in	r24, 0x12	; 18
-    1be6:	84 25       	eor	r24, r4
-    1be8:	82 bb       	out	0x12, r24	; 18
+					//LED_TGL();
 					pagebuf_t size;
 					size = rx_buf[2];
-    1bea:	60 91 8e 00 	lds	r22, 0x008E	; 0x80008e <rx_buf+0x2>
-					address = rx_buf[3]; //
-    1bee:	80 91 8f 00 	lds	r24, 0x008F	; 0x80008f <rx_buf+0x3>
-    1bf2:	28 2f       	mov	r18, r24
-    1bf4:	30 e0       	ldi	r19, 0x00	; 0
-    1bf6:	30 93 69 00 	sts	0x0069, r19	; 0x800069 <address+0x1>
-    1bfa:	20 93 68 00 	sts	0x0068, r18	; 0x800068 <address>
-    1bfe:	a0 e9       	ldi	r26, 0x90	; 144
-    1c00:	b0 e0       	ldi	r27, 0x00	; 0
+    1be0:	c0 91 8e 00 	lds	r28, 0x008E	; 0x80008e <rx_buf+0x2>
+    1be4:	80 91 8f 00 	lds	r24, 0x008F	; 0x80008f <rx_buf+0x3>
+    1be8:	90 91 90 00 	lds	r25, 0x0090	; 0x800090 <rx_buf+0x4>
+					address = (uint16_t)(rx_buf[4] << 8 | rx_buf[3]); //
+    1bec:	90 93 67 00 	sts	0x0067, r25	; 0x800067 <__data_end+0x1>
+    1bf0:	80 93 66 00 	sts	0x0066, r24	; 0x800066 <__data_end>
+    1bf4:	a1 e9       	ldi	r26, 0x91	; 145
+    1bf6:	b0 e0       	ldi	r27, 0x00	; 0
 
 					for (uint8_t i = 0; i < size; i++)
-    1c02:	ec ea       	ldi	r30, 0xAC	; 172
-    1c04:	f0 e0       	ldi	r31, 0x00	; 0
-    1c06:	90 e0       	ldi	r25, 0x00	; 0
-    1c08:	96 17       	cp	r25, r22
-    1c0a:	21 f0       	breq	.+8      	; 0x1c14 <main+0x11e>
+    1bf8:	ec ea       	ldi	r30, 0xAC	; 172
+    1bfa:	f0 e0       	ldi	r31, 0x00	; 0
+    1bfc:	20 e0       	ldi	r18, 0x00	; 0
+    1bfe:	2c 17       	cp	r18, r28
+    1c00:	21 f0       	breq	.+8      	; 0x1c0a <main+0x114>
 					{
-						gBuffer[i] = rx_buf[i+4];
-    1c0c:	2d 91       	ld	r18, X+
-    1c0e:	21 93       	st	Z+, r18
-					LED_TGL();
+						gBuffer[i] = rx_buf[i+5];
+    1c02:	3d 91       	ld	r19, X+
+    1c04:	31 93       	st	Z+, r19
+					//LED_TGL();
 					pagebuf_t size;
 					size = rx_buf[2];
-					address = rx_buf[3]; //
+					address = (uint16_t)(rx_buf[4] << 8 | rx_buf[3]); //
 
 					for (uint8_t i = 0; i < size; i++)
-    1c10:	9f 5f       	subi	r25, 0xFF	; 255
-    1c12:	fa cf       	rjmp	.-12     	; 0x1c08 <main+0x112>
-	boot_rww_enable();
+    1c06:	2f 5f       	subi	r18, 0xFF	; 255
+    1c08:	fa cf       	rjmp	.-12     	; 0x1bfe <main+0x108>
+	return baddr>>1;
 }
 
 static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
 {
 	uint32_t pagestart = (uint32_t)waddr<<1;
-    1c14:	90 e0       	ldi	r25, 0x00	; 0
-    1c16:	a0 e0       	ldi	r26, 0x00	; 0
-    1c18:	b0 e0       	ldi	r27, 0x00	; 0
-    1c1a:	4c 01       	movw	r8, r24
-    1c1c:	5d 01       	movw	r10, r26
-    1c1e:	88 0c       	add	r8, r8
-    1c20:	99 1c       	adc	r9, r9
-    1c22:	aa 1c       	adc	r10, r10
-    1c24:	bb 1c       	adc	r11, r11
+    1c0a:	a0 e0       	ldi	r26, 0x00	; 0
+    1c0c:	b0 e0       	ldi	r27, 0x00	; 0
+    1c0e:	bc 01       	movw	r22, r24
+    1c10:	cd 01       	movw	r24, r26
+    1c12:	66 0f       	add	r22, r22
+    1c14:	77 1f       	adc	r23, r23
+    1c16:	88 1f       	adc	r24, r24
+    1c18:	99 1f       	adc	r25, r25
 	uint32_t baddr = pagestart;
 	uint16_t data;
 	uint8_t *tmp = gBuffer;
-    1c26:	20 91 ac 00 	lds	r18, 0x00AC	; 0x8000ac <gBuffer>
-    1c2a:	ac ea       	ldi	r26, 0xAC	; 172
-    1c2c:	b0 e0       	ldi	r27, 0x00	; 0
-    1c2e:	a4 01       	movw	r20, r8
+    1c1a:	20 91 ac 00 	lds	r18, 0x00AC	; 0x8000ac <gBuffer>
+    1c1e:	ac ea       	ldi	r26, 0xAC	; 172
+    1c20:	b0 e0       	ldi	r27, 0x00	; 0
+    1c22:	ab 01       	movw	r20, r22
 
 	do 
-		{
+	{
 		data = *tmp++;
 		data |= *tmp++ << 8;
 		boot_page_fill(baddr, data);	// call asm routine.
-    1c30:	c4 01       	movw	r24, r8
-    1c32:	8c 5a       	subi	r24, 0xAC	; 172
-    1c34:	90 40       	sbci	r25, 0x00	; 0
-    1c36:	fc 01       	movw	r30, r24
-    1c38:	ea 0f       	add	r30, r26
-    1c3a:	fb 1f       	adc	r31, r27
-    1c3c:	11 96       	adiw	r26, 0x01	; 1
-    1c3e:	7c 91       	ld	r23, X
-    1c40:	11 97       	sbiw	r26, 0x01	; 1
-    1c42:	30 e0       	ldi	r19, 0x00	; 0
-    1c44:	37 2b       	or	r19, r23
-    1c46:	09 01       	movw	r0, r18
-    1c48:	50 92 57 00 	sts	0x0057, r5	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c4c:	e8 95       	spm
-    1c4e:	11 24       	eor	r1, r1
+    1c24:	cb 01       	movw	r24, r22
+    1c26:	8c 5a       	subi	r24, 0xAC	; 172
+    1c28:	90 40       	sbci	r25, 0x00	; 0
+    1c2a:	fc 01       	movw	r30, r24
+    1c2c:	ea 0f       	add	r30, r26
+    1c2e:	fb 1f       	adc	r31, r27
+    1c30:	11 96       	adiw	r26, 0x01	; 1
+    1c32:	6c 91       	ld	r22, X
+    1c34:	11 97       	sbiw	r26, 0x01	; 1
+    1c36:	30 e0       	ldi	r19, 0x00	; 0
+    1c38:	36 2b       	or	r19, r22
+    1c3a:	09 01       	movw	r0, r18
+    1c3c:	50 92 57 00 	sts	0x0057, r5	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c40:	e8 95       	spm
+    1c42:	11 24       	eor	r1, r1
 
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
-    1c50:	62 50       	subi	r22, 0x02	; 2
-    1c52:	12 96       	adiw	r26, 0x02	; 2
-		} 
+    1c44:	c2 50       	subi	r28, 0x02	; 2
+    1c46:	12 96       	adiw	r26, 0x02	; 2
+	} 
 	while (size);				// Loop until all bytes written
-    1c54:	66 23       	and	r22, r22
-    1c56:	11 f0       	breq	.+4      	; 0x1c5c <main+0x166>
+    1c48:	cc 23       	and	r28, r28
+    1c4a:	11 f0       	breq	.+4      	; 0x1c50 <main+0x15a>
 	uint8_t *tmp = gBuffer;
 
 	do 
-		{
+	{
 		data = *tmp++;
 		data |= *tmp++ << 8;
-    1c58:	2c 91       	ld	r18, X
-    1c5a:	ed cf       	rjmp	.-38     	; 0x1c36 <main+0x140>
+    1c4c:	2c 91       	ld	r18, X
+    1c4e:	ed cf       	rjmp	.-38     	; 0x1c2a <main+0x134>
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
-		} 
+	} 
 	while (size);				// Loop until all bytes written
 
 	boot_page_write(pagestart);
-    1c5c:	fa 01       	movw	r30, r20
-    1c5e:	30 92 57 00 	sts	0x0057, r3	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c62:	e8 95       	spm
+    1c50:	fa 01       	movw	r30, r20
+    1c52:	a0 92 57 00 	sts	0x0057, r10	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c56:	e8 95       	spm
 	boot_spm_busy_wait();
-    1c64:	07 b6       	in	r0, 0x37	; 55
-    1c66:	00 fc       	sbrc	r0, 0
-    1c68:	fd cf       	rjmp	.-6      	; 0x1c64 <main+0x16e>
+    1c58:	07 b6       	in	r0, 0x37	; 55
+    1c5a:	00 fc       	sbrc	r0, 0
+    1c5c:	fd cf       	rjmp	.-6      	; 0x1c58 <main+0x162>
 	boot_rww_enable();		// Re-enable the RWW section
-    1c6a:	20 92 57 00 	sts	0x0057, r2	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
-    1c6e:	e8 95       	spm
-						gBuffer[i] = rx_buf[i+4];
-					}
-
+    1c5e:	b0 92 57 00 	sts	0x0057, r11	; 0x800057 <__TEXT_REGION_LENGTH__+0x7fe057>
+    1c62:	e8 95       	spm
+					//_delay_ms(100);
 					writeFlashPage(address, size);
 					//_delay_ms(100);
+					//VerifyFlashPage(address, size);
+
 					tx_buf[0] = BUT_ADDR;
-    1c70:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
+    1c64:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
 					tx_buf[1] = 'N';
-    1c74:	00 93 6d 00 	sts	0x006D, r16	; 0x80006d <tx_buf+0x1>
+    1c68:	00 93 6d 00 	sts	0x006D, r16	; 0x80006d <tx_buf+0x1>
 					NRF24L01_Send(tx_buf);
-    1c78:	8c e6       	ldi	r24, 0x6C	; 108
-    1c7a:	90 e0       	ldi	r25, 0x00	; 0
-    1c7c:	cb de       	rcall	.-618    	; 0x1a14 <NRF24L01_Send>
+    1c6c:	8c e6       	ldi	r24, 0x6C	; 108
+    1c6e:	90 e0       	ldi	r25, 0x00	; 0
+    1c70:	d1 de       	rcall	.-606    	; 0x1a14 <NRF24L01_Send>
 					load_pause = 0;
-    1c7e:	c0 e0       	ldi	r28, 0x00	; 0
-    1c80:	d0 e0       	ldi	r29, 0x00	; 0
+    1c72:	c0 e0       	ldi	r28, 0x00	; 0
+    1c74:	d0 e0       	ldi	r29, 0x00	; 0
 				}
 
 			}
 
 			f_rx = 0;						//опускаем флаг приема
-    1c82:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <f_rx>
+    1c76:	10 92 6b 00 	sts	0x006B, r1	; 0x80006b <f_rx>
 		}
 
 		wdt_reset();
-    1c86:	a8 95       	wdr
+    1c7a:	a8 95       	wdr
 
 		if (!f_wait)
-    1c88:	80 91 66 00 	lds	r24, 0x0066	; 0x800066 <__data_end>
-    1c8c:	81 11       	cpse	r24, r1
-    1c8e:	13 c0       	rjmp	.+38     	; 0x1cb6 <main+0x1c0>
+    1c7c:	80 91 68 00 	lds	r24, 0x0068	; 0x800068 <f_wait>
+    1c80:	81 11       	cpse	r24, r1
+    1c82:	13 c0       	rjmp	.+38     	; 0x1caa <main+0x1b4>
 		{
 			if (cnt++ >= WAIT_VALUE) 
-    1c90:	47 01       	movw	r8, r14
-    1c92:	ff ef       	ldi	r31, 0xFF	; 255
-    1c94:	8f 1a       	sub	r8, r31
-    1c96:	9f 0a       	sbc	r9, r31
-    1c98:	28 ee       	ldi	r18, 0xE8	; 232
-    1c9a:	e2 16       	cp	r14, r18
-    1c9c:	23 e0       	ldi	r18, 0x03	; 3
-    1c9e:	f2 06       	cpc	r15, r18
-    1ca0:	10 f0       	brcs	.+4      	; 0x1ca6 <main+0x1b0>
+    1c84:	47 01       	movw	r8, r14
+    1c86:	ff ef       	ldi	r31, 0xFF	; 255
+    1c88:	8f 1a       	sub	r8, r31
+    1c8a:	9f 0a       	sbc	r9, r31
+    1c8c:	28 ee       	ldi	r18, 0xE8	; 232
+    1c8e:	e2 16       	cp	r14, r18
+    1c90:	23 e0       	ldi	r18, 0x03	; 3
+    1c92:	f2 06       	cpc	r15, r18
+    1c94:	10 f0       	brcs	.+4      	; 0x1c9a <main+0x1a4>
 			{
 				jump_to_app();			// Jump to application sector
-    1ca2:	f6 01       	movw	r30, r12
-    1ca4:	09 95       	icall
-    1ca6:	8f ec       	ldi	r24, 0xCF	; 207
-    1ca8:	97 e0       	ldi	r25, 0x07	; 7
-    1caa:	01 97       	sbiw	r24, 0x01	; 1
-    1cac:	f1 f7       	brne	.-4      	; 0x1caa <main+0x1b4>
-    1cae:	00 c0       	rjmp	.+0      	; 0x1cb0 <main+0x1ba>
-    1cb0:	00 00       	nop
+    1c96:	f6 01       	movw	r30, r12
+    1c98:	09 95       	icall
+    1c9a:	8f ec       	ldi	r24, 0xCF	; 207
+    1c9c:	97 e0       	ldi	r25, 0x07	; 7
+    1c9e:	01 97       	sbiw	r24, 0x01	; 1
+    1ca0:	f1 f7       	brne	.-4      	; 0x1c9e <main+0x1a8>
+    1ca2:	00 c0       	rjmp	.+0      	; 0x1ca4 <main+0x1ae>
+    1ca4:	00 00       	nop
 
 		wdt_reset();
 
 		if (!f_wait)
 		{
 			if (cnt++ >= WAIT_VALUE) 
-    1cb2:	74 01       	movw	r14, r8
-    1cb4:	5f cf       	rjmp	.-322    	; 0x1b74 <main+0x7e>
+    1ca6:	74 01       	movw	r14, r8
+    1ca8:	63 cf       	rjmp	.-314    	; 0x1b70 <main+0x7a>
 			}
 			_delay_ms(1);		
 		}
 		else
 		{
 			load_pause++;
-    1cb6:	21 96       	adiw	r28, 0x01	; 1
-			if (load_pause >= 1000)
-    1cb8:	c8 3e       	cpi	r28, 0xE8	; 232
-    1cba:	93 e0       	ldi	r25, 0x03	; 3
-    1cbc:	d9 07       	cpc	r29, r25
-    1cbe:	08 f4       	brcc	.+2      	; 0x1cc2 <main+0x1cc>
-    1cc0:	59 cf       	rjmp	.-334    	; 0x1b74 <main+0x7e>
+    1caa:	21 96       	adiw	r28, 0x01	; 1
+			if (load_pause >= 10000)
+    1cac:	c0 31       	cpi	r28, 0x10	; 16
+    1cae:	97 e2       	ldi	r25, 0x27	; 39
+    1cb0:	d9 07       	cpc	r29, r25
+    1cb2:	08 f4       	brcc	.+2      	; 0x1cb6 <main+0x1c0>
+    1cb4:	5d cf       	rjmp	.-326    	; 0x1b70 <main+0x7a>
 			{
 				tx_buf[0] = BUT_ADDR;
-    1cc2:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
+    1cb6:	10 93 6c 00 	sts	0x006C, r17	; 0x80006c <tx_buf>
 				tx_buf[1] = 'N';
-    1cc6:	00 93 6d 00 	sts	0x006D, r16	; 0x80006d <tx_buf+0x1>
+    1cba:	00 93 6d 00 	sts	0x006D, r16	; 0x80006d <tx_buf+0x1>
 				NRF24L01_Send(tx_buf);
-    1cca:	8c e6       	ldi	r24, 0x6C	; 108
-    1ccc:	90 e0       	ldi	r25, 0x00	; 0
-    1cce:	a2 de       	rcall	.-700    	; 0x1a14 <NRF24L01_Send>
-    1cd0:	ef ec       	ldi	r30, 0xCF	; 207
-    1cd2:	f7 e0       	ldi	r31, 0x07	; 7
-    1cd4:	31 97       	sbiw	r30, 0x01	; 1
-    1cd6:	f1 f7       	brne	.-4      	; 0x1cd4 <main+0x1de>
-    1cd8:	00 c0       	rjmp	.+0      	; 0x1cda <main+0x1e4>
-    1cda:	00 00       	nop
+    1cbe:	8c e6       	ldi	r24, 0x6C	; 108
+    1cc0:	90 e0       	ldi	r25, 0x00	; 0
+    1cc2:	a8 de       	rcall	.-688    	; 0x1a14 <NRF24L01_Send>
+    1cc4:	ef ec       	ldi	r30, 0xCF	; 207
+    1cc6:	f7 e0       	ldi	r31, 0x07	; 7
+    1cc8:	31 97       	sbiw	r30, 0x01	; 1
+    1cca:	f1 f7       	brne	.-4      	; 0x1cc8 <main+0x1d2>
+    1ccc:	00 c0       	rjmp	.+0      	; 0x1cce <main+0x1d8>
+    1cce:	00 00       	nop
 				_delay_ms(1);
 				load_pause = 0;
-    1cdc:	c0 e0       	ldi	r28, 0x00	; 0
-    1cde:	d0 e0       	ldi	r29, 0x00	; 0
-    1ce0:	49 cf       	rjmp	.-366    	; 0x1b74 <main+0x7e>
+    1cd0:	c0 e0       	ldi	r28, 0x00	; 0
+    1cd2:	d0 e0       	ldi	r29, 0x00	; 0
+    1cd4:	4d cf       	rjmp	.-358    	; 0x1b70 <main+0x7a>
 
-00001ce2 <_exit>:
-    1ce2:	f8 94       	cli
+00001cd6 <_exit>:
+    1cd6:	f8 94       	cli
 
-00001ce4 <__stop_program>:
-    1ce4:	ff cf       	rjmp	.-2      	; 0x1ce4 <__stop_program>
+00001cd8 <__stop_program>:
+    1cd8:	ff cf       	rjmp	.-2      	; 0x1cd8 <__stop_program>

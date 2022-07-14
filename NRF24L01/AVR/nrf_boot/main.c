@@ -86,7 +86,6 @@ volatile uint8_t f_rx = 0, f_tx = 0;				//флаги приема и передачи
 uint8_t f_send;								//флаг отправки
 
 uint8_t buf[20];							//буфер
-uint16_t address;
 uint8_t device, val;
 uint8_t f_wait = 0;
 
@@ -347,6 +346,31 @@ static inline void eraseFlash(void)
 	boot_rww_enable();
 }
 
+static inline uint16_t VerifyFlashPage(uint16_t waddr, pagebuf_t size)
+{
+	uint32_t baddr = (uint32_t)waddr<<1;
+	uint16_t data;
+
+	do
+	{
+		// don't read bootloader
+		if ( baddr < APP_END )
+		{
+			data = pgm_read_word_near(baddr);
+			//if (data != (gBuffer[1]<<8 | gBuffer[0])) LED_OFF();
+			if (data ==  0xFFFF) LED_OFF();
+		}
+		else
+		{
+			data = 0xFFFF; // fake empty
+		}
+		baddr += 2;			// Select next word in memory
+		size -= 2;			// Subtract two bytes from number of bytes to read
+	}
+	while (size);				// Repeat until block has been read
+	return baddr>>1;
+}
+
 static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
 {
 	uint32_t pagestart = (uint32_t)waddr<<1;
@@ -355,14 +379,14 @@ static inline uint16_t writeFlashPage(uint16_t waddr, pagebuf_t size)
 	uint8_t *tmp = gBuffer;
 
 	do 
-		{
+	{
 		data = *tmp++;
 		data |= *tmp++ << 8;
 		boot_page_fill(baddr, data);	// call asm routine.
 
 		baddr += 2;			// Select next word in memory
 		size -= 2;			// Reduce number of bytes to write by two
-		} 
+	} 
 	while (size);				// Loop until all bytes written
 
 	boot_page_write(pagestart);
@@ -442,18 +466,20 @@ int main(void)
 
 				if (rx_buf[1] == 'F')		//
 				{
-					LED_TGL();
+					//LED_TGL();
 					pagebuf_t size;
 					size = rx_buf[2];
-					address = rx_buf[3]; //
+					address = (uint16_t)(rx_buf[4] << 8 | rx_buf[3]); //
 
 					for (uint8_t i = 0; i < size; i++)
 					{
-						gBuffer[i] = rx_buf[i+4];
+						gBuffer[i] = rx_buf[i+5];
 					}
-
+					//_delay_ms(100);
 					writeFlashPage(address, size);
 					//_delay_ms(100);
+					//VerifyFlashPage(address, size);
+
 					tx_buf[0] = BUT_ADDR;
 					tx_buf[1] = 'N';
 					NRF24L01_Send(tx_buf);
@@ -478,7 +504,7 @@ int main(void)
 		else
 		{
 			load_pause++;
-			if (load_pause >= 1000)
+			if (load_pause >= 10000)
 			{
 				tx_buf[0] = BUT_ADDR;
 				tx_buf[1] = 'N';
