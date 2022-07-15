@@ -86,15 +86,16 @@ static void MX_USART1_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
 //Процедура передачи данных в порт
 void USART_TX (uint8_t* dt, uint16_t sz)					//
 {
   uint16_t ind = 0;				
   while (ind<sz)
   {
-    while (!LL_USART_IsActiveFlag_TXE(USART1)) {}
-    LL_USART_TransmitData8(USART1,*(uint8_t*)(dt+ind));
-    ind++;
+    while (!LL_USART_IsActiveFlag_TXE(USART1)) {}				//ждем отправки предыдущего байта
+    LL_USART_TransmitData8(USART1,*(uint8_t*)(dt+ind));	//отправляем очередной байт в порт
+    ind++;																							//задаем следующий индекс
   }
 }
 
@@ -115,7 +116,7 @@ void Ascii_To_Hex(uint8_t *buff, uint8_t count)
 		}	
 	}	
 }
-
+//процедура приема 
 void update_receive(void)
 {
 	if (firm_update)
